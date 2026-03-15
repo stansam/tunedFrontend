@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { QuoteForm } from "@/components/quote-form";
-import type { HeroPhoneBlockProps } from "@/lib/props";
+import { QuoteForm } from "./quote-form";
+import type { HeroPhoneBlockProps } from "@/lib/props/index.props";
 
 export function HeroPhoneBlock({ services, levels }: HeroPhoneBlockProps) {
   return (

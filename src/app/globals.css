@@ -80,6 +80,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --color-brand:        #22c55e;   /* emerald-500  */
+  --color-brand-dark:   #16a34a;   /* emerald-600  */
+  --color-brand-deep:   #059669;   /* emerald-700  (form bg) */
+  --color-surface:      #e8e6e1;   /* hero warm grey */
+  --color-surface-2:    #f1efeb;   /* marquee strip */
+  --color-text:         #1e293b;   /* slate-800 */
+  --color-text-muted:   #64748b;   /* slate-500 */
+  --color-border:       #e2e8f0;   /* slate-200 */
 }
 
 .dark {
@@ -125,5 +133,134 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    "DM Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* ─── Marquee animation ──────────────────────────────────────────────────────── */
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* ─── Flatpickr overrides ────────────────────────────────────────────────────── */
+
+.flatpickr-calendar {
+  border-radius: 16px !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12) !important;
+  font-family: inherit !important;
+  overflow: hidden;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+  background: var(--color-brand) !important;
+  border-color: var(--color-brand) !important;
+  color: #fff !important;
+}
+
+.flatpickr-day:hover {
+  background: #f0fdf4 !important;
+  border-color: transparent !important;
+}
+
+.flatpickr-months .flatpickr-month {
+  background: var(--color-brand) !important;
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  color: #fff !important;
+}
+
+.flatpickr-weekdays {
+  background: #f8fafc !important;
+}
+
+span.flatpickr-weekday {
+  color: var(--color-text-muted) !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+
+.flatpickr-time input:hover,
+.flatpickr-time input:focus,
+.flatpickr-time .flatpickr-am-pm:hover,
+.flatpickr-time .flatpickr-am-pm:focus {
+  background: #f0fdf4 !important;
+}
+
+/* ─── Focus-visible ring ─────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+}
+
+/* ─── Scrollbar (thin) ───────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+/* ─── Utility layer ──────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp:2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

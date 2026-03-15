@@ -3,7 +3,7 @@ import type { ApiError, ApiResult } from "@/types";
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 

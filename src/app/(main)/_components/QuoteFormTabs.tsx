@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import type { QuoteFormTabsProps } from "@/lib/props";
+import type { QuoteFormTabsProps } from "@/lib/props/index.props";
 import type { CategoryTab } from "@/types";
 
 const TABS: { label: string; value: CategoryTab }[] = [

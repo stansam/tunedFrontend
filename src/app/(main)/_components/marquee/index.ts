@@ -1,1 +1,1 @@
-export { ServicesMarquee } from "./ServicesMarquee";
+export { ServicesMarquee } from "../ServicesMarquee";

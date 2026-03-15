@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useId } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { LevelSelectProps } from "@/lib/props";
+import type { LevelSelectProps } from "@/lib/props/index.props";
 
 export function LevelSelect({
   levels,

@@ -1,8 +1,8 @@
 import React from "react";
 import { HeroLeftBlock } from "./HeroLeftBlock";
 import { HeroPhoneBlock } from "./HeroPhoneBlock";
-import { ServicesMarquee } from "@/components/marquee/ServicesMarquee";
-import type { HeroSectionProps } from "@/lib/props";
+import { ServicesMarquee } from "./ServicesMarquee";
+import type { HeroSectionProps } from "@/lib/props/index.props";
 
 /**
  * HeroSection

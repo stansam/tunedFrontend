@@ -3,7 +3,7 @@
 import React from "react";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { PageCountControlProps } from "@/lib/props";
+import type { PageCountControlProps } from "@/lib/props/index.props";
 
 export function PageCountControl({
   value,

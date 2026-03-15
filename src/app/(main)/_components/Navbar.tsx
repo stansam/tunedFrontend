@@ -5,14 +5,14 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { NavbarProps } from "@/lib/props";
+import type { NavbarProps } from "@/lib/props/index.props";
 
 const NAV_LINKS = [
-  { label: "Services", href: "/services" },
-  { label: "FAQs", href: "/faqs" },
-  { label: "Samples", href: "/samples" },
-  { label: "Blogs", href: "/blogs" },
-  { label: "Testimonials", href: "/testimonials" },
+  { label: "Services", href: "#" },
+  { label: "FAQs", href: "#" },
+  { label: "Samples", href: "#" },
+  { label: "Blogs", href: "#" },
+  { label: "Testimonials", href: "#" },
 ] as const;
 
 export function Navbar({ activeRoute }: NavbarProps) {
@@ -95,14 +95,14 @@ export function Navbar({ activeRoute }: NavbarProps) {
             className="border-slate-300 text-slate-700 hover:bg-slate-50 font-medium px-5"
             asChild
           >
-            <Link href="/signin">Sign in</Link>
+            <Link href="#">Sign in</Link>
           </Button>
           <Button
             size="sm"
             className="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-5 shadow-none"
             asChild
           >
-            <Link href="/order">Order Now</Link>
+            <Link href="#">Order Now</Link>
           </Button>
         </div>
 
@@ -147,13 +147,13 @@ export function Navbar({ activeRoute }: NavbarProps) {
               className="w-full border-slate-300 text-slate-700"
               asChild
             >
-              <Link href="/signin">Sign in</Link>
+              <Link href="#">Sign in</Link>
             </Button>
             <Button
               className="w-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-none"
               asChild
             >
-              <Link href="/order">Order Now</Link>
+              <Link href="#">Order Now</Link>
             </Button>
           </div>
         </div>

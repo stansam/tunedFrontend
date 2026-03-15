@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import type { ServicesMarqueeProps, ServiceCardProps } from "@/lib/props";
+import type { ServicesMarqueeProps, ServiceCardProps } from "@/lib/props/index.props";
 
 // ─── Service Card ─────────────────────────────────────────────────────────────
 
@@ -71,8 +71,8 @@ export function ServicesMarquee({ featuredServices }: ServicesMarqueeProps) {
         className={cn(
           "flex gap-4 will-change-transform",
           isPaused
-            ? "[animation-play-state:paused]"
-            : "[animation-play-state:running]",
+            ? "paused"
+            : "running",
           "animate-marquee"
         )}
         style={{

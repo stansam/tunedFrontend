@@ -3,13 +3,13 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { useQuoteForm } from "@/lib/hooks";
+import { useQuoteForm } from "@/lib/hooks/quote.hook";
 import { QuoteFormTabs } from "./QuoteFormTabs";
 import { ServiceSelect } from "./ServiceSelect";
 import { LevelSelect } from "./LevelSelect";
 import { DeadlinePicker } from "./DeadlinePicker";
 import { PageCountControl } from "./PageCountControl";
-import type { QuoteFormProps } from "@/lib/props";
+import type { QuoteFormProps } from "@/lib/props/index.props";
 
 export function QuoteForm({ services, levels }: QuoteFormProps) {
   const {
@@ -25,9 +25,10 @@ export function QuoteForm({ services, levels }: QuoteFormProps) {
     setPageCount,
   } = useQuoteForm();
 
-  const continueHref = formState.serviceId
-    ? `/order?service=${formState.serviceId}&level=${formState.levelId ?? ""}&pages=${formState.pageCount}`
-    : "/order";
+  const continueHref = "#"
+  // formState.serviceId
+  //   ? `/order?service=${formState.serviceId}&level=${formState.levelId ?? ""}&pages=${formState.pageCount}`
+  //   : "/order";
 
   return (
     <div className="flex flex-col gap-3 w-full">

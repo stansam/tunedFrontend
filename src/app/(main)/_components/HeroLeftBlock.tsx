@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Search } from "lucide-react";
-import type { HeroLeftBlockProps } from "@/lib/props";
+import type { HeroLeftBlockProps } from "@/lib/props/index.props";
 
 export function HeroLeftBlock({
   searchPlaceholder = "What are you looking for?",
