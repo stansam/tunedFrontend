@@ -4,13 +4,6 @@ import { HeroPhoneBlock } from "./HeroPhoneBlock";
 import { ServicesMarquee } from "./ServicesMarquee";
 import type { HeroSectionProps } from "@/lib/props/index.props";
 
-/**
- * HeroSection
- *
- * Block 1 (left)  – illustrations + title + search
- * Block 2 (right) – phone frame with embedded QuoteForm + character illustrations
- * Block 3 (bottom)– auto-scrolling featured services marquee
- */
 export function HeroSection({
   services,
   levels,
@@ -21,27 +14,17 @@ export function HeroSection({
       className="w-full bg-[#e8e6e1] overflow-hidden"
       aria-label="Hero section"
     >
-      {/* Blocks 1 & 2 — two-column on md+, stacked on mobile */}
-      <div className="mx-auto max-w-5xl">
-        <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between pt-10 pb-0 min-h-[480px] md:min-h-[580px]">
-          {/* Block 1: Left — title, illustrations, search */}
+      <div className="mx-auto max-w-6xl lg:max-w-7xl">
+        <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between pt-5 pb-0 min-h-[480px] md:min-h-[580px]">
+
           <div className="w-full md:w-[42%] pb-8 md:pb-16 z-10">
             <HeroLeftBlock />
           </div>
 
-          {/* Block 2: Right — phone + form + characters */}
-          {/*
-            The phone block is positioned so characters slightly overflow
-            the section bottom edge, bleeding into the marquee area.
-            We use `overflow-hidden` on the section to clip any overflow.
-          */}
-          <div className="w-full md:w-[58%] flex justify-center md:justify-end relative z-20">
-            <div className="relative" style={{ minHeight: 580 }}>
-              <HeroPhoneBlock services={services} levels={levels} />
-            </div>
+          <div className="w-full md:w-[58%] z-20">
+            <HeroPhoneBlock services={services} levels={levels} />
           </div>
 
-          {/* Background decorative blobs */}
           <div
             className="pointer-events-none absolute inset-0 overflow-hidden"
             aria-hidden="true"
@@ -52,7 +35,6 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* Block 3: Marquee — full width strip below the two-column area */}
       <div className="w-full border-t border-slate-200 bg-[#f1efeb]">
         <ServicesMarquee featuredServices={featuredServices} />
       </div>

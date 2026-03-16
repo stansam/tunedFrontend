@@ -17,23 +17,16 @@ export function HeroLeftBlock({
   };
 
   return (
-    <div className="flex flex-col items-start justify-center gap-0 relative">
-      {/* Decorative illustration images */}
-      <div className="flex flex-col gap-0">
-        {/* Question mark with people */}
-        <div className="relative top-0 left-0 h-[120px] w-[200px] sm:h-[130px] sm:w-[220px]">
-          {/* We replicate this with SVG since we cannot load external images */}
-          <QuestionIllustration />
-        </div>
-
-        {/* Open book */}
-        <div className="relative h-[260px] w-[260px] sm:w-[220px]">
-          <BookIllustration />
-        </div>
+    <div className="flex flex-col items-center justify-center align-center gap-0 relative">
+      {/* <div className="relative hidden md:block h-[50px] w-[50px] sm:h-[130px] sm:w-[220px]">
+        <QuestionIllustration />
+      </div> */}
+      <div className="relative -top-20 -left-[5%] sm:left-0 h-[180px] w-[290px]">
+        <BookIllustration />
       </div>
 
-      {/* Title */}
-      <div>
+      {/* Title & Subtitle */}
+      <div className="flex flex-col justify-center align-center gap-2 mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 leading-tight">
           Your Trusted Writer &amp; Editor
         </h1>
@@ -152,7 +145,7 @@ function QuestionIllustration() {
     <img
       src="/question.svg"
       alt="Question illustration"
-      className="w-full h-full"
+      className="w-50 h-40 opacity-75"
     />
   );
 }
@@ -195,7 +188,7 @@ function BookIllustration() {
     <img
       src="/book_sketch.svg"
       alt="Book illustration"
-      className="w-full h-full"
+      className="h-80"
     />
   );
 }
