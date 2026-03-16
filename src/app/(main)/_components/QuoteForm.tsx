@@ -31,7 +31,7 @@ export function QuoteForm({ services, levels }: QuoteFormProps) {
   //   : "/order";
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="flex flex-col gap-3 w-full ">
       {/* Header */}
       <div className="text-center px-2">
         <p className="text-base font-semibold text-white leading-snug">

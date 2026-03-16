@@ -22,8 +22,8 @@ export function HeroSection({
       aria-label="Hero section"
     >
       {/* Blocks 1 & 2 — two-column on md+, stacked on mobile */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative flex flex-col md:flex-row items-start md:items-end justify-between gap-8 pt-10 pb-0 min-h-[480px] md:min-h-[580px]">
+      <div className="mx-auto max-w-5xl">
+        <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between pt-10 pb-0 min-h-[480px] md:min-h-[580px]">
           {/* Block 1: Left — title, illustrations, search */}
           <div className="w-full md:w-[42%] pb-8 md:pb-16 z-10">
             <HeroLeftBlock />
