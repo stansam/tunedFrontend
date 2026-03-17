@@ -1,9 +1,9 @@
-import type { ApiError, ApiResult } from "@/types";
+import type { ApiResult } from "@/lib/types";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000";
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000/api";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 
@@ -21,16 +21,26 @@ function buildHeaders(extra?: HeadersInit): HeadersInit {
   };
 }
 
-async function parseErrorBody(res: Response): Promise<ApiError> {
+async function parseErrorBody(res: Response): Promise<ApiResult<never>> {
   try {
     const body = await res.json();
     return {
-      message: body?.message ?? body?.detail ?? res.statusText,
-      code: body?.code ?? res.status,
-      details: body,
+      ok: false,
+      error: {
+        message: body?.message ?? body?.detail ?? res.statusText,
+        errors: body?.errors ?? { "": [] },
+        status: body?.code ?? res.status,
+      },
     };
   } catch {
-    return { message: res.statusText, code: res.status };
+    return {
+      ok: false,
+      error: {
+        message: res.statusText,
+        status: res.status,
+        errors: { "": [] },
+      },
+    };
   }
 }
 
@@ -71,19 +81,31 @@ export async function apiRequest<T>(
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      const error = await parseErrorBody(res);
-      return { ok: false, error };
+      return await parseErrorBody(res);
     }
 
-    const data: T = await res.json();
-    return { ok: true, data };
+    const contentType = res.headers.get("content-type");
+    const data: T = contentType?.includes("application/json")
+      ?
+      await res.json()
+      : (null as T);
+    return {
+      ok: true,
+      data,
+      message: res.statusText,
+      status: res.status,
+    };
   } catch (err: unknown) {
     clearTimeout(timeoutId);
 
     if (err instanceof DOMException && err.name === "AbortError") {
       return {
         ok: false,
-        error: { message: "Request timed out", code: "TIMEOUT" },
+        error: { 
+          message: "Request timed out",
+          errors: { "": [] },
+          status: "TIMEOUT"
+        },
       };
     }
 
@@ -91,8 +113,9 @@ export async function apiRequest<T>(
       ok: false,
       error: {
         message:
-          err instanceof Error ? err.message : "An unexpected error occurred",
-        code: "NETWORK_ERROR",
+           "An unexpected error occurred",
+        errors: err instanceof Error ? { "": [err.message] } : { "": ["An unexpected error occurred"] },
+        status: "NETWORK_ERROR",
       },
     };
   }

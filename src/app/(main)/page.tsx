@@ -1,72 +1,73 @@
 import { Suspense } from "react";
 import { Navbar } from "./_components/navbar";
 import { HeroSection } from "./_components/hero";
-import { fetchServices, fetchLevels, fetchFeaturedServices } from "@/lib/services/quote.service";
-import type { Service, Level, FeaturedService } from "@/types";
+import { fetchOptions } from "@/lib/services/quote.service";
+import { fetchFeaturedServices } from "@/lib/services/services.service";
+import type { Service, Level, QuoteFormOptions } from "@/lib/types";
 
 // ─── Fallback data (shown when API is unavailable / dev mode) ─────────────────
 
-const FALLBACK_SERVICES: Service[] = [
-  { id: "essay-writing", name: "Essay Writing", category: "writing" },
-  { id: "dissertation", name: "Dissertation", category: "writing" },
-  { id: "research-paper", name: "Research Paper", category: "writing" },
-  { id: "admission-essay", name: "Admission Essay", category: "writing" },
-  { id: "case-study", name: "Case Study", category: "technical" },
-  { id: "data-analysis", name: "Data Analysis", category: "technical" },
-  { id: "lab-report", name: "Lab Report", category: "technical" },
-  { id: "proofreading", name: "Proofreading", category: "proofreading" },
-  { id: "editing", name: "Editing", category: "proofreading" },
-  { id: "formatting", name: "Formatting", category: "proofreading" },
+const FALLBACK_SERVICES: any[] = [
+  { id: "essay-writing", name: "Essay Writing", category: "writing", pricing_category: "writing" },
+  { id: "dissertation", name: "Dissertation", category: "writing", pricing_category: "writing" },
+  { id: "research-paper", name: "Research Paper", category: "writing", pricing_category: "writing" },
+  { id: "admission-essay", name: "Admission Essay", category: "writing", pricing_category: "writing" },
+  { id: "case-study", name: "Case Study", category: "technical", pricing_category: "technical" },
+  { id: "data-analysis", name: "Data Analysis", category: "technical", pricing_category: "technical" },
+  { id: "lab-report", name: "Lab Report", category: "technical", pricing_category: "technical" },
+  { id: "proofreading", name: "Proofreading", category: "proofreading", pricing_category: "proofreading" },
+  { id: "editing", name: "Editing", category: "proofreading", pricing_category: "proofreading" },
+  { id: "formatting", name: "Formatting", category: "proofreading", pricing_category: "proofreading" },
 ];
 
 const FALLBACK_LEVELS: Level[] = [
-  { id: "high-school", name: "High School" },
-  { id: "undergraduate", name: "Undergraduate" },
-  { id: "masters", name: "Master's" },
-  { id: "phd", name: "PhD" },
-  { id: "personal", name: "Personal" },
-  { id: "professional", name: "Professional" },
+  { id: "high-school", name: "High School", order: 1 },
+  { id: "undergraduate", name: "Undergraduate", order: 2 },
+  { id: "masters", name: "Master's", order: 3 },
+  { id: "phd", name: "PhD", order: 4 },
+  { id: "personal", name: "Personal", order: 5 },
+  { id: "professional", name: "Professional", order: 6 },
 ];
 
-const FALLBACK_FEATURED: FeaturedService[] = [
+const FALLBACK_FEATURED: any[] = [
   {
     id: "proofreading-editing",
-    title: "Proofreading and Editing",
+    name: "Proofreading and Editing",
     description:
       "Whether it is an academic paper, resume, or business document, professional proofreading helps.",
     iconEmoji: "✍️",
   },
   {
     id: "writing",
-    title: "Writing",
+    name: "Writing",
     description:
       "From essays and dissertations to admission papers, we support you in producing structured papers.",
     iconEmoji: "📝",
   },
   {
     id: "data-analysis",
-    title: "Data Analysis",
+    name: "Data Analysis",
     description:
       "Make sense of your data and uncover key insights with accurate analysis, visualizations, and conclusions.",
     iconEmoji: "📊",
   },
   {
     id: "presentations",
-    title: "Presentations",
+    name: "Presentations",
     description:
       "Impress your audience with professionally designed slides and compelling narratives.",
     iconEmoji: "🎯",
   },
   {
     id: "research",
-    title: "Research",
+    name: "Research",
     description:
       "Thorough literature reviews, annotated bibliographies, and structured research support.",
     iconEmoji: "🔬",
   },
   {
     id: "coding",
-    title: "Coding & Programming",
+    name: "Coding & Programming",
     description:
       "Get help with technical assignments, debugging, and code documentation.",
     iconEmoji: "💻",
@@ -76,17 +77,15 @@ const FALLBACK_FEATURED: FeaturedService[] = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  // Parallel data fetching with graceful fallback
-  const [servicesResult, levelsResult, featuredResult] = await Promise.all([
-    fetchServices(),
-    fetchLevels(),
+  const [optionsResult, featuredResult] = await Promise.all([
+    fetchOptions(),
     fetchFeaturedServices(),
   ]);
 
-  const services = servicesResult.ok ? servicesResult.data : FALLBACK_SERVICES;
-  const levels = levelsResult.ok ? levelsResult.data : FALLBACK_LEVELS;
+  const services = optionsResult.ok ? optionsResult.data.services : FALLBACK_SERVICES;
+  const levels = optionsResult.ok ? optionsResult.data.academic_levels : FALLBACK_LEVELS;
   const featuredServices = featuredResult.ok
-    ? featuredResult.data
+    ? featuredResult.data.services
     : FALLBACK_FEATURED;
 
   return (
@@ -94,9 +93,8 @@ export default async function HomePage() {
       <Navbar />
       <Suspense fallback={<HeroSkeleton />}>
         <HeroSection
-          services={services}
-          levels={levels}
-          featuredServices={featuredServices}
+          options={{ services, levels } as QuoteFormOptions}
+          featuredServices={featuredServices as Service[]}
         />
       </Suspense>
     </main>

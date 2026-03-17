@@ -3,7 +3,7 @@ import Image from "next/image";
 import { QuoteForm } from "./quote-form";
 import type { HeroPhoneBlockProps } from "@/lib/props/index.props";
 
-export function HeroPhoneBlock({ services, levels }: HeroPhoneBlockProps) {
+export function HeroPhoneBlock({ options }: HeroPhoneBlockProps) {
   return (
     <div className="relative flex items-start justify-center w-full">
       <div
@@ -53,7 +53,7 @@ export function HeroPhoneBlock({ services, levels }: HeroPhoneBlockProps) {
         </div>
 
         <div className="mt-8 rounded-[38px] bg-emerald-600 p-4 flex flex-col ">
-          <QuoteForm services={services} levels={levels} />
+          <QuoteForm options={options} />
         </div>
 
         <div className="absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-20 rounded-full bg-slate-700" aria-hidden="true" />

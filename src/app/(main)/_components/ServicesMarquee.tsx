@@ -14,29 +14,20 @@ function ServiceCard({ service }: ServiceCardProps) {
         "shadow-sm ring-1 ring-slate-100 w-[260px] sm:w-[280px]",
         "transition-shadow hover:shadow-md cursor-default select-none"
       )}
-      aria-label={service.title}
+      aria-label={service.name}
     >
       {/* Icon */}
       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 ring-1 ring-slate-100">
-        {service.iconUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={service.iconUrl}
-            alt=""
-            className="h-7 w-7 object-contain"
-            aria-hidden="true"
-          />
-        ) : (
-          <span className="text-2xl leading-none" aria-hidden="true">
-            {service.iconEmoji ?? "📄"}
-          </span>
-        )}
+        <span className="text-2xl leading-none" aria-hidden="true">
+          {/* @ts-ignore */}
+          {service.iconEmoji ?? "📄"}
+        </span>
       </div>
 
       {/* Text */}
       <div className="min-w-0 flex-1">
         <p className="font-semibold text-slate-800 text-sm leading-snug truncate">
-          {service.title}
+          {service.name}
         </p>
         <p className="mt-1 text-xs text-slate-500 line-clamp-2 leading-relaxed">
           {service.description}

@@ -1,37 +1,28 @@
 import type {
   Service,
   Level,
-  FeaturedService,
   CategoryTab,
-} from "@/types";
-import type {
   QuoteFormState,
+  QuoteFormOptions,
   CalculatePriceResponse,
-} from "@/types/quote.type";
+} from "@/lib/types";
+import { ServiceWithPricingCategory } from "../types/quote.type";
 
-// ─── Navbar ───────────────────────────────────────────────────────────────────
 
 export interface NavbarProps {
-  /** Mark a nav item as active */
   activeRoute?: string;
 }
 
-// ─── Hero Section ─────────────────────────────────────────────────────────────
 
 export interface HeroSectionProps {
-  /** Pre-fetched services for the quote form */
-  services: Service[];
-  /** Pre-fetched levels for the quote form */
-  levels: Level[];
-  /** Pre-fetched featured services for the marquee */
-  featuredServices: FeaturedService[];
+  options: QuoteFormOptions;
+  featuredServices: Service[];
 }
 
 // ─── Quote Form ───────────────────────────────────────────────────────────────
 
 export interface QuoteFormProps {
-  services: Service[];
-  levels: Level[];
+  options: QuoteFormOptions;
 }
 
 export interface QuoteFormTabsProps {
@@ -40,7 +31,7 @@ export interface QuoteFormTabsProps {
 }
 
 export interface ServiceSelectProps {
-  services: Service[];
+  services: ServiceWithPricingCategory[];
   activeTab: CategoryTab;
   value: string | null;
   onChange: (serviceId: string) => void;
@@ -83,22 +74,20 @@ export interface ContinueButtonProps {
 // ─── Marquee ─────────────────────────────────────────────────────────────────
 
 export interface ServicesMarqueeProps {
-  featuredServices: FeaturedService[];
+  featuredServices: Service[];
 }
 
 export interface ServiceCardProps {
-  service: FeaturedService;
+  service: Service;
 }
 
 // ─── Hero Blocks ─────────────────────────────────────────────────────────────
 
 export interface HeroLeftBlockProps {
-  /** Optional search placeholder override */
   searchPlaceholder?: string;
   onSearch?: (query: string) => void;
 }
 
 export interface HeroPhoneBlockProps {
-  services: Service[];
-  levels: Level[];
+  options: QuoteFormOptions;
 }

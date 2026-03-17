@@ -5,8 +5,7 @@ import { ServicesMarquee } from "./ServicesMarquee";
 import type { HeroSectionProps } from "@/lib/props/index.props";
 
 export function HeroSection({
-  services,
-  levels,
+  options,
   featuredServices,
 }: HeroSectionProps) {
   return (
@@ -22,7 +21,7 @@ export function HeroSection({
           </div>
 
           <div className="w-full md:w-[58%] z-20">
-            <HeroPhoneBlock services={services} levels={levels} />
+            <HeroPhoneBlock options={options} />
           </div>
 
           <div

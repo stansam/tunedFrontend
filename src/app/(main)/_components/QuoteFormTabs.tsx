@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
 import { cn } from "@/lib/utils";
 import type { QuoteFormTabsProps } from "@/lib/props/index.props";
-import type { CategoryTab } from "@/types";
+import type { CategoryTab } from "@/lib/types";
 
 const TABS: { label: string; value: CategoryTab }[] = [
   { label: "Writing", value: "writing" },

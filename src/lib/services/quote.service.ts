@@ -1,131 +1,61 @@
 import { apiGet, apiPost } from "@/api-client";
+import { z } from "zod";
 import {
-  FetchServicesResponseSchema,
-  FetchLevelsResponseSchema,
-  FetchFeaturedServicesResponseSchema,
   CalculatePriceResponseSchema,
   CalculatePriceRequestSchema,
-} from "@/lib/schemas/quote.schema";
+} from "@/lib/schemas";
 import type {
   ApiResult,
-  Service,
-  Level,
-  FeaturedService
-} from "@/types"
-import type {
   CalculatePriceRequest,
-  CalculatePriceResponse,
-} from "@/types/quote.type";
+  CalculatePriceResponse
+} from "@/lib/types"
+import {
+  GetQuoteOptionsResponseSchema,
+} from "@/lib/schemas/quote.schema";
 
-// ─── Services ─────────────────────────────────────────────────────────────────
-
-/**
- * Fetches all available services from the backend.
- * Results are cached by Next.js for 60 seconds.
- */
-export async function fetchServices(): Promise<ApiResult<Service[]>> {
-  const result = await apiGet<unknown>("/services", {
-    next: { revalidate: 60, tags: ["services"] },
+export async function fetchOptions(): Promise<ApiResult<z.infer<typeof GetQuoteOptionsResponseSchema>>> {
+  const result = await apiGet<typeof GetQuoteOptionsResponseSchema>("/quote/options", {
+    next: { revalidate: 60, tags: ["quote-options"] },
   });
 
   if (!result.ok) return result;
 
-  const parsed = FetchServicesResponseSchema.safeParse(result.data);
+  const parsed = GetQuoteOptionsResponseSchema.safeParse(result.data);
   if (!parsed.success) {
     return {
       ok: false,
       error: {
-        message: "Invalid services response from server",
-        code: "PARSE_ERROR",
-        details: parsed.error.flatten(),
+        message: "Invalid quote options response from server",
+        errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+        status: "PARSE_ERROR",
       },
     };
   }
 
-  return { ok: true, data: parsed.data.services };
+  return { 
+    ok: true,
+    data: parsed.data,
+    message: "Quote options fetched successfully",
+    status: 200,
+   };
 }
 
-// ─── Levels ──────────────────────────────────────────────────────────────────
-
-/**
- * Fetches all available academic / expertise levels.
- * Results are cached by Next.js for 60 seconds.
- */
-export async function fetchLevels(): Promise<ApiResult<Level[]>> {
-  const result = await apiGet<unknown>("/levels", {
-    next: { revalidate: 60, tags: ["levels"] },
-  });
-
-  if (!result.ok) return result;
-
-  const parsed = FetchLevelsResponseSchema.safeParse(result.data);
-  if (!parsed.success) {
-    return {
-      ok: false,
-      error: {
-        message: "Invalid levels response from server",
-        code: "PARSE_ERROR",
-        details: parsed.error.flatten(),
-      },
-    };
-  }
-
-  return { ok: true, data: parsed.data.levels };
-}
-
-// ─── Featured Services (Marquee) ──────────────────────────────────────────────
-
-/**
- * Fetches featured services for the homepage marquee.
- * Results are cached by Next.js for 5 minutes.
- */
-export async function fetchFeaturedServices(): Promise<
-  ApiResult<FeaturedService[]>
-> {
-  const result = await apiGet<unknown>("/featured-services", {
-    next: { revalidate: 300, tags: ["featured-services"] },
-  });
-
-  if (!result.ok) return result;
-
-  const parsed = FetchFeaturedServicesResponseSchema.safeParse(result.data);
-  if (!parsed.success) {
-    return {
-      ok: false,
-      error: {
-        message: "Invalid featured services response from server",
-        code: "PARSE_ERROR",
-        details: parsed.error.flatten(),
-      },
-    };
-  }
-
-  return { ok: true, data: parsed.data.featured_services };
-}
-
-// ─── Price Calculation ────────────────────────────────────────────────────────
-
-/**
- * Sends a price-calculation request to the backend.
- * This is a client-side only call (no caching).
- */
 export async function calculatePrice(
   payload: CalculatePriceRequest
 ): Promise<ApiResult<CalculatePriceResponse>> {
-  // Validate before sending
   const validation = CalculatePriceRequestSchema.safeParse(payload);
   if (!validation.success) {
     return {
       ok: false,
       error: {
         message: "Invalid price calculation payload",
-        code: "VALIDATION_ERROR",
-        details: validation.error.flatten(),
+        errors: validation.error.flatten().fieldErrors as Record<string, string[]>,
+        status: "PARSE_ERROR",
       },
     };
   }
 
-  const result = await apiPost<unknown>("/calculate-price", validation.data);
+  const result = await apiPost<CalculatePriceResponse>("/calculate-price", validation.data);
 
   if (!result.ok) return result;
 
@@ -135,11 +65,16 @@ export async function calculatePrice(
       ok: false,
       error: {
         message: "Invalid price calculation response from server",
-        code: "PARSE_ERROR",
-        details: parsed.error.flatten(),
+        errors: parsed.error.flatten().fieldErrors as Record<string, string[]>,
+        status: "PARSE_ERROR",
       },
     };
   }
 
-  return { ok: true, data: parsed.data };
+  return { 
+    ok: true, 
+    data: parsed.data,
+    message: "Price calculation successful",
+    status: 200,
+   };
 }

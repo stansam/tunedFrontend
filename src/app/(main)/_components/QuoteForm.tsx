@@ -11,7 +11,7 @@ import { DeadlinePicker } from "./DeadlinePicker";
 import { PageCountControl } from "./PageCountControl";
 import type { QuoteFormProps } from "@/lib/props/index.props";
 
-export function QuoteForm({ services, levels }: QuoteFormProps) {
+export function QuoteForm({ options }: QuoteFormProps) {
   const {
     formState,
     price,
@@ -50,7 +50,7 @@ export function QuoteForm({ services, levels }: QuoteFormProps) {
 
       {/* Service select */}
       <ServiceSelect
-        services={services}
+        services={options.services}
         activeTab={formState.activeTab}
         value={formState.serviceId}
         onChange={setServiceId}
@@ -59,7 +59,7 @@ export function QuoteForm({ services, levels }: QuoteFormProps) {
       {/* Level + Deadline row */}
       <div className="grid grid-cols-2 gap-2">
         <LevelSelect
-          levels={levels}
+          levels={options.levels}
           value={formState.levelId}
           onChange={setLevelId}
         />
@@ -94,7 +94,12 @@ export function QuoteForm({ services, levels }: QuoteFormProps) {
               <span className="text-xs text-red-300">Error</span>
             ) : (
               <span className="text-base font-bold text-white tabular-nums">
-                {price?.formatted ?? "$0.00"}
+                {price?.total_price
+                  ? new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(price.total_price)
+                  : "$0.00"}
               </span>
             )}
           </div>

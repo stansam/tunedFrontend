@@ -6,12 +6,11 @@ import { Search } from "lucide-react";
 import type { HeroLeftBlockProps } from "@/lib/props/index.props";
 
 export function HeroLeftBlock({
-  searchPlaceholder = "What are you looking for?",
-  onSearch,
+  searchPlaceholder = "What are you looking for?", onSearch,
 }: HeroLeftBlockProps) {
   const [query, setQuery] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (query.trim()) onSearch?.(query.trim());
   };
@@ -80,115 +79,14 @@ export function HeroLeftBlock({
   );
 }
 
-// ─── Inline SVG Illustrations ─────────────────────────────────────────────────
-
-function QuestionIllustration() {
-  return (
-    // <svg
-    //   viewBox="0 0 220 130"
-    //   fill="none"
-    //   xmlns="http://www.w3.org/2000/svg"
-    //   className="w-full h-full"
-    //   aria-hidden="true"
-    // >
-    //   {/* Large question mark */}
-    //   <text
-    //     x="90"
-    //     y="105"
-    //     fontSize="110"
-    //     fontWeight="800"
-    //     fill="#1e293b"
-    //     opacity="0.12"
-    //     fontFamily="serif"
-    //   >
-    //     ?
-    //   </text>
-    //   <text
-    //     x="85"
-    //     y="100"
-    //     fontSize="90"
-    //     fontWeight="700"
-    //     fill="#334155"
-    //     opacity="0.18"
-    //     fontFamily="serif"
-    //   >
-    //     ?
-    //   </text>
-
-    //   {/* Person left - simple silhouette */}
-    //   <g transform="translate(10, 20)">
-    //     {/* Head */}
-    //     <circle cx="24" cy="18" r="10" fill="#64748b" />
-    //     {/* Body */}
-    //     <rect x="16" y="30" width="16" height="30" rx="6" fill="#475569" />
-    //     {/* Legs */}
-    //     <rect x="16" y="55" width="7" height="22" rx="3" fill="#475569" />
-    //     <rect x="25" y="55" width="7" height="22" rx="3" fill="#475569" />
-    //     {/* Left arm - holding document */}
-    //     <rect x="4" y="33" width="12" height="5" rx="2.5" fill="#475569" />
-    //     <rect x="0" y="28" width="10" height="14" rx="2" fill="#94a3b8" />
-    //   </g>
-
-    //   {/* Person right */}
-    //   <g transform="translate(165, 20)">
-    //     {/* Head */}
-    //     <circle cx="24" cy="18" r="10" fill="#64748b" />
-    //     {/* Body */}
-    //     <rect x="16" y="30" width="16" height="30" rx="6" fill="#475569" />
-    //     {/* Legs */}
-    //     <rect x="16" y="55" width="7" height="22" rx="3" fill="#475569" />
-    //     <rect x="25" y="55" width="7" height="22" rx="3" fill="#475569" />
-    //     {/* Right arm */}
-    //     <rect x="32" y="33" width="12" height="5" rx="2.5" fill="#475569" />
-    //   </g>
-    // </svg>
-    <img
-      src="/question.svg"
-      alt="Question illustration"
-      className="w-50 h-40 opacity-75"
-    />
-  );
-}
-
 function BookIllustration() {
   return (
-    // <svg
-    //   viewBox="0 0 220 90"
-    //   fill="none"
-    //   xmlns="http://www.w3.org/2000/svg"
-    //   className="w-full h-full"
-    //   aria-hidden="true"
-    // >
-    //   {/* Book pages - open book effect */}
-    //   {/* Left pages */}
-    //   {[0, 1, 2, 3, 4].map((i) => (
-    //     <path
-    //       key={`left-${i}`}
-    //       d={`M 110 75 L ${40 - i * 6} ${15 + i * 2} L ${50 - i * 4} ${10 + i * 2} Z`}
-    //       fill={`hsl(35, ${15 + i * 5}%, ${75 - i * 3}%)`}
-    //       stroke="hsl(35,10%,60%)"
-    //       strokeWidth="0.3"
-    //     />
-    //   ))}
-    //   {/* Right pages */}
-    //   {[0, 1, 2, 3, 4].map((i) => (
-    //     <path
-    //       key={`right-${i}`}
-    //       d={`M 110 75 L ${180 + i * 6} ${15 + i * 2} L ${170 + i * 4} ${10 + i * 2} Z`}
-    //       fill={`hsl(35, ${15 + i * 5}%, ${75 - i * 3}%)`}
-    //       stroke="hsl(35,10%,60%)"
-    //       strokeWidth="0.3"
-    //     />
-    //   ))}
-    //   {/* Spine */}
-    //   <ellipse cx="110" cy="75" rx="6" ry="4" fill="#78716c" />
-    //   {/* Cover shadow */}
-    //   <ellipse cx="110" cy="80" rx="70" ry="6" fill="#1e293b" opacity="0.07" />
-    // </svg>
-    <img
+    <Image
       src="/book_sketch.svg"
       alt="Book illustration"
       className="h-80"
+      width={290}
+      height={180}
     />
   );
 }

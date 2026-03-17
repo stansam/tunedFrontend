@@ -12,8 +12,8 @@ import type {
   QuoteFormState,
   CalculatePriceResponse,
   CalculatePriceRequest,
-} from "@/types/quote.type";
-import type { CategoryTab } from "@/types";
+  CategoryTab,
+} from "@/lib/types";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
