@@ -9,6 +9,13 @@ export interface Service {
     is_active: boolean;
 }
 
+export interface FallbackService {
+    id: string;
+    name: string;
+    description: string;
+    iconEmoji: string;
+}
+
 export interface ServiceCategory {
   id: string;
   name: string;

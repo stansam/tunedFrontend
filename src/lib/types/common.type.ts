@@ -13,3 +13,11 @@ export type ApiResult<T> =
         status: number | "PARSE_ERROR" | "TIMEOUT" | "NETWORK_ERROR";
       };
     };
+    
+export interface RequestOptions {
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  body?: unknown;
+  headers?: HeadersInit;
+  timeoutMs?: number;
+  next?: NextFetchRequestConfig;
+}

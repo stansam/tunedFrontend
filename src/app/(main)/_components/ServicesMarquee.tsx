@@ -19,7 +19,7 @@ function ServiceCard({ service }: ServiceCardProps) {
       {/* Icon */}
       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 ring-1 ring-slate-100">
         <span className="text-2xl leading-none" aria-hidden="true">
-          {/* @ts-ignore */}
+          {/* @ts-expect-error */}
           {service.iconEmoji ?? "📄"}
         </span>
       </div>

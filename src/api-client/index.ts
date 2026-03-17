@@ -1,13 +1,9 @@
-import type { ApiResult } from "@/lib/types";
-
-// ─── Config ───────────────────────────────────────────────────────────────────
+import type { ApiResult, RequestOptions } from "@/lib/types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000/api";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function buildUrl(path: string): string {
   return `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
@@ -42,16 +38,6 @@ async function parseErrorBody(res: Response): Promise<ApiResult<never>> {
       },
     };
   }
-}
-
-// ─── Core Request ─────────────────────────────────────────────────────────────
-
-interface RequestOptions {
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  body?: unknown;
-  headers?: HeadersInit;
-  timeoutMs?: number;
-  next?: NextFetchRequestConfig;
 }
 
 export async function apiRequest<T>(

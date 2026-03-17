@@ -3,11 +3,11 @@ import { Navbar } from "./_components/navbar";
 import { HeroSection } from "./_components/hero";
 import { fetchOptions } from "@/lib/services/quote.service";
 import { fetchFeaturedServices } from "@/lib/services/services.service";
-import type { Service, Level, QuoteFormOptions } from "@/lib/types";
+import type { Service, Level, QuoteFormOptions, ServiceWithPricingCategory, FallbackService } from "@/lib/types";
 
 // ─── Fallback data (shown when API is unavailable / dev mode) ─────────────────
 
-const FALLBACK_SERVICES: any[] = [
+const FALLBACK_SERVICES: ServiceWithPricingCategory[] = [
   { id: "essay-writing", name: "Essay Writing", category: "writing", pricing_category: "writing" },
   { id: "dissertation", name: "Dissertation", category: "writing", pricing_category: "writing" },
   { id: "research-paper", name: "Research Paper", category: "writing", pricing_category: "writing" },
@@ -29,7 +29,7 @@ const FALLBACK_LEVELS: Level[] = [
   { id: "professional", name: "Professional", order: 6 },
 ];
 
-const FALLBACK_FEATURED: any[] = [
+const FALLBACK_FEATURED: FallbackService[] = [
   {
     id: "proofreading-editing",
     name: "Proofreading and Editing",
