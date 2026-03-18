@@ -28,4 +28,14 @@ export const metadata: Metadata = {
   },
 };
 
-
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className={dmSans.variable}>
+      <body className={`${dmSans.className} antialiased`}>{children}</body>
+    </html>
+  );
+}

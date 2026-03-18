@@ -20,6 +20,6 @@ export interface ServiceWithPricingCategory {
 }
 
 export interface QuoteFormOptions {
-    services: ServiceWithPricingCategory[];
-    levels: Level[] ;
+  levels: Level[] ;
+  services: ServiceWithPricingCategory[];
 }

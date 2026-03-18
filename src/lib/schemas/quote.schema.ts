@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { LevelSchema } from "./content.schema";
-import { PricingCategorySchema } from "./price.schema";
 import { isoUtcDatetime } from "@/lib/utils"
 
 export const CategoryTabSchema = z.enum(["writing", "technical", "proofreading"]);
@@ -13,9 +12,8 @@ export const ServiceWithPricingCategorySchema = z.object({
 });
 
 export const GetQuoteOptionsResponseSchema = z.object({
+  levels: z.array(LevelSchema),
   services: z.array(ServiceWithPricingCategorySchema),
-  academic_levels: z.array(LevelSchema),
-  pricing_categories: z.array(PricingCategorySchema),
 });
 
 export const QuoteFormStateSchema = z.object({

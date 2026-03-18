@@ -14,7 +14,7 @@ export default async function HomePage() {
   ]);
 
   const services = optionsResult.ok ? optionsResult.data.services : FALLBACK_SERVICES;
-  const levels = optionsResult.ok ? optionsResult.data.academic_levels : FALLBACK_LEVELS;
+  const levels = optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS;
   const featuredServices = featuredResult.ok
     ? featuredResult.data.services
     : FALLBACK_FEATURED;
