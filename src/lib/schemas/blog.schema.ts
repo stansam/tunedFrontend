@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TagSchema } from "./content.schema";
+import { TagSchema } from "./tag.schema";
 
 // export const BlogPostSchema = z.object({
 //     id: z.string().min(1),

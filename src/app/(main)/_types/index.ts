@@ -28,6 +28,13 @@ export interface Service {
   readonly tags:                readonly Tag[];
 }
 
+export interface ServiceCategory {
+  readonly id:                  CategoryId;
+  readonly name:                string;
+  readonly description:         string;
+  readonly order:               number;
+}
+
 export interface Sample {
   readonly id:         SampleId;
   readonly title:      string;
@@ -57,7 +64,7 @@ export interface BlogPostResponse {
 }
 
 export interface FeaturedContentResponse {
-  readonly services: readonly Service[];
+  readonly services: readonly ServiceCategory[];
   readonly samples:  readonly Sample[];
   readonly blogs:    readonly BlogPostResponse[];
 }

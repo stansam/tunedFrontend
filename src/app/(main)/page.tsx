@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { Navbar } from "./_components/navbar";
-import { HeroSection } from "./_components/hero";
+import { Navbar } from "./_components/Navbar";
+import { HeroSection } from "./_components/HeroSection";
 import { HeroSkeleton } from "./_components/skeleton";
 import { fetchOptions } from "@/lib/services/quote.service";
 import { fetchFeaturedContent } from "@/lib/services/content.service";
@@ -11,7 +11,7 @@ import type { QuoteFormOptions } from "@/lib/types";
 
 import { 
   FALLBACK_FEATURED_SERVICES, FALLBACK_SAMPLES, FALLBACK_BLOGS
-} from "./_fallback";
+} from "./_fallback/featured.fallback";
 import { FALLBACK_SERVICES, FALLBACK_LEVELS } from "./_schemas/fallback";
 
 export default async function HomePage() {

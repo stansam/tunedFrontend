@@ -1,5 +1,5 @@
 import type {
-  Service,
+  ServiceCategory,
   Sample,
   BlogPostResponse,
   BlogPostViewModel,
@@ -7,11 +7,11 @@ import type {
 } from "../_types";
 
 export interface ServicesMarqueeProps {
-  readonly featuredServices: readonly Service[];
+  readonly featuredServices: readonly ServiceCategory[];
 }
 
 export interface ServiceCardProps {
-  readonly service: Service;
+  readonly service: ServiceCategory;
 }
 
 export interface FeaturedBlogsProps {

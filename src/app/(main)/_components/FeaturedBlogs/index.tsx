@@ -9,7 +9,7 @@ import type {
 } from "../../_props";
 import type { BlogPostResponse } from "../../_types";
 import { toBlogPostViewModels } from "../../_mappers";
-import { FALLBACK_BLOGS } from "../../_fallback";
+import { FALLBACK_BLOGS } from "../../_fallback/featured.fallback";
 import { BlogCard } from "../BlogCard";
 
 function EmptyBlogs() {

@@ -1,5 +1,5 @@
-import type { ServiceIconMapping } from "@/lib/types";
-import type { Service } from "@/app/(main)/_types";
+import type { ServiceCategory, ServiceIconMapping } from "@/lib/types";
+import type { ServiceCategory as ServiceCategoryRO} from "@/app/(main)/_types";
 
 const SERVICE_ICON_MAPPINGS: readonly ServiceIconMapping[] = [
   // ── Writing & Composition ─────────────────────────────────────────────────
@@ -151,12 +151,12 @@ export interface ResolvedServiceIcon {
  * @param service - The service object from the API response.
  * @returns An object containing the emoji and its aria label.
  */
-export function resolveServiceIcon(service: Service): ResolvedServiceIcon {
+export function resolveServiceIcon(service: ServiceCategoryRO): ResolvedServiceIcon {
   const haystack = [
     normalise(service.name),
-    normalise(service.slug),
-    normalise(service.category_id),
-    ...service.tags.map((t) => normalise(t.name)),
+    // normalise(service.slug),
+    // normalise(service.category_id),
+    // ...service.tags.map((t) => normalise(t.name)),
   ].join(" ");
 
   for (const mapping of SERVICE_ICON_MAPPINGS) {
@@ -175,16 +175,11 @@ export function resolveIconByNameSlug(
   slug: string,
   categoryId: string = ""
 ): ResolvedServiceIcon {
-  const stub: Service = {
+  const stub: ServiceCategoryRO = {
     id:                  "",
     name,
     description:         "",
-    category_id:         categoryId,
-    featured:            false,
-    pricing_category_id: "",
-    slug,
-    is_active:           true,
-    tags:                [],
+    order:               0,
   };
   return resolveServiceIcon(stub);
 }

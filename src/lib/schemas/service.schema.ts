@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TagSchema } from "./content.schema";
+import { TagSchema } from "./tag.schema";
 
 // export const ServiceSchema = z.object({
 //   id: z.string().min(1),
@@ -22,6 +22,13 @@ export const ServiceSchema = z.object({
   slug:                z.string().min(1, "Service slug is required"),
   is_active:           z.boolean(),
   tags:                z.array(TagSchema),
+});
+
+export const ServiceCategorySchema = z.object({
+  id:                  z.string().min(1, "Service category id is required"),
+  name:                z.string().min(1, "Service category name is required"),
+  description:         z.string().min(1, "Service category description is required"),
+  order:               z.number().int().positive("Order must be a positive integer"),
 });
 
 export const GetServicesResponseSchema = z.object({

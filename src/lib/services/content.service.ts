@@ -67,7 +67,7 @@ export async function fetchFeaturedContent(): Promise<
   ApiResult<FeaturedContentResponse>
 > {
   
-  const result = await apiGet<unknown>("/featured/content", {
+  const result = await apiGet<FeaturedContentResponse>("/featured/contents", {
     next: { revalidate: 300, tags: ["featured-content"] },
   });
 

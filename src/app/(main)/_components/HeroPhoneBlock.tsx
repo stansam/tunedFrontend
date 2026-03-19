@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { QuoteForm } from "./quote-form";
+import { QuoteForm } from "./QuoteForm";
 import type { HeroPhoneBlockProps } from "@/lib/props/index.props";
 
 export function HeroPhoneBlock({ options }: HeroPhoneBlockProps) {

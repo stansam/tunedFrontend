@@ -3,8 +3,8 @@
 import { useRef, useState } from "react";
 import { cn, resolveServiceIcon } from "@/lib/utils";
 import type { ServicesMarqueeProps, ServiceCardProps } from "../_props";
-export { FALLBACK_FEATURED_SERVICES as FALLBACK_FEATURED } from "../_fallback";
-import type { Service } from "../_types";
+export { FALLBACK_FEATURED_SERVICES as FALLBACK_FEATURED } from "../_fallback/featured.fallback";
+import type { ServiceCategory } from "../_types";
 
 function FeaturedServiceCard({ service }: ServiceCardProps) {
   const { emoji, ariaLabel } = resolveServiceIcon(service);
@@ -40,7 +40,7 @@ export function ServicesMarquee({ featuredServices }: ServicesMarqueeProps) {
   const [isPaused, setIsPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const items: Service[] = [...featuredServices, ...featuredServices];
+  const items: ServiceCategory[] = [...featuredServices, ...featuredServices];
 
   if (featuredServices.length === 0) return null;
 

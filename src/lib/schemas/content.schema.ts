@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { ServiceSchema } from "./service.schema";
+import { ServiceCategorySchema } from "./service.schema";
 import { BlogPostSchema } from "./blog.schema";
+import { TagSchema } from "./tag.schema";
 
 // export const TagSchema = z.object({
 //     id: z.string().min(1),
@@ -9,13 +10,7 @@ import { BlogPostSchema } from "./blog.schema";
 //     slug: z.string().min(1),
 //     usage_count: z.number().int().positive(),
 // });
-export const TagSchema = z.object({
-  id:          z.string().min(1, "Tag id is required"),
-  name:        z.string().min(1, "Tag name is required"),
-  description: z.string().min(1, "Tag description is required"),
-  slug:        z.string().min(1, "Tag slug is required"),
-  usage_count: z.number().int().positive("usage_count must be a positive integer"),
-});
+
 
 export const LevelSchema = z.object({
   id: z.string().min(1),
@@ -61,7 +56,7 @@ export const SampleSchema = z.object({
 // });
 
 export const FeaturedContentResponseSchema = z.object({
-  services: z.array(ServiceSchema),
+  services: z.array(ServiceCategorySchema),
   samples:  z.array(SampleSchema),
   blogs:    z.array(BlogPostSchema),
 });

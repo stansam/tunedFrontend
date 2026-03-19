@@ -13,7 +13,7 @@ import type {
 } from "../_props";
 import type { Sample } from "../_types";
 import { toSampleViewModels } from "../_mappers";
-import { FALLBACK_SAMPLES } from "../_fallback";
+import { FALLBACK_SAMPLES } from "../_fallback/featured.fallback";
 
 // ─── Image placeholder ────────────────────────────────────────────────────────
 
