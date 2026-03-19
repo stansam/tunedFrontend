@@ -1,21 +1,6 @@
 import { z } from "zod";
 import { TagSchema } from "./tag.schema";
 
-// export const BlogPostSchema = z.object({
-//     id: z.string().min(1),
-//     title: z.string().min(1),
-//     content: z.string().min(1),
-//     author: z.string().min(1),
-//     category_id: z.string().min(1),
-//     slug: z.string().min(1),
-//     excerpt: z.string().min(1),
-//     featured_image: z.string().min(1),
-//     meta_description: z.string().min(1),
-//     is_published: z.boolean(),
-//     is_featured: z.boolean(),
-//     published_at: z.string().min(1),
-//     tags: z.array(TagSchema),
-// });
 const isoDateString = z
   .string()
   .min(1, "published_at is required");
