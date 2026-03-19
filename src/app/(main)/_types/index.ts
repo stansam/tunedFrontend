@@ -11,7 +11,7 @@ export type ISODateString = string;
 export interface Tag {
   readonly id:          TagId;
   readonly name:        string;
-  readonly description: string;
+  readonly description?: string | null;
   readonly slug:        Slug;
   readonly usage_count: number;
 }

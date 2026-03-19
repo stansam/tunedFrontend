@@ -47,7 +47,7 @@ export interface FAQ {
 export interface Tag {
     id: string;
     name: string;
-    description: string;
+    description?: string | null;
     slug: string;
     usage_count: number;
 }

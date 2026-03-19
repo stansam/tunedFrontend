@@ -32,7 +32,6 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
       style={{ backgroundImage: `url(${backgroundImage})` }}
       aria-label={`Read blog post: ${post.title}`}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={post.featuredImage}
         alt=""
