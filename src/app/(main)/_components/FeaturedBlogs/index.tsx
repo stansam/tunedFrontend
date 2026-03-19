@@ -59,26 +59,53 @@ export function FeaturedBlogs({
           <EmptyBlogs />
         ) : (
           <>
-            <div className="hidden md:grid md:h-[640px] md:grid-cols-2 lg:grid-cols-[1fr_0.52fr] gap-4">
-              {viewModels.slice(0, 3).map((post, index) => {
-                const isPrimary = index === 0;
-                return (
-                  <div
-                    key={post.id}
-                    className={cn(
-                      isPrimary
-                        ? "row-span-2"
-                        : "row-span-1"
-                    )}
-                  >
-                    <BlogCard post={post} isPrimary={isPrimary} />
-                  </div>
-                );
+            <div className="hidden md:flex md:flex-col gap-4 lg:gap-6">
+              {Array.from({ length: Math.ceil(viewModels.length / 3) }).map((_, chunkIndex) => {
+                const chunk = viewModels.slice(chunkIndex * 3, chunkIndex * 3 + 3);
+
+                if (chunk.length === 3) {
+                  return (
+                    <div key={chunkIndex} className="grid gap-4 md:h-[640px] md:grid-cols-2 md:grid-rows-2 lg:grid-cols-[1fr_0.52fr]">
+                      {chunk.map((post, index) => {
+                        const isPrimary = index === 0;
+                        return (
+                          <div key={post.id} className={cn(isPrimary ? "row-span-2" : "row-span-1")}>
+                            <BlogCard post={post} isPrimary={isPrimary} />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+
+                if (chunk.length === 2) {
+                  return (
+                    <div key={chunkIndex} className="grid gap-4 md:h-[320px] md:grid-cols-2">
+                      {chunk.map((post) => (
+                        <div key={post.id} className="row-span-1">
+                          <BlogCard post={post} isPrimary={false} />
+                        </div>
+                      ))}
+                    </div>
+                  );
+                }
+
+                if (chunk.length === 1 && chunk[0]) {
+                  return (
+                    <div key={chunkIndex} className="grid gap-4 md:h-[320px] grid-cols-1">
+                      <div className="row-span-1">
+                        <BlogCard post={chunk[0]} isPrimary={true} />
+                      </div>
+                    </div>
+                  );
+                }
+
+                return null;
               })}
             </div>
 
             <div className="flex flex-col gap-4 md:hidden">
-              {viewModels.slice(0, 3).map((post, index) => (
+              {viewModels.map((post, index) => (
                 <BlogCard key={post.id} post={post} isPrimary={index === 0} />
               ))}
             </div>

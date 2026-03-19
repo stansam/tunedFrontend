@@ -10,3 +10,11 @@ export function cn(...inputs: ClassValue[]) {
 export { isoUtcDatetime }
 export { resolveServiceIcon, resolveIconByNameSlug }
 export type { ResolvedServiceIcon }
+
+export const placeholderImage = (text = "Image"): string =>
+  `https://placehold.co/600x400/1a1a1a/ffffff?text=${encodeURIComponent(text)}`;
+
+export const formatWordCount = (count: number): string => {
+  if (count >= 1000) return `${(count / 1000).toFixed(1)}k words`;
+  return `${count} words`;
+}

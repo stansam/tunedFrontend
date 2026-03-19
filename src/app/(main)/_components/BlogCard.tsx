@@ -23,7 +23,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
     <Link
       href={"#"} // /blogs/${post.slug}
       className={cn(
-        "group relative flex flex-col justify-end overflow-hidden rounded-2xl",
+        "group relative flex flex-col justify-end overflow-hidden rounded-2xl w-full h-full",
         "bg-slate-900 bg-cover bg-center bg-no-repeat text-white",
         "transition-transform duration-300 hover:scale-[0.985] hover:rotate-[0.2deg]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2",

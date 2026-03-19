@@ -6,7 +6,7 @@ import { fetchOptions } from "@/lib/services/quote.service";
 import { fetchFeaturedContent } from "@/lib/services/content.service";
 import { FeaturedBlogs } from "./_components/FeaturedBlogs";
 import { FeaturedSamples } from "./_components/FeaturedSamples";
-import { Service, Sample, BlogPostResponse } from "./_types";
+import { ServiceCategory, Sample, BlogPostResponse } from "./_types";
 import type { QuoteFormOptions } from "@/lib/types";
 
 import { 
@@ -33,7 +33,7 @@ export default async function HomePage() {
     levels: optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS,
   };
 
-  const featuredServices: readonly Service[] = featuredResult.ok
+  const featuredServices: readonly ServiceCategory[] = featuredResult.ok
     ? featuredResult.data.services
     : FALLBACK_FEATURED_SERVICES;
 
