@@ -9,6 +9,7 @@ import { LevelSelect } from "./LevelSelect";
 import { DeadlinePicker } from "./DeadlinePicker";
 import { PageCountControl } from "./PageCountControl";
 import type { QuoteFormProps } from "@/lib/props/index.props";
+import { cn } from "@/lib/utils";
 
 export function QuoteForm({ options }: QuoteFormProps) {
   const {
@@ -31,7 +32,6 @@ export function QuoteForm({ options }: QuoteFormProps) {
 
   return (
     <div className="flex flex-col gap-3 w-full ">
-      {/* Header */}
       <div className="text-center px-2">
         <p className="text-base font-semibold text-white leading-snug">
           AI &amp; Plagiarism free services
@@ -41,13 +41,11 @@ export function QuoteForm({ options }: QuoteFormProps) {
         </p>
       </div>
 
-      {/* Category tabs */}
       <QuoteFormTabs
         activeTab={formState.activeTab}
         onTabChange={setActiveTab}
       />
 
-      {/* Service select */}
       <ServiceSelect
         services={options.services}
         activeTab={formState.activeTab}
@@ -55,7 +53,6 @@ export function QuoteForm({ options }: QuoteFormProps) {
         onChange={setServiceId}
       />
 
-      {/* Level + Deadline row */}
       <div className="grid grid-cols-2 gap-2">
         <LevelSelect
           levels={options.levels}
@@ -68,16 +65,13 @@ export function QuoteForm({ options }: QuoteFormProps) {
         />
       </div>
 
-      {/* Page count control */}
       <PageCountControl
         value={formState.pageCount}
         wordsPerPage={wordsPerPage}
         onChange={setPageCount}
       />
 
-      {/* Price + Continue row */}
       <div className="flex items-center justify-between mt-1">
-        {/* Approx price */}
         <div>
           <p className="text-[10px] font-medium text-emerald-100 uppercase tracking-wide">
             Approx Price:
@@ -104,10 +98,12 @@ export function QuoteForm({ options }: QuoteFormProps) {
           </div>
         </div>
 
-        {/* Continue button */}
         <Link
           href={continueHref}
-          className="flex items-center gap-2 rounded-full bg-emerald-500 hover:bg-emerald-400 px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-none focus:outline-none focus:ring-2 focus:ring-emerald-300"
+          className={cn(
+            "flex items-center gap-2 rounded-full bg-slate-700 hover:bg-slate-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-none focus:outline-none focus:ring-2 focus:ring-slate-300",
+            !formState.serviceId && "opacity-50 cursor-not-allowed"
+          )}
           aria-label="Continue to order"
         >
           Continue
