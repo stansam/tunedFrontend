@@ -5,13 +5,18 @@ import type {
   BlogPostViewModel,
   SampleViewModel,
 } from "../_types";
+import type { ResolvedServiceIcon } from "@/lib/utils/resolveServiceIcon";
+
+export type ServiceIconRecord = Readonly<Record<string, ResolvedServiceIcon>>;
 
 export interface ServicesMarqueeProps {
   readonly featuredServices: readonly ServiceCategory[];
+  readonly iconRecord:       ServiceIconRecord;
 }
 
 export interface ServiceCardProps {
-  readonly service: ServiceCategory;
+  readonly service:    ServiceCategory;
+  readonly icon:       ResolvedServiceIcon;
 }
 
 export interface FeaturedBlogsProps {

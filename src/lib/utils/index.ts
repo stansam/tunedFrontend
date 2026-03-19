@@ -1,15 +1,15 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { isoUtcDatetime } from "./dateFormat"
-import { resolveServiceIcon, resolveIconByNameSlug, ResolvedServiceIcon } from "./serviceIcon"
+// import { resolveServiceIcon, ResolvedServiceIcon } from "./serviceIcon"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 export { isoUtcDatetime }
-export { resolveServiceIcon, resolveIconByNameSlug }
-export type { ResolvedServiceIcon }
+// export { resolveServiceIcon}
+// export type { ResolvedServiceIcon }
 
 export const placeholderImage = (text = "Image"): string =>
   `https://placehold.co/600x400/1a1a1a/ffffff?text=${encodeURIComponent(text)}`;

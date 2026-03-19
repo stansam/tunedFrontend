@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ServiceCardProps } from "../../_props";
-import { resolveServiceIcon } from "@/lib/utils/serviceIcon";
+import { resolveServiceIcon } from "@/lib/utils/resolveServiceIcon";
 
 export function FeaturedServiceCard({ service }: ServiceCardProps) {
   const { emoji, ariaLabel } = resolveServiceIcon(service);

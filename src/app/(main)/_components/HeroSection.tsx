@@ -1,12 +1,17 @@
+import { ServiceIconRecord } from "../_props/featured.props";
 import { HeroLeftBlock } from "./HeroLeftBlock";
 import { HeroPhoneBlock } from "./HeroPhoneBlock";
 import { ServicesMarquee } from "./ServicesMarquee";
 import type { HeroSectionProps } from "@/lib/props/index.props";
+import { resolveServiceIcons } from "@/lib/utils/resolveServiceIcon";
 
 export function HeroSection({
   options,
   featuredServices,
 }: HeroSectionProps) {
+  const iconMap = resolveServiceIcons(featuredServices);
+  const iconRecord: ServiceIconRecord = Object.fromEntries(iconMap);
+
   return (
     <section
       className="relative w-full bg-[#e8e6e1] overflow-hidden"
@@ -45,7 +50,7 @@ export function HeroSection({
       </div>
 
       <div className="relative z-10 w-full border-t border-slate-200 bg-[#f1efeb]">
-        <ServicesMarquee featuredServices={featuredServices} />
+        <ServicesMarquee featuredServices={featuredServices} iconRecord={iconRecord} />
       </div>
     </section>
   );
