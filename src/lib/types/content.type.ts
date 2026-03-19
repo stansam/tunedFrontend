@@ -1,3 +1,6 @@
+import { Service } from "./service.type";
+import { BlogPost } from "./blog.type";
+
 export interface Deadline {
     id: string;
     name: string;
@@ -40,3 +43,9 @@ export interface FAQ {
     order: number;
 }
 
+
+export interface FeaturedContentResponse {
+    services: Service[];
+    samples: Sample[];
+    blogs: BlogPost[];
+}

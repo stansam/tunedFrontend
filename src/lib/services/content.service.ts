@@ -1,18 +1,17 @@
-import { ApiResult } from "@/lib/types";
-import { GetServicesResponseSchema } from "@/lib/schemas/service.schema";
+import { ApiResult, FeaturedContentResponse } from "@/lib/types";
+import { FeaturedContentResponseSchema } from "@/lib/schemas/content.schema";
 import { apiGet } from "@/api-client";
-import z from "zod";
 
-export async function fetchFeaturedServices(): Promise<
-  ApiResult<z.infer<typeof GetServicesResponseSchema>>
+export async function fetchFeaturedContent(): Promise<
+  ApiResult<FeaturedContentResponse>
 > {
-  const result = await apiGet<typeof GetServicesResponseSchema>("/featured-services", {
-    next: { revalidate: 300, tags: ["featured-services"] },
+  const result = await apiGet<FeaturedContentResponse>("/featured/content", {
+    next: { revalidate: 300, tags: ["featured-content"] },
   });
 
   if (!result.ok) return result;
 
-  const parsed = GetServicesResponseSchema.safeParse(result.data);
+  const parsed = FeaturedContentResponseSchema.safeParse(result.data);
   if (!parsed.success) {
     return {
       ok: false,
