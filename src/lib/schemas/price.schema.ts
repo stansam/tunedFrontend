@@ -11,10 +11,10 @@ export const PricingCategorySchema = z.object({
 
 export const CalculatePriceResponseSchema = z.object({
   price_per_page: z.number().nonnegative(),
-  page_count: z.number().int().min(1),
+  page_count: z.number().min(1),
   pages_price: z.number().nonnegative(),
   total_price: z.number().nonnegative(),
-  deadline_hours: z.number().int().positive(),
+  deadline_hours: z.number().positive(),
   selected_deadline: DeadlineSchema,
 });
 
