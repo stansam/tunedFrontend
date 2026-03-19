@@ -25,7 +25,6 @@ export function Navbar({ activeRoute }: NavbarProps) {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [activeRoute]);
@@ -41,13 +40,11 @@ export function Navbar({ activeRoute }: NavbarProps) {
         className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
         aria-label="Main navigation"
       >
-        {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 text-xl font-bold text-slate-800 select-none"
           aria-label="TunedEssays home"
         >
-          {/* Leaf icon approximation */}
           <svg
             width="26"
             height="26"
@@ -68,7 +65,6 @@ export function Navbar({ activeRoute }: NavbarProps) {
           </span>
         </Link>
 
-        {/* Desktop nav links */}
         <ul className="hidden md:flex items-center gap-1" role="list">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
@@ -87,7 +83,6 @@ export function Navbar({ activeRoute }: NavbarProps) {
           ))}
         </ul>
 
-        {/* CTA buttons */}
         <div className="hidden md:flex items-center gap-3">
           <Button
             variant="outline"
@@ -106,7 +101,6 @@ export function Navbar({ activeRoute }: NavbarProps) {
           </Button>
         </div>
 
-        {/* Mobile menu toggle */}
         <button
           className="md:hidden rounded-md p-2 text-slate-600 hover:bg-slate-100 transition-colors"
           onClick={() => setMobileOpen((o) => !o)}
@@ -118,7 +112,6 @@ export function Navbar({ activeRoute }: NavbarProps) {
         </button>
       </nav>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div
           id="mobile-menu"

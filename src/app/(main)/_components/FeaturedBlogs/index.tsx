@@ -52,7 +52,7 @@ export function FeaturedBlogs({
           backgroundLabel={backgroundLabel}
           backgroundPosition={backgroundPosition}
           align="center"
-          accentWord="Blog"
+          accentWord="Blogs"
         />
 
         {viewModels.length === 0 ? (

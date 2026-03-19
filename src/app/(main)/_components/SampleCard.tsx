@@ -1,3 +1,5 @@
+"use client";
+
 import { placeholderImage, formatWordCount } from "@/lib/utils";
 import { useState } from "react";
 import Link from "next/link";
@@ -32,7 +34,6 @@ export function SampleCard({ sample }: SampleCardProps) {
       )}
       aria-label={`View sample: ${sample.title}`}
     >
-      {/* Thumbnail */}
       <div className="relative h-44 w-full overflow-hidden bg-slate-100 shrink-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -72,12 +73,10 @@ export function SampleCard({ sample }: SampleCardProps) {
           {sample.title}
         </h3>
 
-        {/* Excerpt */}
         <p className="text-sm text-slate-500 leading-relaxed line-clamp-3 flex-1">
           {sample.excerpt}
         </p>
 
-        {/* Footer */}
         <div className="flex items-center justify-between mt-2 pt-3 border-t border-slate-100">
           <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-400">
             <BookOpen size={12} aria-hidden="true" />

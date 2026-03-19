@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import type { BlogCardProps } from "../_props";
 import { TagChip } from "./TagChip";
@@ -5,10 +7,7 @@ import { formatPublishedDate } from "../_mappers";
 import { MoveRight, Clock, User, Tag as TagIcon } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-
-const placeholderImage = (text = "Image"): string =>
-  `https://placehold.co/600x400/1a1a1a/ffffff?text=${encodeURIComponent(text)}`;
-
+import { placeholderImage } from "@/lib/utils";
 
 export function BlogCard({ post, isPrimary }: BlogCardProps) {
   const [imgError, setImgError] = useState(false);

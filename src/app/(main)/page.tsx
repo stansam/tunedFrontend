@@ -12,7 +12,7 @@ import type { QuoteFormOptions } from "@/lib/types";
 import { 
   FALLBACK_FEATURED_SERVICES, FALLBACK_SAMPLES, FALLBACK_BLOGS
 } from "./_fallback/featured.fallback";
-import { FALLBACK_SERVICES, FALLBACK_LEVELS } from "./_schemas/fallback";
+import { FALLBACK_SERVICES, FALLBACK_LEVELS } from "./_fallback/quote.fallback";
 
 export default async function HomePage() {
   const [optionsResult, featuredResult] = await Promise.all([

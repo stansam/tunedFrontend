@@ -20,8 +20,6 @@ export interface HeroSectionProps {
   featuredServices: readonly MainServiceCategory[];
 }
 
-// ─── Quote Form ───────────────────────────────────────────────────────────────
-
 export interface QuoteFormProps {
   options: QuoteFormOptions;
 }
@@ -71,16 +69,6 @@ export interface ContinueButtonProps {
   disabled?: boolean;
   onClick?: () => void;
 }
-
-// ─── Marquee ─────────────────────────────────────────────────────────────────
-
-// export interface ServicesMarqueeProps {
-//   featuredServices: Service[];
-// }
-
-// export interface ServiceCardProps {
-//   service: Service;
-// }
 
 export interface HeroLeftBlockProps {
   searchPlaceholder?: string;
