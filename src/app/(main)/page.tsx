@@ -13,8 +13,21 @@ export default async function HomePage() {
     fetchFeaturedServices(),
   ]);
 
-  const services = optionsResult.ok ? optionsResult.data.services : FALLBACK_SERVICES;
-  const levels = optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS;
+  if (!optionsResult.ok && process.env.NODE_ENV === "development") {
+    console.error("[HomePage] fetchOptions failed:", optionsResult.error);
+  }
+
+  if (!featuredResult.ok && process.env.NODE_ENV === "development") {
+    console.error("[HomePage] fetchFeaturedServices failed:", featuredResult.error);
+  }
+
+  const options: QuoteFormOptions = {
+    services: optionsResult.ok ? optionsResult.data.services : FALLBACK_SERVICES,
+    levels: optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS,
+  };
+
+  // const services = optionsResult.ok ? optionsResult.data.services : FALLBACK_SERVICES;
+  // const levels = optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS;
   const featuredServices = featuredResult.ok
     ? featuredResult.data.services
     : FALLBACK_FEATURED;
@@ -24,7 +37,7 @@ export default async function HomePage() {
       <Navbar />
       <Suspense fallback={<HeroSkeleton />}>
         <HeroSection
-          options={{ services, levels } as QuoteFormOptions}
+          options={options}
           featuredServices={featuredServices as Service[]}
         />
       </Suspense>

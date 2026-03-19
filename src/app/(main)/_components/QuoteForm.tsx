@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useQuoteForm } from "@/lib/hooks/quote.hook";

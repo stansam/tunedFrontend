@@ -4,17 +4,18 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000/api";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
+const UNEXPECTED_ERROR = "An unexpected error occurred"
+const BASE_HEADERS = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+} as const;
 
 function buildUrl(path: string): string {
   return `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
 function buildHeaders(extra?: HeadersInit): HeadersInit {
-  return {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    ...extra,
-  };
+  return extra ? { ...BASE_HEADERS, ...extra} : BASE_HEADERS;
 }
 
 async function parseErrorBody(res: Response): Promise<ApiResult<never>> {
@@ -64,21 +65,39 @@ export async function apiRequest<T>(
       ...(next ? { next } : {}),
     });
 
-    clearTimeout(timeoutId);
-
     if (!res.ok) {
+      clearTimeout(timeoutId);
       return await parseErrorBody(res);
     }
-
+    
     const contentType = res.headers.get("content-type");
-    const data: T = contentType?.includes("application/json")
-      ?
-      await res.json()
-      : (null as T);
+    if (!contentType?.includes("application/json")) {
+      clearTimeout(timeoutId);
+      return {
+        ok: true,
+        data: undefined as unknown as T,
+        message: res.statusText,
+        status: res.status,
+      };
+    }
+
+    const jsonBody = await res.json();
+    clearTimeout(timeoutId);
+    
+    let data: T = null as T;
+    let message = res.statusText;
+
+    if (jsonBody && typeof jsonBody === "object" && jsonBody.success === true && "data" in jsonBody) {
+      data = jsonBody.data as T;
+      if (typeof jsonBody.message === "string") message = jsonBody.message;
+    } else {
+      data = jsonBody as T;
+    }
+
     return {
       ok: true,
       data,
-      message: res.statusText,
+      message,
       status: res.status,
     };
   } catch (err: unknown) {
@@ -98,9 +117,8 @@ export async function apiRequest<T>(
     return {
       ok: false,
       error: {
-        message:
-           "An unexpected error occurred",
-        errors: err instanceof Error ? { "": [err.message] } : { "": ["An unexpected error occurred"] },
+        message: UNEXPECTED_ERROR,
+        errors: err instanceof Error ? { "": [err.message] } : { "": [UNEXPECTED_ERROR] },
         status: "NETWORK_ERROR",
       },
     };

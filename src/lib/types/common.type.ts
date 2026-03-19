@@ -9,7 +9,7 @@ export type ApiResult<T> =
       ok: false;
       error: {
         message: string;
-        errors?: Record<string, string[]> | string;
+        errors?: Record<string, string[]>;
         status: number | "PARSE_ERROR" | "TIMEOUT" | "NETWORK_ERROR";
       };
     };

@@ -13,9 +13,11 @@ import {
   GetQuoteOptionsResponseSchema,
 } from "@/lib/schemas/quote.schema";
 
-export async function fetchOptions(): Promise<ApiResult<z.infer<typeof GetQuoteOptionsResponseSchema>>> {
-  const result = await apiGet<typeof GetQuoteOptionsResponseSchema>("/quote/options", {
-    next: { revalidate: 60, tags: ["quote-options"] },
+export type QuoteOptionsData = z.infer<typeof GetQuoteOptionsResponseSchema>;
+
+export async function fetchOptions(): Promise<ApiResult<QuoteOptionsData>> {
+  const result = await apiGet<QuoteOptionsData>("/quote/options", {
+    next: { revalidate: 60, tags: ["quote:options"] },
   });
 
   if (!result.ok) return result;
