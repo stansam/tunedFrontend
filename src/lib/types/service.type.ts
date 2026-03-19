@@ -1,3 +1,5 @@
+import { Tag } from "./content.type";
+
 export interface Service {
     id: string;
     name: string;
@@ -7,6 +9,7 @@ export interface Service {
     pricing_category_id: string;
     slug: string;
     is_active: boolean;
+    tags: Tag[];
 }
 
 export interface FallbackService {
@@ -14,6 +17,13 @@ export interface FallbackService {
     name: string;
     description: string;
     iconEmoji: string;
+}
+
+
+export interface ServiceIconMapping {
+  readonly keywords:  readonly string[];
+  readonly emoji:     string;
+  readonly ariaLabel: string;
 }
 
 export interface ServiceCategory {

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PageCountControlProps } from "@/lib/props/index.props";
@@ -19,7 +18,6 @@ export function PageCountControl({
 
   return (
     <div className="flex w-full items-center justify-between rounded-full bg-slate-100 px-2 py-1.5">
-      {/* Decrement */}
       <button
         type="button"
         onClick={decrement}
@@ -35,7 +33,6 @@ export function PageCountControl({
         <Minus size={13} strokeWidth={2.5} />
       </button>
 
-      {/* Display */}
       <span
         className="flex-1 text-center text-sm font-medium text-slate-700 tabular-nums"
         aria-live="polite"
@@ -44,7 +41,6 @@ export function PageCountControl({
         {value} {value === 1 ? "page" : "pages"} / {totalWords.toLocaleString()} words
       </span>
 
-      {/* Increment */}
       <button
         type="button"
         onClick={increment}

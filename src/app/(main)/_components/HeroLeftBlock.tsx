@@ -24,12 +24,10 @@ export function HeroLeftBlock({
         <BookIllustration />
       </div>
 
-      {/* Title & Subtitle */}
       <div className="flex flex-col justify-center align-center gap-2 mb-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 leading-tight">
           Your Trusted Writer &amp; Editor
         </h1>
-        {/* Subtitle pill */}
         <div className="mt-2 flex items-center gap-2">
           <div className="h-6 w-10 rounded-full bg-slate-200 flex items-center justify-center">
             <div className="h-3 w-3 rounded-full bg-slate-400" />
@@ -40,7 +38,6 @@ export function HeroLeftBlock({
         </div>
       </div>
 
-      {/* Search form */}
       <form
         onSubmit={handleSubmit}
         className="flex w-full max-w-[320px] items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm"
@@ -62,7 +59,6 @@ export function HeroLeftBlock({
         />
       </form>
 
-      {/* Decorative dots */}
       <div
         className="absolute bottom-0 left-24 flex gap-2 opacity-30 pointer-events-none"
         aria-hidden="true"

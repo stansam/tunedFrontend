@@ -1,6 +1,5 @@
-"use client";
 import Image from "next/image";
-import { QuoteForm } from "./quote-form";
+import { QuoteForm } from "./QuoteForm";
 import type { HeroPhoneBlockProps } from "@/lib/props/index.props";
 
 export function HeroPhoneBlock({ options }: HeroPhoneBlockProps) {
@@ -27,12 +26,10 @@ export function HeroPhoneBlock({ options }: HeroPhoneBlockProps) {
         role="presentation"
         aria-label="Quick quote form"
       >
-        {/* Notch / Dynamic island */}
         <div className="mx-auto mb-3 flex h-7 w-24 items-center justify-center rounded-full bg-slate-800">
           <div className="h-2.5 w-12 rounded-full bg-slate-700" />
         </div>
 
-        {/* Side LED dots */}
         <div className="absolute top-[28px] left-8 flex gap-1.5" aria-hidden="true">
           {[1, 2, 3, 4].map((i) => (
             <div

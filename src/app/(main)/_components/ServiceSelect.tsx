@@ -29,9 +29,6 @@ export function ServiceSelect({
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
 
-  // const containerRef = useRef<HTMLDivElement>(null);
-  // const listboxId = useId();
-
   const filtered = useMemo(() => 
     services.filter((s) => s.pricing_category === activeTab),
     [services, activeTab]
@@ -166,8 +163,6 @@ export function ServiceSelect({
           break;
  
         case KEYS.TAB:
-          // Tab without Shift closes and moves to next focusable element.
-          // The browser handles Tab naturally; we just need to close.
           closeList(false);
           break;
  
@@ -186,41 +181,9 @@ export function ServiceSelect({
   const activeDescendant =
     open && activeIndex >= 0 ? getOptionId(activeIndex) : undefined;
 
-  // Close on outside click
-  // useEffect(() => {
-  //   function handleClick(e: MouseEvent) {
-  //     if (!containerRef.current?.contains(e.target as Node)) {
-  //       setOpen(false);
-  //     }
-  //   }
-  //   document.addEventListener("mousedown", handleClick);
-  //   return () => document.removeEventListener("mousedown", handleClick);
-  // }, []);
-
-  // Close on Escape
-  // useEffect(() => {
-  //   function handleKey(e: KeyboardEvent) {
-  //     if (e.key === "Escape") setOpen(false);
-  //   }
-  //   document.addEventListener("keydown", handleKey);
-  //   return () => document.removeEventListener("keydown", handleKey);
-  // }, []);
-
-  // const handleSelect = (id: string) => {
-  //   onChange(id);
-  //   setOpen(false);
-  // };
-
   return (
     <div ref={containerRef} className="relative w-full">
       <button
-        // type="button"
-        // aria-haspopup="listbox"
-        // aria-expanded={open}
-        // aria-controls={listboxId}
-        // aria-label="Choose a service"
-        // disabled={disabled}
-        // onClick={() => !disabled && setOpen((o) => !o)}
         ref={triggerRef}
         id={triggerId}
         type="button"
@@ -254,9 +217,6 @@ export function ServiceSelect({
 
       {open && (
         <ul
-          // id={listboxId}
-          // role="listbox"
-          // aria-label="Services"
           ref={listboxRef}
           id={listboxId}
           role="listbox"
@@ -280,23 +240,6 @@ export function ServiceSelect({
             </li>
           ) : (
             filtered.map((service, index) => (
-              // <li
-              //   key={service.id}
-              //   role="option"
-              //   aria-selected={service.id === value}
-              //   onClick={() => handleSelect(service.id)}
-              //   className={cn(
-              //     "flex cursor-pointer items-center justify-between px-4 py-2.5 text-sm transition-colors",
-              //     service.id === value
-              //       ? "bg-emerald-50 text-emerald-700 font-medium"
-              //       : "text-slate-700 hover:bg-slate-50"
-              //   )}
-              // >
-              //   <span>{service.name}</span>
-              //   {service.id === value && (
-              //     <Check size={14} className="text-emerald-500" />
-              //   )}
-              // </li>
               <OptionItem
                 key={service.id}
                 service={service}

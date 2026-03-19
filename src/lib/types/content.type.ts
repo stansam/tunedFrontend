@@ -1,3 +1,6 @@
+import { Service } from "./service.type";
+import { BlogPost } from "./blog.type";
+
 export interface Deadline {
     id: string;
     name: string;
@@ -20,6 +23,7 @@ export interface Sample {
     word_count: number;
     featured: boolean;
     image: string;
+    tags: Tag[];
 }
 
 export interface Testimonial {
@@ -40,3 +44,16 @@ export interface FAQ {
     order: number;
 }
 
+export interface Tag {
+    id: string;
+    name: string;
+    description?: string | null;
+    slug: string;
+    usage_count: number;
+}
+
+export interface FeaturedContentResponse {
+    services: Service[];
+    samples: Sample[];
+    blogs: BlogPost[];
+}

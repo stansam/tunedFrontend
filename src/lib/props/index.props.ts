@@ -7,6 +7,7 @@ import type {
   CalculatePriceResponse,
 } from "@/lib/types";
 import { ServiceWithPricingCategory } from "../types/quote.type";
+import type { ServiceCategory as MainServiceCategory } from "@/app/(main)/_types";
 
 
 export interface NavbarProps {
@@ -16,10 +17,8 @@ export interface NavbarProps {
 
 export interface HeroSectionProps {
   options: QuoteFormOptions;
-  featuredServices: Service[];
+  featuredServices: readonly MainServiceCategory[];
 }
-
-// ─── Quote Form ───────────────────────────────────────────────────────────────
 
 export interface QuoteFormProps {
   options: QuoteFormOptions;
@@ -70,18 +69,6 @@ export interface ContinueButtonProps {
   disabled?: boolean;
   onClick?: () => void;
 }
-
-// ─── Marquee ─────────────────────────────────────────────────────────────────
-
-export interface ServicesMarqueeProps {
-  featuredServices: Service[];
-}
-
-export interface ServiceCardProps {
-  service: Service;
-}
-
-// ─── Hero Blocks ─────────────────────────────────────────────────────────────
 
 export interface HeroLeftBlockProps {
   searchPlaceholder?: string;
