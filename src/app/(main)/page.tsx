@@ -33,15 +33,15 @@ export default async function HomePage() {
     levels: optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS,
   };
 
-  const featuredServices: Service[] = featuredResult.ok
+  const featuredServices: readonly Service[] = featuredResult.ok
     ? featuredResult.data.services
     : FALLBACK_FEATURED_SERVICES;
 
-  const blogs: BlogPostResponse[] = featuredResult.ok
+  const blogs: readonly BlogPostResponse[] = featuredResult.ok
     ? featuredResult.data.blogs
     : FALLBACK_BLOGS;
 
-  const samples: Sample[] = featuredResult.ok
+  const samples: readonly Sample[] = featuredResult.ok
     ? featuredResult.data.samples
     : FALLBACK_SAMPLES;
 

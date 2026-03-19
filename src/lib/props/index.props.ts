@@ -7,6 +7,7 @@ import type {
   CalculatePriceResponse,
 } from "@/lib/types";
 import { ServiceWithPricingCategory } from "../types/quote.type";
+import type { Service as MainService } from "@/app/(main)/_types";
 
 
 export interface NavbarProps {
@@ -16,7 +17,7 @@ export interface NavbarProps {
 
 export interface HeroSectionProps {
   options: QuoteFormOptions;
-  featuredServices: Service[];
+  featuredServices: readonly MainService[];
 }
 
 // ─── Quote Form ───────────────────────────────────────────────────────────────
