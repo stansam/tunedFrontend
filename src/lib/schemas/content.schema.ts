@@ -2,6 +2,14 @@ import { z } from "zod";
 import { ServiceSchema } from "./service.schema";
 import { BlogPostSchema } from "./blog.schema";
 
+export const TagSchema = z.object({
+    id: z.string().min(1),
+    name: z.string().min(1),
+    description: z.string().min(1),
+    slug: z.string().min(1),
+    usage_count: z.number().int().positive(),
+});
+
 export const LevelSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -24,7 +32,9 @@ export const SampleSchema = z.object({
     word_count: z.number().int().positive(),
     featured: z.boolean(),
     image: z.string().min(1),
+    tags: z.array(TagSchema),
 });
+
 
 export const FeaturedContentResponseSchema = z.object({
     services: z.array(ServiceSchema),

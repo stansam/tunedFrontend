@@ -1,3 +1,4 @@
+import { Tag } from "./content.type";
 
 export interface BlogCategory {
     name: string;
@@ -32,6 +33,7 @@ export interface BlogPostResponse {
     is_published: boolean;
     is_featured: boolean;
     published_at: string;
+    tags: Tag[];
 }
 
 export interface BlogComment {

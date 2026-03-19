@@ -23,6 +23,7 @@ export interface Sample {
     word_count: number;
     featured: boolean;
     image: string;
+    tags: Tag[];
 }
 
 export interface Testimonial {
@@ -43,6 +44,13 @@ export interface FAQ {
     order: number;
 }
 
+export interface Tag {
+    id: string;
+    name: string;
+    description: string;
+    slug: string;
+    usage_count: number;
+}
 
 export interface FeaturedContentResponse {
     services: Service[];

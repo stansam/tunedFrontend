@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TagSchema } from "./content.schema";
 
 export const BlogPostSchema = z.object({
     id: z.string().min(1),
@@ -13,6 +14,7 @@ export const BlogPostSchema = z.object({
     is_published: z.boolean(),
     is_featured: z.boolean(),
     published_at: z.string().min(1),
+    tags: z.array(TagSchema),
 });
 
 export const BlogCategorySchema = z.object({

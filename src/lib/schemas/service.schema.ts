@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TagSchema } from "./content.schema";
 
 export const ServiceSchema = z.object({
   id: z.string().min(1),
@@ -9,6 +10,7 @@ export const ServiceSchema = z.object({
   pricing_category_id: z.string().min(1),
   slug: z.string().min(1),
   is_active: z.boolean(),
+  tags: z.array(TagSchema),
 });
 
 export const GetServicesResponseSchema = z.object({
