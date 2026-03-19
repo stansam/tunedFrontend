@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import type { ServicesMarqueeProps, ServiceCardProps } from "@/lib/props/index.props";
+import { useRef, useState } from "react";
+import { cn, resolveServiceIcon } from "@/lib/utils";
+import type { ServicesMarqueeProps, ServiceCardProps } from "../_props";
+export { FALLBACK_FEATURED_SERVICES as FALLBACK_FEATURED } from "../_fallback";
+import type { Service } from "../_types";
 
-// ─── Service Card ─────────────────────────────────────────────────────────────
+function FeaturedServiceCard({ service }: ServiceCardProps) {
+  const { emoji, ariaLabel } = resolveServiceIcon(service);
 
-function ServiceCard({ service }: ServiceCardProps) {
   return (
     <article
       className={cn(
@@ -16,15 +18,12 @@ function ServiceCard({ service }: ServiceCardProps) {
       )}
       aria-label={service.name}
     >
-      {/* Icon */}
       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 ring-1 ring-slate-100">
-        <span className="text-2xl leading-none" aria-hidden="true">
-          {/* @ts-expect-error */}
-          {service.iconEmoji ?? "📄"}
+        <span className="text-2xl leading-none" role="img" aria-label={ariaLabel}>
+          {emoji}
         </span>
       </div>
 
-      {/* Text */}
       <div className="min-w-0 flex-1">
         <p className="font-semibold text-slate-800 text-sm leading-snug truncate">
           {service.name}
@@ -37,14 +36,11 @@ function ServiceCard({ service }: ServiceCardProps) {
   );
 }
 
-// ─── Marquee ─────────────────────────────────────────────────────────────────
-
 export function ServicesMarquee({ featuredServices }: ServicesMarqueeProps) {
   const [isPaused, setIsPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  // Duplicate items so the loop is seamless
-  const items = [...featuredServices, ...featuredServices];
+  const items: Service[] = [...featuredServices, ...featuredServices];
 
   if (featuredServices.length === 0) return null;
 
@@ -59,21 +55,22 @@ export function ServicesMarquee({ featuredServices }: ServicesMarqueeProps) {
     >
       <div
         ref={trackRef}
-        className={cn(
-          "flex gap-4 will-change-transform",
-          isPaused
-            ? "paused"
-            : "running",
-          "animate-marquee"
-        )}
+        // className={cn(
+        //   "flex gap-4 will-change-transform",
+        //   isPaused
+        //     ? "paused"
+        //     : "running",
+        //   "animate-marquee"
+        // )}
         style={{
-          // Width = content duplicated, animation handled in global CSS
           width: "max-content",
+          animationPlayState: isPaused ? "paused" : "running",
         }}
-        aria-hidden={false}
+        className="flex gap-4 will-change-transform animate-marquee"
+        // aria-hidden={false}
       >
         {items.map((service, idx) => (
-          <ServiceCard
+          <FeaturedServiceCard
             key={`${service.id}-${idx}`}
             service={service}
           />

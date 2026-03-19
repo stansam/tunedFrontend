@@ -73,15 +73,13 @@ export interface ContinueButtonProps {
 
 // ─── Marquee ─────────────────────────────────────────────────────────────────
 
-export interface ServicesMarqueeProps {
-  featuredServices: Service[];
-}
+// export interface ServicesMarqueeProps {
+//   featuredServices: Service[];
+// }
 
-export interface ServiceCardProps {
-  service: Service;
-}
-
-// ─── Hero Blocks ─────────────────────────────────────────────────────────────
+// export interface ServiceCardProps {
+//   service: Service;
+// }
 
 export interface HeroLeftBlockProps {
   searchPlaceholder?: string;

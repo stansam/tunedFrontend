@@ -1,7 +1,7 @@
 import { Deadline, Level, Sample, Testimonial, FAQ, FeaturedContentResponse } from "./content.type";
 import { PricingCategory, CalculatePriceRequest, CalculatePriceResponse } from "./price.type";
 import { ApiResult, RequestOptions } from "./common.type";
-import { Service, FallbackService, ServiceCategory, FetchServicesResponse } from "./service.type"
+import { Service, FallbackService, ServiceCategory, ServiceIconMapping, FetchServicesResponse } from "./service.type"
 import { CategoryTab, QuoteFormOptions, QuoteFormState, ServiceWithPricingCategory } from "./quote.type";
 import {
     BlogPost, BlogCategory, BlogComment,
@@ -17,6 +17,7 @@ export type {
     FAQ,
     Service,
     FeaturedContentResponse,
+    ServiceIconMapping,
     FallbackService,
     ServiceCategory,
     FetchServicesResponse,

@@ -3,14 +3,21 @@ import { Navbar } from "./_components/navbar";
 import { HeroSection } from "./_components/hero";
 import { HeroSkeleton } from "./_components/skeleton";
 import { fetchOptions } from "@/lib/services/quote.service";
-import { fetchFeaturedServices } from "@/lib/services/services.service";
-import type { Service, QuoteFormOptions } from "@/lib/types";
-import { FALLBACK_SERVICES, FALLBACK_LEVELS, FALLBACK_FEATURED } from "./_schemas/fallback";
+import { fetchFeaturedContent } from "@/lib/services/content.service";
+import { FeaturedBlogs } from "./_components/FeaturedBlogs";
+import { FeaturedSamples } from "./_components/FeaturedSamples";
+import { Service, Sample, BlogPostResponse } from "./_types";
+import type { QuoteFormOptions } from "@/lib/types";
+
+import { 
+  FALLBACK_FEATURED_SERVICES, FALLBACK_SAMPLES, FALLBACK_BLOGS
+} from "./_fallback";
+import { FALLBACK_SERVICES, FALLBACK_LEVELS } from "./_schemas/fallback";
 
 export default async function HomePage() {
   const [optionsResult, featuredResult] = await Promise.all([
     fetchOptions(),
-    fetchFeaturedServices(),
+    fetchFeaturedContent(),
   ]);
 
   if (!optionsResult.ok && process.env.NODE_ENV === "development") {
@@ -18,7 +25,7 @@ export default async function HomePage() {
   }
 
   if (!featuredResult.ok && process.env.NODE_ENV === "development") {
-    console.error("[HomePage] fetchFeaturedServices failed:", featuredResult.error);
+    console.error("[HomePage] fetchFeaturedContent failed:", featuredResult.error);
   }
 
   const options: QuoteFormOptions = {
@@ -26,11 +33,17 @@ export default async function HomePage() {
     levels: optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS,
   };
 
-  // const services = optionsResult.ok ? optionsResult.data.services : FALLBACK_SERVICES;
-  // const levels = optionsResult.ok ? optionsResult.data.levels : FALLBACK_LEVELS;
-  const featuredServices = featuredResult.ok
+  const featuredServices: Service[] = featuredResult.ok
     ? featuredResult.data.services
-    : FALLBACK_FEATURED;
+    : FALLBACK_FEATURED_SERVICES;
+
+  const blogs: BlogPostResponse[] = featuredResult.ok
+    ? featuredResult.data.blogs
+    : FALLBACK_BLOGS;
+
+  const samples: Sample[] = featuredResult.ok
+    ? featuredResult.data.samples
+    : FALLBACK_SAMPLES;
 
   return (
     <main className="min-h-screen bg-[#e8e6e1]">
@@ -38,9 +51,13 @@ export default async function HomePage() {
       <Suspense fallback={<HeroSkeleton />}>
         <HeroSection
           options={options}
-          featuredServices={featuredServices as Service[]}
+          featuredServices={featuredServices}
         />
       </Suspense>
+
+      <FeaturedBlogs blogs={blogs} />
+      
+      <FeaturedSamples samples={samples} />
     </main>
   );
 }

@@ -13,13 +13,7 @@ export function HeroSection({
       className="relative w-full bg-[#e8e6e1] overflow-hidden"
       aria-label="Hero section"
     >
-      {/* ── Grain texture overlay ─────────────────────────────────────────── */}
-      {/*
-        SVG grain is rendered as a data-URI background on an absolutely
-        positioned div. It sits at z-0 and never receives pointer events.
-        Opacity is kept intentionally low (0.035) so the texture is felt,
-        not seen.
-      */}
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 opacity-[0.035]"
@@ -30,36 +24,38 @@ export function HeroSection({
         }}
       />
 
-      {/* ── Radial glow – top right (emerald tint) ───────────────────────── */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-32 -top-32 z-0 h-[500px] w-[500px] rounded-full bg-emerald-400 opacity-[0.06] blur-3xl"
       />
 
-      {/* ── Radial glow – bottom left (warm stone) ───────────────────────── */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-24 bottom-16 z-0 h-80 w-80 rounded-full bg-stone-400 opacity-[0.12] blur-2xl"
       />
 
-      {/* ── Two-column layout ─────────────────────────────────────────────── */}
-      <div className="relative z-10 mx-auto max-w-6xl lg:max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-between pt-5 pb-0 min-h-[480px] md:min-h-[580px]">
+      <div className="mx-auto max-w-6xl lg:max-w-7xl">
+        <div className="relative flex flex-col md:flex-row items-center md:items-start justify-between pt-5 pb-0 min-h-[480px] md:min-h-[580px]">
 
-          {/* Block 1 — Left: illustrations, title, search */}
           <div className="w-full md:w-[42%] pb-8 md:pb-16 z-10">
             <HeroLeftBlock />
           </div>
 
-          {/* Block 2 — Right: phone + form + characters */}
           <div className="w-full md:w-[58%] z-20">
             <HeroPhoneBlock options={options} />
+          </div>
+
+          <div
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+            aria-hidden="true"
+          >
+            <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-slate-300 opacity-20 blur-3xl" />
+            <div className="absolute left-1/4 bottom-0 h-48 w-48 rounded-full bg-stone-300 opacity-30 blur-2xl" />
           </div>
         </div>
       </div>
 
-      {/* ── Block 3: Marquee strip ────────────────────────────────────────── */}
-      <div className="relative z-10 w-full border-t border-slate-200 bg-[#f1efeb]">
+      <div className="w-full border-t border-slate-200 bg-[#f1efeb]">
         <ServicesMarquee featuredServices={featuredServices} />
       </div>
     </section>

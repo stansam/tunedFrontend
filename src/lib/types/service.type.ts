@@ -19,6 +19,13 @@ export interface FallbackService {
     iconEmoji: string;
 }
 
+
+export interface ServiceIconMapping {
+  readonly keywords:  readonly string[];
+  readonly emoji:     string;
+  readonly ariaLabel: string;
+}
+
 export interface ServiceCategory {
   id: string;
   name: string;
