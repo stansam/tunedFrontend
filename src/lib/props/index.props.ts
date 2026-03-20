@@ -1,5 +1,4 @@
 import type {
-  Service,
   Level,
   CategoryTab,
   QuoteFormState,

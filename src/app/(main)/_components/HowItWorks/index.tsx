@@ -10,6 +10,7 @@ import type { HowItWorksCarouselProps, StepImageProps } from "../../_props/howIt
 import { FALLBACK_STEPS } from "../../_fallback/howitworks.fallback";
 import { HowItWorksCard } from "./card";
 import { StepsNav } from "./stepsNav";
+import Image from "next/image";
 
 
 export const ANIMATION_PRESETS = {
@@ -29,13 +30,15 @@ export const ANIMATION_PRESETS = {
 const StepImage = forwardRef<HTMLImageElement, StepImageProps>(
   ({ src, alt, className, style }, ref) => {
     return (
-      <img
+      <Image
         ref={ref}
-        src={src}
-        alt={alt}
+        src={src ?? ""}
+        alt={alt ?? ""}
         className={className}
         style={style}
         draggable={false}
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
     );
   }
@@ -82,10 +85,9 @@ function AnimatedStepImage(
 interface ProgressBarProps {
   readonly current: number;
   readonly total: number;
-  readonly intervalMs: number;
 }
 
-function ProgressBar({ current, total, intervalMs }: ProgressBarProps) {
+function ProgressBar({ current, total }: ProgressBarProps) {
   return (
     <div className="flex items-center gap-1.5" aria-hidden="true">
       {Array.from({ length: total }).map((_, i) => (
@@ -185,7 +187,6 @@ export function HowItWorks({
               <ProgressBar
                 current={currentStepIndex}
                 total={steps.length}
-                intervalMs={autoPlayInterval}
               />
 
               <StepsNav
