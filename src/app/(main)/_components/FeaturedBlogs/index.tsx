@@ -24,7 +24,7 @@ function EmptyBlogs() {
 
 export function FeaturedBlogs({
   blogs,
-  title             = "From Our Blog",
+  title             = "From Our Blogs",
   description       = "Expert insights on academic writing, research strategies, and professional development from our team of writers and editors.",
   backgroundLabel   = "BLOG",
   backgroundPosition = "right",

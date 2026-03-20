@@ -9,6 +9,11 @@ import {
     BlogCardSkeletonProps,
 } from "./featured.props";
 
+import {
+    HowItWorksProps,
+    HowItWorksCarouselProps,
+} from "./howItworks.props";
+
 export type {
     ServiceCardProps, ServicesMarqueeProps,
     SectionHeaderProps,
@@ -18,4 +23,6 @@ export type {
     SampleCardSkeletonProps,
     BlogCardProps,
     BlogCardSkeletonProps,
+    HowItWorksProps,
+    HowItWorksCarouselProps,
 }
