@@ -1,12 +1,3 @@
-// export type HowItWorksStepId = string;
-
-// export interface HowItWorksStep {
-//   readonly id: HowItWorksStepId;
-//   readonly title: string;
-//   readonly description: string;
-//   readonly image: string;
-// }
-
 import { z } from "zod";
 
 export type ValidatedUrl = string & { readonly __brand: "ValidatedUrl" };
