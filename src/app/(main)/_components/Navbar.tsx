@@ -25,9 +25,12 @@ export function Navbar({ activeRoute }: NavbarProps) {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  useEffect(() => {
+  const [prevRoute, setPrevRoute] = useState(activeRoute);
+
+  if (activeRoute !== prevRoute) {
+    setPrevRoute(activeRoute);
     setMobileOpen(false);
-  }, [activeRoute]);
+  }
 
   return (
     <header

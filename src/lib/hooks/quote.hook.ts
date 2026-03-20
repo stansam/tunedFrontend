@@ -63,10 +63,18 @@ export function useQuoteForm(): UseQuoteFormReturn {
     );
   }, []);
 
-  useEffect(() => {
+  const [lastFormState, setLastFormState] = useState(deferredFormState);
+
+  if (deferredFormState !== lastFormState) {
+    setLastFormState(deferredFormState);
     if (!isComplete(deferredFormState)) {
       setPrice(null);
       setPriceError(null);
+    }
+  }
+
+  useEffect(() => {
+    if (!isComplete(deferredFormState)) {
       return;
     }
 

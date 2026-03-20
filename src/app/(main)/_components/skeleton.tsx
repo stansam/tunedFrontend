@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { BlogCardSkeletonProps, SampleCardSkeletonProps } from "../_props";
+import type { BlogCardSkeletonProps } from "../_props";
 
 export function HeroSkeleton() {
   return (

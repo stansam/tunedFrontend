@@ -7,6 +7,7 @@ import { formatPublishedDate } from "../_mappers";
 import { MoveRight, Clock, User, Tag as TagIcon } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { placeholderImage } from "@/lib/utils";
 
 export function BlogCard({ post, isPrimary }: BlogCardProps) {
@@ -23,20 +24,21 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
       href={"#"} // /blogs/${post.slug}
       className={cn(
         "group relative flex flex-col justify-end overflow-hidden rounded-2xl w-full h-full",
-        "bg-slate-900 bg-cover bg-center bg-no-repeat text-white",
+        "bg-slate-900 text-white",
         "transition-transform duration-300 hover:scale-[0.985] hover:rotate-[0.2deg]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2",
         isPrimary ? "min-h-[340px] md:min-h-0" : "min-h-[240px] md:min-h-0"
       )}
-      style={{ backgroundImage: `url(${backgroundImage})` }}
       aria-label={`Read blog post: ${post.title}`}
     >
-      <img
-        src={post.featuredImage}
+      <Image
+        src={backgroundImage}
         alt=""
-        aria-hidden="true"
-        className="hidden"
+        fill
+        className="object-cover object-center absolute inset-0 -z-10"
         onError={() => setImgError(true)}
+        sizes={isPrimary ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
+        priority={isPrimary}
       />
 
       <div
