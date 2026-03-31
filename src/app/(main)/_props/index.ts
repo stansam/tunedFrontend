@@ -14,6 +14,27 @@ import {
     HowItWorksCarouselProps,
 } from "./howItworks.props";
 
+import {
+    SeoSectionProps,
+    SeoStatsBarProps,
+    SeoStatItemProps,
+    SeoColumnsGridProps,
+    SeoColumnProps,
+    KeywordTagsProps,
+    KeywordTagChipProps,
+    SeoSectionHeaderProps,
+    ExpandToggleProps,
+} from "./seo.props";
+
+import {
+    FooterProps,
+    FooterBrandProps,
+    ContactRowProps,
+    SocialLinksProps,
+    FooterLinksProps,
+    NewsletterFormProps,
+} from "./footer.props";
+
 export type {
     ServiceCardProps, ServicesMarqueeProps,
     SectionHeaderProps,
@@ -25,4 +46,19 @@ export type {
     BlogCardSkeletonProps,
     HowItWorksProps,
     HowItWorksCarouselProps,
+    SeoSectionProps,
+    SeoStatsBarProps,
+    SeoStatItemProps,
+    SeoColumnsGridProps,
+    SeoColumnProps,
+    KeywordTagsProps,
+    KeywordTagChipProps,
+    SeoSectionHeaderProps,
+    ExpandToggleProps,
+    FooterProps,
+    FooterBrandProps,
+    ContactRowProps,
+    SocialLinksProps,
+    FooterLinksProps,
+    NewsletterFormProps,
 }
