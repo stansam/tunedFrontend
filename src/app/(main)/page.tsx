@@ -7,6 +7,7 @@ import { fetchFeaturedContent } from "@/lib/services/content.service";
 import { FeaturedBlogs } from "./_components/FeaturedBlogs";
 import { FeaturedSamples } from "./_components/FeaturedSamples";
 import { HowItWorks } from "./_components/HowItWorks";
+import { SeoSection } from "./_components/SeoSection";
 import { ServiceCategory, Sample, BlogPostResponse } from "./_types";
 import type { QuoteFormOptions } from "@/lib/types";
 
@@ -61,6 +62,8 @@ export default async function HomePage() {
       <FeaturedSamples samples={samples} />
       
       <HowItWorks />
+
+      <SeoSection />
     </main>
   );
 }
