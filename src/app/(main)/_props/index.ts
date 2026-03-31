@@ -26,6 +26,15 @@ import {
     ExpandToggleProps,
 } from "./seo.props";
 
+import {
+    FooterProps,
+    FooterBrandProps,
+    ContactRowProps,
+    SocialLinksProps,
+    FooterLinksProps,
+    NewsletterFormProps,
+} from "./footer.props";
+
 export type {
     ServiceCardProps, ServicesMarqueeProps,
     SectionHeaderProps,
@@ -46,4 +55,10 @@ export type {
     KeywordTagChipProps,
     SeoSectionHeaderProps,
     ExpandToggleProps,
+    FooterProps,
+    FooterBrandProps,
+    ContactRowProps,
+    SocialLinksProps,
+    FooterLinksProps,
+    NewsletterFormProps,
 }

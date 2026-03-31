@@ -8,6 +8,7 @@ import { FeaturedBlogs } from "./_components/FeaturedBlogs";
 import { FeaturedSamples } from "./_components/FeaturedSamples";
 import { HowItWorks } from "./_components/HowItWorks";
 import { SeoSection } from "./_components/SeoSection";
+import { Footer } from "./_components/Footer";
 import { ServiceCategory, Sample, BlogPostResponse } from "./_types";
 import type { QuoteFormOptions } from "@/lib/types";
 
@@ -48,23 +49,27 @@ export default async function HomePage() {
     : FALLBACK_SAMPLES;
 
   return (
-    <main className="min-h-screen bg-[#e8e6e1]">
-      <Navbar />
-      <Suspense fallback={<HeroSkeleton />}>
-        <HeroSection
-          options={options}
-          featuredServices={featuredServices}
-        />
-      </Suspense>
+    <>
+      <main className="min-h-screen bg-[#e8e6e1]">
+        <Navbar />
+        <Suspense fallback={<HeroSkeleton />}>
+          <HeroSection
+            options={options}
+            featuredServices={featuredServices}
+          />
+        </Suspense>
 
-      <FeaturedBlogs blogs={blogs} />
-      
-      <FeaturedSamples samples={samples} />
-      
-      <HowItWorks />
+        <FeaturedBlogs blogs={blogs} />
+        
+        <FeaturedSamples samples={samples} />
+        
+        <HowItWorks />
 
-      <SeoSection />
-    </main>
+        <SeoSection />
+      </main>
+
+      <Footer />
+    </>
   );
 }
 
