@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 import type { NavbarProps } from "@/lib/props/index.props";
 
 const NAV_LINKS = [
-  { label: "Services", href: "#" },
-  { label: "FAQs", href: "#" },
-  { label: "Samples", href: "#" },
-  { label: "Blogs", href: "#" },
+  { label: "Services",     href: "#" },
+  { label: "FAQs",         href: "/faqs" },
+  { label: "Samples",      href: "#" },
+  { label: "Blogs",        href: "#" },
   { label: "Testimonials", href: "#" },
 ] as const;
 
