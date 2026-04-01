@@ -15,6 +15,12 @@ import {
     PaginationSchema, 
     SamplesPageResponseSchema 
 } from "./samples.schema";
+import { 
+    BlogCategorySchema,
+    BlogListItemSchema,
+    BlogPaginationSchema,
+    BlogsPageResponseSchema
+} from "./blog.schema";
 
 export {
     TagSchema,
@@ -25,4 +31,5 @@ export {
     NewsletterRequestSchema, NewsletterResponseSchema,
     FaqItemSchema, FaqListSchema,
     SampleServiceSchema, SampleListItemSchema, PaginationSchema, SamplesPageResponseSchema,
+    BlogCategorySchema, BlogListItemSchema, BlogPaginationSchema, BlogsPageResponseSchema,
 };
