@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link, { type LinkProps } from "next/link";
 import { ArrowUpRight, BookOpen, Layers } from "lucide-react";
 import { fetchRelatedContent } from "@/lib/services/service.service";
+import { RelatedContentSkeleton } from "./ServiceSkeletons";
 import type { RelatedContentProps } from "@/lib/props/service.props";
 import type { Service } from "@/lib/types/service.type";
 import type { Sample } from "@/lib/types/content.type";
@@ -56,17 +58,18 @@ export function RelatedContentSection({ serviceId }: RelatedContentProps) {
                     className="group flex flex-col gap-4 p-5 rounded-2xl bg-white border border-slate-200 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-300"
                   >
                     <div className="relative aspect-video rounded-xl overflow-hidden bg-slate-100">
-                      <img 
+                      <Image 
                         src={sample.image || "https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?q=80&w=640&auto=format&fit=crop"} 
                         alt={sample.title}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                     <div className="flex flex-col gap-2">
-                       <h3 className="text-base font-bold text-slate-800 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                      <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors line-clamp-1">
                         {sample.title}
                       </h3>
-                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                      <p className="text-sm text-slate-500 line-clamp-2">
                         {sample.excerpt}
                       </p>
                     </div>
@@ -78,47 +81,42 @@ export function RelatedContentSection({ serviceId }: RelatedContentProps) {
 
           {/* Related Services */}
           {data.services.length > 0 && (
-            <div className="flex flex-col gap-6 pt-12 border-t border-slate-200/60">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center">
-                  <Layers size={20} />
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-xl bg-slate-200 text-slate-600 flex items-center justify-center">
+                    <Layers size={20} />
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+                    Other <span className="text-emerald-600">Services</span>
+                  </h2>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
-                  Other <span className="text-emerald-600">Services</span>
-                </h2>
+                <Link 
+                  href={"/" as LinkProps<string>["href"]} 
+                  className="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors flex items-center gap-1 group"
+                >
+                  Explore more
+                  <ArrowUpRight size={14} className="group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {data.services.slice(0, 4).map((other) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {data.services.slice(0, 4).map((service) => (
                   <Link
-                    key={other.id}
-                    href={`/service/${other.slug}` as LinkProps<string>["href"]}
-                    className="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50/50 transition-all group"
+                    key={service.id}
+                    href={`/service/${service.slug}` as LinkProps<string>["href"]}
+                    className="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-100 hover:border-emerald-100 hover:bg-emerald-50/30 transition-all duration-300"
                   >
-                    <span className="text-sm font-bold text-slate-700 group-hover:text-emerald-700">
-                      {other.name}
-                    </span>
-                    <ArrowUpRight size={14} className="text-slate-300 group-hover:text-emerald-500 transition-colors" />
+                    <span className="text-[14px] font-bold text-slate-700">{service.name}</span>
+                    <ArrowUpRight size={14} className="text-slate-300 group-hover:text-emerald-500" />
                   </Link>
                 ))}
               </div>
             </div>
           )}
         </div>
+
       </div>
     </section>
-  );
-}
-
-function RelatedContentSkeleton() {
-  return (
-    <div className="bg-slate-50 py-16 animate-pulse">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="h-8 w-48 bg-slate-200 rounded" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => <div key={i} className="h-64 bg-slate-200 rounded-2xl" />)}
-        </div>
-      </div>
-    </div>
   );
 }

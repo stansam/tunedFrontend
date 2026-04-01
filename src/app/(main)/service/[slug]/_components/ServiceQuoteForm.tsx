@@ -24,7 +24,6 @@ export function ServiceQuoteForm({ service, levels }: ServiceQuoteFormProps) {
     setPageCount,
   } = useQuoteForm();
 
-  // Initialize form with current service and first level
   useEffect(() => {
     setServiceId(service.id);
     if (levels.length > 0 && levels[0] && !formState.levelId) {
@@ -32,7 +31,7 @@ export function ServiceQuoteForm({ service, levels }: ServiceQuoteFormProps) {
     }
   }, [service.id, levels, setServiceId, setLevelId, formState.levelId]);
 
-  const continueHref = "#"; // Matches landing page placeholder for now
+  const continueHref = "#";
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -46,7 +45,6 @@ export function ServiceQuoteForm({ service, levels }: ServiceQuoteFormProps) {
       </div>
 
       <div className="space-y-4">
-        {/* Fixed Service Display */}
         <div className="flex flex-col gap-1.5">
           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">
             Selected Service
@@ -56,7 +54,6 @@ export function ServiceQuoteForm({ service, levels }: ServiceQuoteFormProps) {
           </div>
         </div>
 
-        {/* Level and Deadline Selection */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">
@@ -79,7 +76,6 @@ export function ServiceQuoteForm({ service, levels }: ServiceQuoteFormProps) {
           </div>
         </div>
 
-        {/* Page Count Control */}
         <div className="flex flex-col gap-1.5">
           <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 px-1">
             Length
@@ -94,7 +90,6 @@ export function ServiceQuoteForm({ service, levels }: ServiceQuoteFormProps) {
         </div>
       </div>
 
-      {/* Pricing and Action */}
       <div className="flex items-center justify-between mt-2 pt-4 border-t border-slate-700/50">
         <div>
           <p className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest mb-0.5">

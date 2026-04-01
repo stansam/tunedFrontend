@@ -20,11 +20,6 @@ const NAV_LINKS: NavLink[] = [
   { label: "Testimonials", href: "#" },
 ];
 
-/**
- * Refactored Navbar Component.
- * State and data fetching logic are moved to specialized hooks (useNavbar, useNavbarServices)
- * for better separation of concerns and architectural integrity.
- */
 export function Navbar({ activeRoute = "/" }: NavbarProps) {
   const { 
     mobileOpen, 

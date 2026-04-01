@@ -15,9 +15,6 @@ import type {
 } from "@/lib/types/service.type";
 import type { Level, Sample } from "@/lib/types/content.type";
 
-/**
- * Fetch all service categories with their nested services for navigation.
- */
 export async function fetchServiceCategories(): Promise<ApiResult<readonly ServiceCategory[]>> {
   const result = await apiGet<unknown>("/services/categories", {
     next: { revalidate: 3600, tags: ["services:categories"] }
@@ -45,9 +42,6 @@ export async function fetchServiceCategories(): Promise<ApiResult<readonly Servi
   };
 }
 
-/**
- * Fetch detailed information for a single service by its slug.
- */
 export async function fetchServiceBySlug(slug: string): Promise<ApiResult<ServiceDetails>> {
   const result = await apiGet<unknown>(`/services/${slug}`, {
     next: { revalidate: 3600, tags: [`service:${slug}`] }
@@ -75,9 +69,6 @@ export async function fetchServiceBySlug(slug: string): Promise<ApiResult<Servic
   };
 }
 
-/**
- * Fetch related samples and services for a given service.
- */
 export async function fetchRelatedContent(serviceId: string): Promise<ApiResult<RelatedContentResponse>> {
   const result = await apiGet<unknown>(`/services/${serviceId}/related-content`, {
     next: { revalidate: 3600 }
@@ -97,9 +88,9 @@ export async function fetchRelatedContent(serviceId: string): Promise<ApiResult<
     };
   }
 
-  // Map to align with frontend Sample type which uses service_id
   const data: RelatedContentResponse = {
     services: parsed.data.services as readonly Service[],
+    /* TODO check on sample return schema */
     samples: parsed.data.samples.map(s => ({
       ...s,
       service_id: s.service?.id || "",
@@ -114,9 +105,6 @@ export async function fetchRelatedContent(serviceId: string): Promise<ApiResult<
   };
 }
 
-/**
- * Fetch academic levels for the quote form.
- */
 export async function fetchAcademicLevels(): Promise<ApiResult<readonly Level[]>> {
   const result = await apiGet<unknown>("/academic-levels", {
     next: { revalidate: 86400 } // Cache for 24 hours

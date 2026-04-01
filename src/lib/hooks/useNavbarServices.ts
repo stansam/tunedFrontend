@@ -16,10 +16,6 @@ export interface UseNavbarServicesReturn {
   dropdownRef: React.RefObject<HTMLLIElement | null>;
 }
 
-/**
- * Specialized hook for Services link dropdown logic.
- * Handles fetching categories and managing dropdown visibility (Click-only).
- */
 export function useNavbarServices(): UseNavbarServicesReturn {
   const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState<readonly ServiceCategory[]>([]);
@@ -27,7 +23,6 @@ export function useNavbarServices(): UseNavbarServicesReturn {
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLLIElement>(null);
 
-  // Fetch categories once on mount
   useEffect(() => {
     let mounted = true;
     fetchServiceCategories().then((res) => {
@@ -42,7 +37,6 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     return () => { mounted = false; };
   }, []);
 
-  // Click outside detection for dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

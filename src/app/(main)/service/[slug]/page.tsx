@@ -16,9 +16,6 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-/**
- * Dynamic metadata generation for the service page.
- */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const result = await fetchServiceBySlug(slug);
@@ -40,13 +37,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-/**
- * Main Service Detail Page (Server Component).
- */
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Parallel fetching for initial data
   const [serviceResult, levelsResult] = await Promise.all([
     fetchServiceBySlug(slug),
     fetchAcademicLevels(),

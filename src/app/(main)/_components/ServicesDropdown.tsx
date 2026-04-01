@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link, { type LinkProps } from "next/link";
 import { ChevronRight, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,11 +7,6 @@ import { DropdownSkeleton } from "./DropdownSkeleton";
 import type { ServicesDropdownProps } from "@/lib/props/service.props";
 import type { Service } from "@/lib/types/service.type";
 
-/**
- * Refactored Services Dropdown.
- * Presents categories and services in a two-column desktop layout.
- * State is managed by the useNavbarServices hook in the parent Navbar.
- */
 export function ServicesDropdown({ 
   categories, 
   isOpen, 
@@ -32,7 +26,6 @@ export function ServicesDropdown({
         <DropdownSkeleton />
       ) : (
         <div className="flex divide-x divide-slate-50 min-h-[440px]">
-          {/* Column 1: Categories */}
           <div className="w-[280px] bg-slate-50/50 p-5">
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 px-3 mb-3">
@@ -65,7 +58,6 @@ export function ServicesDropdown({
             </div>
           </div>
 
-          {/* Column 2: Services Grid */}
           <div className="flex-1 p-8 bg-white">
             <div className="flex flex-col gap-6">
               <div>
@@ -107,7 +99,6 @@ export function ServicesDropdown({
         </div>
       )}
       
-      {/* Universal Footer */}
       <div className="bg-slate-50/80 border-t border-slate-100 p-4 flex items-center justify-between">
         <p className="text-[11px] font-medium text-slate-500 italic">
           Looking for custom solutions? Our support is available 24/7.

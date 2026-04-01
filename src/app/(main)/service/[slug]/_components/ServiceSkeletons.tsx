@@ -1,10 +1,3 @@
-import React from "react";
-
-/**
- * Collection of premium skeletons for the service detail page.
- * Designed to minimize layout shift and maintain aesthetic during streaming.
- */
-
 export function ServiceHeroSkeleton() {
   return (
     <section className="relative w-full overflow-hidden bg-slate-900 py-20 pb-32 lg:py-28 lg:pb-40 animate-pulse">

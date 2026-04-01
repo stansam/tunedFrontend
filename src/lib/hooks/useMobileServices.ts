@@ -9,10 +9,6 @@ export interface UseMobileServicesReturn {
   closeAll: () => void;
 }
 
-/**
- * Hook for managing mobile service accordion state.
- * Encapsulates the logic for opening and closing categories.
- */
 export function useMobileServices(): UseMobileServicesReturn {
   const [openCategoryId, setOpenCategoryId] = useState<string | null>(null);
 

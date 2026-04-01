@@ -1,17 +1,11 @@
 "use client";
 
-import React from "react";
 import Link, { type LinkProps } from "next/link";
 import { Plus, Minus, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMobileServices } from "@/lib/hooks/useMobileServices";
 import type { MobileServicesMenuProps } from "@/lib/props/service.props";
 
-/**
- * Refactored Mobile Services Menu.
- * Implements a clean, animated accordion using the useMobileServices hook.
- * Senior-level UI with mobile-focused interactivity.
- */
 export function MobileServicesMenu({ categories }: MobileServicesMenuProps) {
   const { 
     openCategoryId, 
