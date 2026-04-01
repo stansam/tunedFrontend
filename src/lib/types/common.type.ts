@@ -19,5 +19,11 @@ export interface RequestOptions {
   body?: unknown;
   headers?: HeadersInit;
   timeoutMs?: number;
+  cache?: RequestCache;
   next?: NextFetchRequestConfig;
 }
+
+export type NavLink = {
+  label: string;
+  href: string;
+};
