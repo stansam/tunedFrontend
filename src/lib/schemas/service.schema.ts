@@ -1,23 +1,42 @@
 import { z } from "zod";
 import { TagSchema } from "./tag.schema";
+import { SampleListItemSchema } from "./samples.schema";
 
 export const ServiceSchema = z.object({
-  id:                  z.string().min(1, "Service id is required"),
-  name:                z.string().min(1, "Service name is required"),
-  description:         z.string().min(1, "Service description is required"),
-  category_id:         z.string().min(1, "category_id is required"),
-  featured:            z.boolean(),
-  pricing_category_id: z.string().min(1, "pricing_category_id is required"),
-  slug:                z.string().min(1, "Service slug is required"),
-  is_active:           z.boolean(),
-  tags:                z.array(TagSchema),
+  id:                  z.string().min(1),
+  name:                z.string().min(1),
+  description:         z.string(),
+  category_id:         z.string().min(1),
+  featured:            z.boolean().default(false),
+  pricing_category_id: z.string().or(z.number()).transform(v => String(v)),
+  slug:                z.string().min(1),
+  is_active:           z.boolean().default(true),
+  tags:                z.array(TagSchema).optional().default([]),
 });
 
 export const ServiceCategorySchema = z.object({
-  id:                  z.string().min(1, "Service category id is required"),
-  name:                z.string().min(1, "Service category name is required"),
-  description:         z.string().min(1, "Service category description is required"),
-  order:               z.number().int().positive("Order must be a positive integer"),
+  id:          z.string().min(1),
+  name:        z.string().min(1),
+  description: z.string().optional().default(""),
+  order:       z.number().int().default(0),
+  services:    z.array(ServiceSchema).optional(),
+});
+
+export const ServiceDetailsSchema = ServiceSchema.extend({
+  content:          z.string().min(1),
+  meta_description: z.string().nullable().optional(),
+  category_name:    z.string().optional(),
+});
+
+export const RelatedContentResponseSchema = z.object({
+  services: z.array(ServiceSchema),
+  samples:  z.array(SampleListItemSchema),
+});
+
+export const AcademicLevelSchema = z.object({
+  id:    z.string().min(1),
+  name:  z.string().min(1),
+  order: z.number().int().default(0),
 });
 
 export const GetServicesResponseSchema = z.object({

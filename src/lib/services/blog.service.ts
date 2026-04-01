@@ -67,7 +67,7 @@ export async function fetchBlogs(
 
 export async function fetchBlogCategories(): Promise<ApiResult<readonly BlogCategory[]>> {
   const result = await apiGet<unknown>("/blogs/categories", {
-    next: { revalidate: 3600 } // Cache for 1 hour
+    next: { revalidate: 3600 }
   });
 
   if (!result.ok) return result as ApiResult<readonly BlogCategory[]>;
@@ -75,11 +75,16 @@ export async function fetchBlogCategories(): Promise<ApiResult<readonly BlogCate
   const parsed = z.array(BlogCategorySchema).safeParse(result.data);
 
   if (!parsed.success) {
+    const fieldErrors = parsed.error.flatten().fieldErrors;
+    const normalizedErrors: Record<string, string[]> = Object.fromEntries(
+      Object.entries(fieldErrors).map(([key, value]) => [key, value ?? []])
+    );
+
     return {
       ok: false,
       error: {
         message: "Invalid blog categories response.",
-        errors: {},
+        errors: normalizedErrors,
         status: "PARSE_ERROR",
       },
     };
