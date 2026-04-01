@@ -1,5 +1,6 @@
 import { apiGet } from "@/api-client";
 import { 
+  ServiceSchema,
   ServiceCategorySchema, 
   ServiceDetailsSchema, 
   RelatedContentResponseSchema,
@@ -42,12 +43,40 @@ export async function fetchServiceCategories(): Promise<ApiResult<readonly Servi
   };
 }
 
-export async function fetchServiceBySlug(slug: string): Promise<ApiResult<ServiceDetails>> {
-  const result = await apiGet<unknown>(`/services/${slug}`, {
+export async function fetchServicesByCategoryId(categoryId: string): Promise<ApiResult<readonly Service[]>> {
+  const result = await apiGet<unknown>(`/services/category/${categoryId}`, {
+    next: { revalidate: 300, tags: ["services:categories"] }
+  });
+
+  if (!result.ok) return result as ApiResult<readonly Service[]>;
+
+  console.log("RAW SERVICE RESPONSE:", result.data);
+  const parsed = z.array(ServiceSchema).safeParse(result.data);
+  if (!parsed.success) {
+    return {
+      ok: false,
+      error: {
+        message: "Invalid service categories response from server.",
+        errors: parsed.error.flatten().fieldErrors as unknown as Record<string, string[]>,
+        status: "PARSE_ERROR",
+      },
+    };
+  }
+
+  return {
+    ok: true,
+    data: parsed.data as readonly Service[],
+    message: "Service categories fetched successfully",
+    status: 200,
+  };
+}
+
+export async function fetchServiceBySlug(slug: string): Promise<ApiResult<Service>> {
+  const result = await apiGet<Service>(`/services/${slug}`, {
     next: { revalidate: 3600, tags: [`service:${slug}`] }
   });
 
-  if (!result.ok) return result as ApiResult<ServiceDetails>;
+  if (!result.ok) return result as ApiResult<Service>;
 
   const parsed = ServiceDetailsSchema.safeParse(result.data);
   if (!parsed.success) {
@@ -107,7 +136,7 @@ export async function fetchRelatedContent(serviceId: string): Promise<ApiResult<
 
 export async function fetchAcademicLevels(): Promise<ApiResult<readonly Level[]>> {
   const result = await apiGet<unknown>("/academic-levels", {
-    next: { revalidate: 86400 } // Cache for 24 hours
+    next: { revalidate: 300 } // Cache for 24 hours
   });
 
   if (!result.ok) return result as ApiResult<readonly Level[]>;

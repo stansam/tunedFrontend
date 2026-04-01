@@ -35,6 +35,8 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
     isLoading: isServicesLoading,
     activeCategoryId,
     setActiveCategoryId,
+    activeServices,
+    isServicesLoading: isCategoryServicesLoading,
     dropdownRef
   } = useNavbarServices();
 
@@ -100,6 +102,8 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
                     isLoading={isServicesLoading}
                     activeCategoryId={activeCategoryId}
                     onCategorySelect={setActiveCategoryId}
+                    services={activeServices}
+                    isServicesLoading={isCategoryServicesLoading}
                   />
                 </li>
               );

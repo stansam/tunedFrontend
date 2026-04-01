@@ -9,9 +9,9 @@ export interface Deadline {
 }
 
 export interface Level {
-    id: string;
-    name: string;
-    order: number;
+    readonly id: string;
+    readonly name: string;
+    readonly order: number;
 }
 
 export interface Sample {
@@ -56,4 +56,8 @@ export interface FeaturedContentResponse {
     services: Service[];
     samples: Sample[];
     blogs: BlogPost[];
+}
+
+export interface LevelsResponse {
+    levels: Level[];
 }

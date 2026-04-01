@@ -9,7 +9,8 @@ import type { MobileServicesMenuProps } from "@/lib/props/service.props";
 export function MobileServicesMenu({ categories }: MobileServicesMenuProps) {
   const { 
     openCategoryId, 
-    toggleCategory 
+    toggleCategory,
+    isCategoryLoading
   } = useMobileServices();
 
   if (categories.length === 0) return null;
@@ -25,6 +26,8 @@ export function MobileServicesMenu({ categories }: MobileServicesMenuProps) {
       <div className="space-y-1.5">
         {categories.map((category) => {
           const isOpen = openCategoryId === category.id;
+          const isLoading = isCategoryLoading(category.id);
+          const hasServices = !!(category.services && category.services.length > 0);
           
           return (
             <div 
@@ -35,7 +38,7 @@ export function MobileServicesMenu({ categories }: MobileServicesMenuProps) {
               )}
             >
               <button
-                onClick={() => toggleCategory(category.id)}
+                onClick={() => toggleCategory(category.id, hasServices)}
                 className={cn(
                   "flex w-full items-center justify-between px-5 py-4 rounded-2xl text-[15px] font-bold transition-all",
                   isOpen ? "text-emerald-700" : "text-slate-700 hover:bg-slate-50"
@@ -69,18 +72,26 @@ export function MobileServicesMenu({ categories }: MobileServicesMenuProps) {
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="grid grid-cols-1 gap-1 pt-1">
-                    {category.services?.map((service) => (
-                      <Link
-                        key={service.id}
-                        href={`/service/${service.slug}` as LinkProps<string>["href"]}
-                        className="flex items-center justify-between px-6 py-3 rounded-xl text-[14px] font-bold text-slate-600 hover:text-emerald-600 transition-all active:bg-white"
-                      >
-                        {service.name}
-                        <ArrowUpRight size={14} className="text-slate-300 opacity-0 group-hover:opacity-100" />
-                      </Link>
-                    ))}
-                  </div>
+                  {isLoading ? (
+                    <div className="px-6 py-4 space-y-3">
+                       {[1, 2, 3].map(i => (
+                         <div key={i} className="h-10 w-full bg-white rounded-xl animate-pulse ring-1 ring-slate-50" />
+                       ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-1 pt-1">
+                      {category.services?.map((service) => (
+                        <Link
+                          key={service.id}
+                          href={`/service/${service.slug}` as LinkProps<string>["href"]}
+                          className="flex items-center justify-between px-6 py-3 rounded-xl text-[14px] font-bold text-slate-600 hover:text-emerald-600 transition-all active:bg-white"
+                        >
+                          {service.name}
+                          <ArrowUpRight size={14} className="text-slate-300 opacity-0 group-hover:opacity-100" />
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                   
                   {/* Category Footer Link */}
                   <div className="mt-4 px-6 pt-4 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-emerald-600">

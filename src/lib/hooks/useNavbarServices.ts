@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { fetchServiceCategories } from "@/lib/services/service.service";
-import type { ServiceCategory } from "@/lib/types/service.type";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { fetchServiceCategories, fetchServicesByCategoryId } from "@/lib/services/service.service";
+import type { ServiceCategory, Service } from "@/lib/types/service.type";
 
 export interface UseNavbarServicesReturn {
   isOpen: boolean;
@@ -13,7 +13,10 @@ export interface UseNavbarServicesReturn {
   isLoading: boolean;
   activeCategoryId: string | null;
   setActiveCategoryId: (id: string | null) => void;
+  activeServices: readonly Service[];
+  isServicesLoading: boolean;
   dropdownRef: React.RefObject<HTMLLIElement | null>;
+  fetchServicesForCategory: (id: string) => Promise<void>;
 }
 
 export function useNavbarServices(): UseNavbarServicesReturn {
@@ -21,6 +24,8 @@ export function useNavbarServices(): UseNavbarServicesReturn {
   const [categories, setCategories] = useState<readonly ServiceCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+  const [fetchedServices, setFetchedServices] = useState<Record<string, readonly Service[]>>({});
+  const [isServicesLoading, setIsServicesLoading] = useState(false);
   const dropdownRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -36,6 +41,30 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     });
     return () => { mounted = false; };
   }, []);
+
+  const fetchServicesForCategory = useCallback(async (id: string) => {
+    if (fetchedServices[id] || !id) return;
+
+    setIsServicesLoading(true);
+    try {
+      const res = await fetchServicesByCategoryId(id);
+      if (res.ok) {
+        setFetchedServices(prev => ({ ...prev, [id]: res.data }));
+        // Also update the categories state to ensure MobileServicesMenu (which receives categories prop) has the data
+        setCategories(prev => prev.map(cat => 
+          cat.id === id ? { ...cat, services: res.data } : cat
+        ));
+      }
+    } finally {
+      setIsServicesLoading(false);
+    }
+  }, [fetchedServices]);
+
+  useEffect(() => {
+    if (isOpen && activeCategoryId) {
+      fetchServicesForCategory(activeCategoryId);
+    }
+  }, [isOpen, activeCategoryId, fetchServicesForCategory]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,6 +89,10 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     setIsOpen(false);
   }, []);
 
+  const activeServices = useMemo(() => 
+    activeCategoryId ? (fetchedServices[activeCategoryId] || []) : [], 
+  [activeCategoryId, fetchedServices]);
+
   return {
     isOpen,
     setIsOpen,
@@ -69,6 +102,9 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     isLoading,
     activeCategoryId,
     setActiveCategoryId,
+    activeServices,
+    isServicesLoading,
     dropdownRef,
+    fetchServicesForCategory,
   };
 }
