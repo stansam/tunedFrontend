@@ -10,7 +10,7 @@ import type { NavbarProps } from "@/lib/props/index.props";
 const NAV_LINKS = [
   { label: "Services",     href: "#" },
   { label: "FAQs",         href: "/faqs" },
-  { label: "Samples",      href: "#" },
+  { label: "Samples",      href: "/samples" },
   { label: "Blogs",        href: "#" },
   { label: "Testimonials", href: "#" },
 ] as const;
@@ -72,7 +72,7 @@ export function Navbar({ activeRoute }: NavbarProps) {
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
-                href={link.href}
+                href={link.href as any}
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150",
                   activeRoute === link.href
@@ -124,7 +124,7 @@ export function Navbar({ activeRoute }: NavbarProps) {
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
-                  href={link.href}
+                  href={link.href as any}
                   className={cn(
                     "block px-4 py-2.5 rounded-md text-sm font-medium transition-colors",
                     activeRoute === link.href

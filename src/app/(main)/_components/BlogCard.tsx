@@ -24,7 +24,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
       href={"#"} // /blogs/${post.slug}
       className={cn(
         "group relative flex flex-col justify-end overflow-hidden rounded-2xl w-full h-full",
-        "bg-slate-900 text-white",
+        "bg-slate-900 bg-opacity-80 text-white",
         "transition-transform duration-300 hover:scale-[0.985] hover:rotate-[0.2deg]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2",
         isPrimary ? "min-h-[340px] md:min-h-0" : "min-h-[240px] md:min-h-0"
@@ -33,7 +33,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
     >
       <Image
         src={backgroundImage}
-        alt=""
+        alt="blog image"
         fill
         className="object-cover object-center absolute inset-0 -z-10"
         onError={() => setImgError(true)}
@@ -46,8 +46,8 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
         className={cn(
           "absolute inset-0 bg-slate-900 transition-opacity duration-500",
           isPrimary
-            ? "opacity-50 group-hover:opacity-60"
-            : "opacity-55 group-hover:opacity-65"
+            ? "opacity-30 group-hover:opacity-40"
+            : "opacity-35 group-hover:opacity-45"
         )}
       />
 

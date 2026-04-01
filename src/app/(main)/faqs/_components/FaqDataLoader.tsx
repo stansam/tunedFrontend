@@ -1,6 +1,6 @@
 import { fetchFaqs } from "@/lib/services/faq.service";
 import { FALLBACK_FAQS } from "./data";
-import { FaqClient } from "./FaqClient";
+import { FaqClient } from "@/app/(main)/faqs/_components/FaqClient";
 
 export async function FaqDataLoader() {
   const result = await fetchFaqs();

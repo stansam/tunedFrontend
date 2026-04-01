@@ -9,6 +9,12 @@ import { ServiceSchema, GetServicesResponseSchema } from "./service.schema";
 import { CategoryTabSchema, GetQuoteOptionsResponseSchema, QuoteFormStateSchema } from "./quote.schema";
 import { NewsletterRequestSchema, NewsletterResponseSchema } from "./newsletter.schema";
 import { FaqItemSchema, FaqListSchema } from "./faq.schema";
+import { 
+    SampleServiceSchema, 
+    SampleListItemSchema, 
+    PaginationSchema, 
+    SamplesPageResponseSchema 
+} from "./samples.schema";
 
 export {
     TagSchema,
@@ -18,4 +24,5 @@ export {
     CategoryTabSchema, GetQuoteOptionsResponseSchema, QuoteFormStateSchema,
     NewsletterRequestSchema, NewsletterResponseSchema,
     FaqItemSchema, FaqListSchema,
+    SampleServiceSchema, SampleListItemSchema, PaginationSchema, SamplesPageResponseSchema,
 };
