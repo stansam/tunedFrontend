@@ -1,9 +1,6 @@
 import { z } from "zod";
 import { TagSchema } from "./tag.schema";
-
-const isoDateString = z
-  .string()
-  .min(1, "published_at is required");
+import { isoUtcDatetime } from "../utils";
 
 export const BlogPostSchema = z.object({
   id:               z.string().min(1, "Blog id is required"),
@@ -17,31 +14,41 @@ export const BlogPostSchema = z.object({
   meta_description: z.string().min(1, "meta_description is required"),
   is_published:     z.boolean(),
   is_featured:      z.boolean(),
-  published_at:     isoDateString,
+  published_at:     isoUtcDatetime,
   tags:             z.array(TagSchema),
 });
 
 export const BlogCategorySchema = z.object({
-    id: z.string().min(1),
-    name: z.string().min(1),
-    slug: z.string().min(1),
-    description: z.string().min(1),
+  id: z.string().or(z.number()).transform(v => String(v)),
+  name: z.string(),
+  slug: z.string(),
+  description: z.string().nullable().optional(),
 });
 
-export const BlogCommentSchema = z.object({
-    id: z.string().min(1),
-    post_id: z.string().min(1),
-    content: z.string().min(1),
-    name: z.string().min(1),
-    email: z.string().min(1),
-    user_id: z.string().min(1),
-    approved: z.boolean(),
+export const BlogListItemSchema = z.object({
+  id: z.string().or(z.number()).transform(v => String(v)),
+  title: z.string(),
+  slug: z.string(),
+  excerpt: z.string(),
+  author: z.string(),
+  category_id: z.string().or(z.number()).transform(v => String(v)),
+  featured_image: z.string().nullable(),
+  is_featured: z.boolean().default(false),
+  published_at: z.string().nullable(),
+  tags: z.array(TagSchema).optional().default([]),
+  category: BlogCategorySchema.nullable().optional(),
 });
 
-export const CommentReactionSchema = z.object({
-    id: z.string().min(1),
-    comment_id: z.string().min(1),
-    reaction_type: z.string().min(1),
-    user_id: z.string().min(1),
-    ip_address: z.string().min(1),
+export const BlogPaginationSchema = z.object({
+  page:        z.number(),
+  per_page:    z.number(),
+  total:       z.number(),
+  total_pages: z.number(),
+  has_next:    z.boolean(),
+  has_prev:    z.boolean(),
+});
+
+export const BlogsPageResponseSchema = z.object({
+  data:       z.array(BlogListItemSchema),
+  pagination: BlogPaginationSchema,
 });
