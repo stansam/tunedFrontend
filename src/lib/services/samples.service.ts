@@ -51,8 +51,8 @@ export async function fetchSamples(
     ...parsed.data,
     data: parsed.data.data.map(item => ({
       ...item,
-      tags: (item.tags || []) as readonly any[]
-    })) as any
+      tags: item.tags,
+    })),
   };
 
   return {

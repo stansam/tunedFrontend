@@ -27,7 +27,7 @@ export function SamplesGrid({ items, isLoading }: SamplesGridProps) {
           wordCount: item.word_count,
           isFeatured: item.featured,
           image: item.image || `https://placehold.co/600x400/1a1a1a/ffffff?text=${encodeURIComponent(item.title)}`,
-          tags: item.tags as any,
+          tags: item.tags,
         };
 
         return <SampleCard key={item.id} sample={viewModel} />;

@@ -22,3 +22,8 @@ export interface RequestOptions {
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
 }
+
+export type NavLink = {
+  label: string;
+  href: string;
+};

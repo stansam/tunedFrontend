@@ -3,8 +3,7 @@ import type {
   SampleFilters, 
   SampleListItem,
   SampleService,
-  SortField,
-  SortOrder
+  SortField
 } from "../_types/samples.types";
 
 export interface SamplesClientProps {
@@ -41,7 +40,12 @@ export interface SamplesEmptyStateProps {
   readonly onClearFilters: () => void;
 }
 
-export interface SamplesHeroProps {}
+export interface SamplesHeroProps {
+  readonly title:         React.ReactNode;
+  readonly description:   string;
+  readonly sampleCount:   number;
+  readonly categoryCount: number;
+}
 
 export interface UseSamplesReturnProps {
   readonly filters:         SampleFilters;

@@ -1,7 +1,12 @@
 import { cn } from "@/lib/utils";
 import type { SamplesHeroProps } from "../_props/samples.props";
 
-export function SamplesHero({}: SamplesHeroProps) {
+export function SamplesHero({ 
+  title, 
+  description, 
+  sampleCount, 
+  categoryCount 
+}: SamplesHeroProps) {
   return (
     <section
       aria-labelledby="samples-page-heading"
@@ -50,13 +55,11 @@ export function SamplesHero({}: SamplesHeroProps) {
             id="samples-page-heading"
             className="text-3xl font-bold leading-tight text-slate-800 sm:text-4xl md:text-5xl lg:text-[3.5rem]"
           >
-            Excellence in <span className="text-emerald-600">Sample</span> Work
+            {title}
           </h1>
 
           <p className="max-w-xl text-base leading-relaxed text-slate-500 sm:text-lg">
-            Explore our curated selection of high-quality samples across multiple 
-            academic and professional disciplines. Each sample reflects the precision 
-            and depth we bring to every project.
+            {description}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -65,7 +68,7 @@ export function SamplesHero({}: SamplesHeroProps) {
               "border border-slate-200 bg-white px-4 py-2 shadow-sm",
               "text-sm font-medium text-slate-700"
             )}>
-              <span className="text-emerald-500 font-bold">100+</span>
+              <span className="text-emerald-500 font-bold">{sampleCount}+</span>
               samples published
             </div>
             <div className={cn(
@@ -73,7 +76,7 @@ export function SamplesHero({}: SamplesHeroProps) {
               "border border-slate-200 bg-white px-4 py-2 shadow-sm",
               "text-sm font-medium text-slate-700"
             )}>
-              <span className="text-emerald-500 font-bold">6</span>
+              <span className="text-emerald-500 font-bold">{categoryCount}</span>
               service categories
             </div>
           </div>

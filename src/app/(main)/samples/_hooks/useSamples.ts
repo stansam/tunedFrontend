@@ -4,7 +4,6 @@ import { useState, useMemo, useCallback, useEffect, useRef, useTransition } from
 import { fetchSamples } from "@/lib/services/samples.service";
 import { ALL_SERVICE } from "../_types/samples.types";
 import type { 
-  SampleListItem, 
   SampleService, 
   SamplesPageResponse, 
   SampleFilters, 
@@ -19,7 +18,7 @@ export function useSamples(
 ): UseSamplesReturnProps {
   const [response, setResponse] = useState<SamplesPageResponse>(initialResponse);
   const [filters,  setFilters]  = useState<SampleFilters>(initialFilters);
-  const [page,     setPageNum]  = useState(initialResponse.pagination.page);
+  const [,         setPageNum]  = useState(initialResponse.pagination.page);
   const [isPending, startTransition] = useTransition();
   
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);

@@ -11,7 +11,7 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { ALL_SERVICE } from "../_types/samples.types";
+import { ALL_SERVICE, SortField } from "../_types/samples.types";
 import type { SamplesControlBarProps } from "../_props/samples.props";
 
 export function SamplesControlBar({
@@ -51,7 +51,7 @@ export function SamplesControlBar({
           </span>
           <Select 
             value={filters.sort} 
-            onValueChange={(val: string) => onSortChange(val as any)}
+            onValueChange={(val: string) => onSortChange(val as SortField)}
           >
             <SelectTrigger className="h-11 w-40 bg-white border-slate-200 rounded-lg shadow-sm">
               <SelectValue placeholder="Sort by" />
@@ -129,6 +129,19 @@ export function SamplesControlBar({
           <div className="absolute right-0 top-0 bottom-4 w-8 bg-linear-to-l from-[#f8f7f4] to-transparent pointer-events-none md:hidden" />
         </div>
       </div>
+      {/* Clear Filters Button */}
+      { (filters.search || filters.serviceId !== ALL_SERVICE) && (
+        <div className="flex justify-end">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onClearFilters}
+            className="text-slate-400 hover:text-emerald-600 text-xs font-semibold h-8"
+          >
+            Clear all filters
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

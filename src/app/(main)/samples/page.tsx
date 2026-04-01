@@ -11,7 +11,12 @@ export default function SamplesPage() {
       <Navbar activeRoute="/samples" />
 
       <main id="main-content">
-        <SamplesHero />
+        <SamplesHero 
+          title={<>Excellence in <span className="text-emerald-600">Sample</span> Work</>}
+          description="Explore our curated selection of high-quality samples across multiple academic and professional disciplines. Each sample reflects the precision and depth we bring to every project."
+          sampleCount={100}
+          categoryCount={6}
+        />
 
         <Suspense fallback={<SamplesSkeleton />}>
           <SamplesDataLoader />

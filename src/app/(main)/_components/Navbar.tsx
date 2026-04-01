@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import Link, { type LinkProps } from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { NavbarProps } from "@/lib/props/index.props";
+import type { NavLink } from "@/lib/types/common.type";
 
-const NAV_LINKS = [
+
+const NAV_LINKS: NavLink[] = [
   { label: "Services",     href: "#" },
   { label: "FAQs",         href: "/faqs" },
   { label: "Samples",      href: "/samples" },
   { label: "Blogs",        href: "#" },
   { label: "Testimonials", href: "#" },
-] as const;
+];
 
 export function Navbar({ activeRoute }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -72,7 +74,7 @@ export function Navbar({ activeRoute }: NavbarProps) {
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <Link
-                href={link.href as any}
+                href={link.href as LinkProps<string>["href"]}
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150",
                   activeRoute === link.href
@@ -124,7 +126,7 @@ export function Navbar({ activeRoute }: NavbarProps) {
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
-                  href={link.href as any}
+                  href={link.href as LinkProps<string>["href"]}
                   className={cn(
                     "block px-4 py-2.5 rounded-md text-sm font-medium transition-colors",
                     activeRoute === link.href
