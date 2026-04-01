@@ -15,6 +15,8 @@ export interface UseNavbarServicesReturn {
   setActiveCategoryId: (id: string | null) => void;
   activeServices: readonly Service[];
   isServicesLoading: boolean;
+  loadingCategoryIds: Set<string>;
+  isCategoryLoading: (id: string) => boolean;
   dropdownRef: React.RefObject<HTMLLIElement | null>;
   fetchServicesForCategory: (id: string) => Promise<void>;
 }
@@ -24,8 +26,7 @@ export function useNavbarServices(): UseNavbarServicesReturn {
   const [categories, setCategories] = useState<readonly ServiceCategory[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
-  const [fetchedServices, setFetchedServices] = useState<Record<string, readonly Service[]>>({});
-  const [isServicesLoading, setIsServicesLoading] = useState(false);
+  const [loadingCategoryIds, setLoadingCategoryIds] = useState<Set<string>>(new Set());
   const dropdownRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -42,23 +43,31 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     return () => { mounted = false; };
   }, []);
 
-  const fetchServicesForCategory = useCallback(async (id: string) => {
-    if (fetchedServices[id] || !id) return;
+  const isCategoryLoading = useCallback((id: string) => loadingCategoryIds.has(id), [loadingCategoryIds]);
 
-    setIsServicesLoading(true);
+  const fetchServicesForCategory = useCallback(async (id: string) => {
+    // Check if we already have services for this category
+    const category = categories.find(c => c.id === id);
+    if (!id || (category?.services && category.services.length > 0)) {
+       return;
+    }
+
+    setLoadingCategoryIds(prev => new Set(prev).add(id));
     try {
       const res = await fetchServicesByCategoryId(id);
       if (res.ok) {
-        setFetchedServices(prev => ({ ...prev, [id]: res.data }));
-        // Also update the categories state to ensure MobileServicesMenu (which receives categories prop) has the data
         setCategories(prev => prev.map(cat => 
           cat.id === id ? { ...cat, services: res.data } : cat
         ));
       }
     } finally {
-      setIsServicesLoading(false);
+      setLoadingCategoryIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
-  }, [fetchedServices]);
+  }, [categories]);
 
   useEffect(() => {
     if (isOpen && activeCategoryId) {
@@ -89,9 +98,14 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     setIsOpen(false);
   }, []);
 
-  const activeServices = useMemo(() => 
-    activeCategoryId ? (fetchedServices[activeCategoryId] || []) : [], 
-  [activeCategoryId, fetchedServices]);
+  const activeServices = useMemo(() => {
+    const activeCategory = categories.find(c => c.id === activeCategoryId);
+    return activeCategory?.services || [];
+  }, [activeCategoryId, categories]);
+
+  const isServicesLoading = useMemo(() => 
+    activeCategoryId ? loadingCategoryIds.has(activeCategoryId) : false,
+  [activeCategoryId, loadingCategoryIds]);
 
   return {
     isOpen,
@@ -104,6 +118,8 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     setActiveCategoryId,
     activeServices,
     isServicesLoading,
+    loadingCategoryIds,
+    isCategoryLoading,
     dropdownRef,
     fetchServicesForCategory,
   };

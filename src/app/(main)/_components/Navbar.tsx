@@ -37,7 +37,10 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
     setActiveCategoryId,
     activeServices,
     isServicesLoading: isCategoryServicesLoading,
-    dropdownRef
+    loadingCategoryIds,
+    isCategoryLoading,
+    dropdownRef,
+    fetchServicesForCategory
   } = useNavbarServices();
 
   return (
@@ -174,7 +177,11 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
               if (link.label === "Services") {
                 return (
                   <li key={link.label} className="mb-2">
-                    <MobileServicesMenu categories={categories} />
+                    <MobileServicesMenu 
+                      categories={categories} 
+                      onFetchCategory={fetchServicesForCategory}
+                      isCategoryLoading={isCategoryLoading}
+                    />
                   </li>
                 );
               }

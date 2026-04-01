@@ -22,6 +22,12 @@ const PRICE_DEBOUNCE_MS = 600;
 
 // ─── useQuoteForm ─────────────────────────────────────────────────────────────
 
+export interface UseQuoteFormConfig {
+  initialServiceId?: string | null;
+  initialLevelId?: string | null;
+  initialTab?: CategoryTab;
+}
+
 export interface UseQuoteFormReturn {
   formState: QuoteFormState;
   price: CalculatePriceResponse | null;
@@ -33,13 +39,14 @@ export interface UseQuoteFormReturn {
   setLevelId: (id: string) => void;
   setDeadline: (isoUtc: string) => void;
   setPageCount: (count: number) => void;
+  calculateInitialPrice: () => Promise<void>;
 }
 
-export function useQuoteForm(): UseQuoteFormReturn {
+export function useQuoteForm(config: UseQuoteFormConfig = {}): UseQuoteFormReturn {
   const [formState, setFormState] = useState<QuoteFormState>({
-    activeTab: "writing",
-    serviceId: null,
-    levelId: null,
+    activeTab: config.initialTab ?? "writing",
+    serviceId: config.initialServiceId ?? null,
+    levelId: config.initialLevelId ?? null,
     deadline: null,
     pageCount: 1,
   });
@@ -73,6 +80,36 @@ export function useQuoteForm(): UseQuoteFormReturn {
     }
   }
 
+  const handleCalculatePrice = useCallback(async (state: QuoteFormState) => {
+    if (!isComplete(state)) return;
+
+    // Cancel in-flight request
+    if (abortRef.current) abortRef.current.abort();
+    abortRef.current = new AbortController();
+
+    const payload: CalculatePriceRequest = {
+      service_id: state.serviceId!,
+      level_id: state.levelId!,
+      deadline: state.deadline!,
+      page_count: state.pageCount,
+      word_count: state.pageCount * WORDS_PER_PAGE,
+    };
+
+    setIsPriceLoading(true);
+    setPriceError(null);
+
+    const result = await calculatePrice(payload);
+
+    setIsPriceLoading(false);
+
+    if (result.ok) {
+      setPrice(result.data);
+    } else {
+      setPriceError(result.error.message);
+      setPrice(null);
+    }
+  }, [isComplete]);
+
   useEffect(() => {
     if (!isComplete(deferredFormState)) {
       return;
@@ -81,38 +118,14 @@ export function useQuoteForm(): UseQuoteFormReturn {
     // Debounce
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    debounceRef.current = setTimeout(async () => {
-      // Cancel in-flight request
-      if (abortRef.current) abortRef.current.abort();
-      abortRef.current = new AbortController();
-
-      const payload: CalculatePriceRequest = {
-        service_id: deferredFormState.serviceId!,
-        level_id: deferredFormState.levelId!,
-        deadline: deferredFormState.deadline!,
-        page_count: deferredFormState.pageCount,
-        word_count: deferredFormState.pageCount * WORDS_PER_PAGE,
-      };
-
-      setIsPriceLoading(true);
-      setPriceError(null);
-
-      const result = await calculatePrice(payload);
-
-      setIsPriceLoading(false);
-
-      if (result.ok) {
-        setPrice(result.data);
-      } else {
-        setPriceError(result.error.message);
-        setPrice(null);
-      }
+    debounceRef.current = setTimeout(() => {
+      handleCalculatePrice(deferredFormState);
     }, PRICE_DEBOUNCE_MS);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [deferredFormState, isComplete]);
+  }, [deferredFormState, isComplete, handleCalculatePrice]);
 
   const setActiveTab = useCallback((tab: CategoryTab) => {
     setFormState((prev) => ({
@@ -142,6 +155,12 @@ export function useQuoteForm(): UseQuoteFormReturn {
     }));
   }, []);
 
+  const calculateInitialPrice = useCallback(async () => {
+    if (isComplete(formState)) {
+       await handleCalculatePrice(formState);
+    }
+  }, [formState, isComplete, handleCalculatePrice]);
+
   return {
     formState,
     price,
@@ -153,6 +172,7 @@ export function useQuoteForm(): UseQuoteFormReturn {
     setLevelId,
     setDeadline,
     setPageCount,
+    calculateInitialPrice,
   };
 }
 

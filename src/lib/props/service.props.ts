@@ -17,6 +17,8 @@ export interface ServicesDropdownProps {
 
 export interface MobileServicesMenuProps {
   readonly categories: readonly ServiceCategory[];
+  readonly onFetchCategory: (id: string) => Promise<void>;
+  readonly isCategoryLoading: (id: string) => boolean;
 }
 
 export interface ServiceHeroProps {
