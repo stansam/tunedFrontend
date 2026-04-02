@@ -1,5 +1,6 @@
 import { TagSchema } from "./tag.schema";
-import { LevelSchema, DeadlineSchema, FeaturedContentResponseSchema } from "./content.schema";
+import { LevelSchema, DeadlineSchema } from "./common.schema";
+import { FeaturedContentResponseSchema } from "./content.schema";
 import { 
     PricingCategorySchema,
     CalculatePriceRequestSchema,

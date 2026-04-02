@@ -2,19 +2,7 @@ import { z } from "zod";
 import { ServiceCategorySchema } from "./service.schema";
 import { BlogPostSchema } from "./blog.schema";
 import { TagSchema } from "./tag.schema";
-
-export const LevelSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  order: z.number().int().positive(),
-});
-
-export const DeadlineSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  hours: z.number().int().positive(),
-  order: z.number().int().positive(),
-});
+// import { LevelSchema, DeadlineSchema } from "./common.schema";
 
 export const SampleSchema = z.object({
   id:         z.string().min(1, "Sample id is required"),

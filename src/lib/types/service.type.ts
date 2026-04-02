@@ -1,24 +1,23 @@
-import { Tag } from "./content.type";
-
+import { Tag, Sample } from "./content.type";
+import { PricingCategory } from "./price.type";
 export interface Service {
-    id: string;
-    name: string;
-    description: string;
-    category_id: string;
-    featured: boolean;
-    pricing_category_id: string;
-    slug: string;
-    is_active: boolean;
-    tags: Tag[];
+  readonly id:                  string;
+  readonly name:                string;
+  readonly description:         string;
+  readonly category_id:         string;
+  readonly featured:            boolean;
+  readonly pricing_category_id: string;
+  readonly slug:                string;
+  readonly is_active:           boolean;
+  readonly tags:                readonly Tag[];
 }
 
 export interface FallbackService {
-    id: string;
-    name: string;
-    description: string;
-    iconEmoji: string;
+  readonly id:        string;
+  readonly name:      string;
+  readonly description: string;
+  readonly iconEmoji: string;
 }
-
 
 export interface ServiceIconMapping {
   readonly keywords:  readonly string[];
@@ -27,12 +26,28 @@ export interface ServiceIconMapping {
 }
 
 export interface ServiceCategory {
-  id: string;
-  name: string;
-  description: string;
-  order: number;
+  readonly id:          string;
+  readonly name:        string;
+  readonly description: string;
+  readonly order:       number;
+  readonly services?:   readonly Service[]; // For nested Navbar dropdown
+}
+
+export interface ServiceDetails extends Service {
+  // readonly content: string;
+  readonly pricing_category: PricingCategory;
+  readonly category: ServiceCategory;
+}
+
+export interface RelatedContentResponse {
+  readonly services: readonly Service[];
+  readonly samples:  readonly Sample[];
 }
 
 export interface FetchServicesResponse {
-  services: Service[];
+  readonly services: readonly Service[];
+}
+
+export interface ServiceCategoryResponse {
+  readonly categories: readonly ServiceCategory[];
 }

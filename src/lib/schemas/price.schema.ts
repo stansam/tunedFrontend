@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { isoUtcDatetime } from "@/lib/utils"
-import { DeadlineSchema } from "./content.schema";
+import { DeadlineSchema } from "./common.schema";
 
 export const PricingCategorySchema = z.object({
   id: z.string().min(1),
