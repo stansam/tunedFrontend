@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { LevelSchema } from "./content.schema";
+import { LevelSchema } from "./common.schema";
 import { isoUtcDatetime } from "@/lib/utils"
 
 export const CategoryTabSchema = z.enum(["writing", "technical", "proofreading"]);

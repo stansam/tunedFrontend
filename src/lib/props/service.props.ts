@@ -1,6 +1,7 @@
 import type { 
   Service, 
-  ServiceCategory
+  ServiceCategory,
+  ServiceDetails
 } from "@/lib/types/service.type";
 import type { Sample, Level } from "@/lib/types/content.type";
 
@@ -30,7 +31,7 @@ export interface ServiceQuoteFormProps {
 }
 
 export interface ServiceDetailsProps {
-  readonly service: Service;
+  readonly service: ServiceDetails;
 }
 
 export interface RelatedContentProps {

@@ -71,15 +71,17 @@ export async function fetchServicesByCategoryId(categoryId: string): Promise<Api
   };
 }
 
-export async function fetchServiceBySlug(slug: string): Promise<ApiResult<Service>> {
-  const result = await apiGet<Service>(`/services/${slug}`, {
+export async function fetchServiceBySlug(slug: string): Promise<ApiResult<ServiceDetails>> {
+  const result = await apiGet<ServiceDetails>(`/services/${slug}`, {
     next: { revalidate: 3600, tags: [`service:${slug}`] }
   });
 
-  if (!result.ok) return result as ApiResult<Service>;
+  if (!result.ok) return result as ApiResult<ServiceDetails>;
 
   const parsed = ServiceDetailsSchema.safeParse(result.data);
   if (!parsed.success) {
+    // console.error("SERVICE DETAILS PARSE ERROR:", parsed.error.format());
+    // console.error("RAW DATA:", result.data);
     return {
       ok: false,
       error: {
@@ -92,7 +94,7 @@ export async function fetchServiceBySlug(slug: string): Promise<ApiResult<Servic
 
   return {
     ok: true,
-    data: parsed.data as ServiceDetails,
+    data: parsed.data,
     message: "Service details fetched successfully",
     status: 200,
   };

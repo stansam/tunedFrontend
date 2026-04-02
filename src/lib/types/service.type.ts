@@ -1,5 +1,5 @@
 import { Tag, Sample } from "./content.type";
-
+import { PricingCategory } from "./price.type";
 export interface Service {
   readonly id:                  string;
   readonly name:                string;
@@ -34,9 +34,9 @@ export interface ServiceCategory {
 }
 
 export interface ServiceDetails extends Service {
-  readonly content: string;
-  readonly meta_description?: string;
-  readonly category_name?: string;
+  // readonly content: string;
+  readonly pricing_category: PricingCategory;
+  readonly category: ServiceCategory;
 }
 
 export interface RelatedContentResponse {

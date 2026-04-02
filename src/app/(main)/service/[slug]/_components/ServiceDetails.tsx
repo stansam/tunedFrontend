@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle2, ShieldCheck, Clock, Zap, MessageSquare, Award } from "lucide-react";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 import type { ServiceDetailsProps } from "@/lib/props/service.props";
 
 export function ServiceDetails({ service }: ServiceDetailsProps) {

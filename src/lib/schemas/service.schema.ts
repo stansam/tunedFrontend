@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { TagSchema } from "./tag.schema";
 import { SampleListItemSchema } from "./samples.schema";
+import { PricingCategorySchema } from "./price.schema";
 
 export const ServiceSchema = z.object({
   id:                  z.string().min(1),
@@ -23,9 +24,11 @@ export const ServiceCategorySchema = z.object({
 });
 
 export const ServiceDetailsSchema = ServiceSchema.extend({
-  content:          z.string().min(1),
-  meta_description: z.string().nullable().optional(),
-  category_name:    z.string().optional(),
+  // content:          z.string().min(1),
+  // meta_description: z.string().nullable().optional(),
+  // category_name:    z.string().optional(),
+  pricing_category: PricingCategorySchema,
+  category: ServiceCategorySchema,
 });
 
 export const RelatedContentResponseSchema = z.object({
