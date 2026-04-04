@@ -27,3 +27,10 @@ export type NavLink = {
   label: string;
   href: string;
 };
+
+export interface Pagination {
+  readonly sort:        string;
+  readonly order:       string;
+  readonly page:        number;
+  readonly per_page:    number;
+}

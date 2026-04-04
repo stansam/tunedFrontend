@@ -32,7 +32,7 @@ export function useBlogs(
         sort:        newFilters.sort,
         order:       newFilters.order,
         page:        newPage,
-        per_page:    10, // Matching fallback and backend typical per_page
+        per_page:    12,
       });
 
       if (result.ok) {
