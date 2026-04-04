@@ -1,7 +1,7 @@
 import { apiGet, apiPost } from "@/api-client";
 import { BlogPostSchema, RelatedBlogsResponseSchema, CommentFormSchema, BlogCommentSchema } from "@/lib/schemas/post.schema";
 import type { ApiResult } from "@/lib/types";
-import type { BlogPost, BlogComment, CommentFormValues, RelatedBlogsResponse } from "@/app/(main)/blogs/[slug]/_types/post.type";
+import type { BlogPost, BlogComment, CommentFormValues } from "@/app/(main)/blogs/[slug]/_types/post.type";
 import type { BlogListItem } from "@/app/(main)/blogs/_types/blog.types";
 import { z } from "zod";
 
@@ -40,11 +40,10 @@ export async function fetchBlogPost(
 }
 
 export async function fetchRelatedBlogs(
-  categoryId: string,
-  excludeSlug: string
+  slug: string
 ): Promise<ApiResult<readonly BlogListItem[]>> {
   const result = await apiGet<unknown>(
-    `/blogs/${encodeURIComponent(categoryId)}/related?exclude=${encodeURIComponent(excludeSlug)}&per_page=3`,
+    `/blogs/${encodeURIComponent(slug)}/related`,
     { next: { revalidate: 120 } }
   );
 
@@ -71,7 +70,7 @@ export async function fetchRelatedBlogs(
     };
   }
 
-  const items = parsed.data.data.filter((p) => p.slug !== excludeSlug);
+  const items = parsed.data.data.filter((p) => p.slug !== slug);
 
   return {
     ok: true,

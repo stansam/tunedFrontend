@@ -1,45 +1,91 @@
 "use client";
-// lib/hooks/useAuth.ts
-// ─────────────────────────────────────────────────────────────────────────────
-// Consume auth state anywhere in the client tree.
-// Throws if called outside <AuthProvider> so misuse is caught at dev time.
-// ─────────────────────────────────────────────────────────────────────────────
 
-import { useContext } from "react";
-import { AuthContext } from "@/lib/auth/Context";
-import type { AuthUser } from "@/lib/types/auth.type";
-import type { ApiResult } from "@/lib/types";
-import type { LoginCredentials, RegisterCredentials } from "@/lib/types/auth.type";
+/**
+ * @file useAuth.ts
+ * @description Primary application hook for consuming auth state.
+ *
+ * This is the hook that components throughout your app should import.
+ * It provides a clean, documented interface on top of the raw context.
+ *
+ * Features:
+ *  - Fully typed with discriminated status for exhaustive handling
+ *  - Convenience booleans (isLoading, isAuthenticated, isError)
+ *  - Guards: requireUser() throws a typed error for components that
+ *    need a guaranteed non-null user without inline null checks
+ *  - logoutAndRefresh() for clean sign-out flow
+ *
+ * @example
+ *   // Basic usage
+ *   const { isAuthenticated, user } = useAuth();
+ *   if (!isAuthenticated) return <LoginPrompt />;
+ *   return <Welcome name={user.name} />;
+ *
+ * @example
+ *   // Exhaustive status handling
+ *   const { status, user } = useAuth();
+ *   switch (status) {
+ *     case "loading":         return <Spinner />;
+ *     case "authenticated":   return <Dashboard user={user!} />;
+ *     case "unauthenticated": return <LoginPage />;
+ *     case "error":           return <ErrorState />;
+ *   }
+ *
+ * @example
+ *   // Inside a protected component where auth is guaranteed by a parent guard
+ *   const { requireUser } = useAuth();
+ *   const user = requireUser(); // AuthUser — never null here
+ */
+
+
+import { useCallback } from "react";
+import { useAuthContext } from "@/lib/auth/Context";
+import { logoutUser } from "@/lib/services/auth.service";
+import type { AuthUser, AuthStatus } from "@/lib/types/auth.type";
 
 export interface UseAuthReturn {
-  user: AuthUser | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-  login: (credentials: LoginCredentials) => Promise<ApiResult<AuthUser>>;
-  register: (credentials: RegisterCredentials) => Promise<ApiResult<AuthUser>>;
-  logout: () => Promise<void>;
-  refresh: () => Promise<void>;
+  readonly status: AuthStatus;
+  readonly user: AuthUser | null;
+  readonly isLoading: boolean;
+  readonly isAuthenticated: boolean;
+  readonly isUnauthenticated: boolean;
+  readonly isError: boolean;
+  readonly error: string | null;
+  readonly refresh: () => Promise<void>;
+  readonly logoutAndRefresh: () => Promise<boolean>;
+  readonly requireUser: () => AuthUser;
 }
 
 export function useAuth(): UseAuthReturn {
-  const ctx = useContext(AuthContext);
+  const { status, user, isAuthenticated, error, refresh } = useAuthContext();
 
-  if (!ctx) {
-    throw new Error(
-      "[useAuth] must be used within <AuthProvider>. " +
-        "Wrap your root layout (or the subtree that needs auth) with <AuthProvider initialUser={...}>."
-    );
-  }
+  const logoutAndRefresh = useCallback(async (): Promise<boolean> => {
+    const success = await logoutUser();
+    await refresh();
+    return success;
+  }, [refresh]);
+
+  const requireUser = useCallback((): AuthUser => {
+    if (status !== "authenticated" || user === null) {
+      throw new Error(
+        `[useAuth] requireUser() called with status="${status}". ` +
+          "This indicates a component using requireUser() is being rendered " +
+          "outside of an authenticated context. Wrap the component tree with " +
+          "<AuthGuard> or withAuth() to prevent this."
+      );
+    }
+    return user;
+  }, [status, user]);
 
   return {
-    user: ctx.user,
-    isAuthenticated: ctx.status === "authenticated",
-    isLoading: ctx.status === "loading" || ctx.status === "idle",
-    error: ctx.error,
-    login: ctx.login,
-    register: ctx.register,
-    logout: ctx.logout,
-    refresh: ctx.refresh,
+    status,
+    user,
+    isLoading: status === "loading",
+    isAuthenticated,
+    isUnauthenticated: status === "unauthenticated",
+    isError: status === "error",
+    error,
+    refresh,
+    logoutAndRefresh,
+    requireUser,
   };
 }

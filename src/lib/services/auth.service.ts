@@ -1,71 +1,130 @@
-// lib/services/auth.service.ts
-// ─────────────────────────────────────────────────────────────────────────────
-// All auth calls are routed through the shared api-client so timeout handling,
-// error normalisation, and response-envelope unwrapping are handled in one place.
-//
-// The backend is expected to set / clear an HttpOnly session cookie on login
-// and logout — no tokens are stored or read here.
-// ─────────────────────────────────────────────────────────────────────────────
-
-import { apiGet, apiPost } from "@/api-client";
+import { apiGet } from "@/api-client";
+import { AuthMeResponseSchema } from "@/lib/schemas/auth.schema";
+import type { AuthUser, ServerAuthResult } from "@/lib/types/auth.type";
 import type { ApiResult } from "@/lib/types";
-import type {
-  AuthUser,
-  AuthResponse,
-  LoginCredentials,
-  RegisterCredentials,
-} from "@/lib/types/auth.type";
 
-const ENDPOINTS = {
-  ME: "/auth/me",
-  LOGIN: "/auth/login",
-  REGISTER: "/auth/register",
-  LOGOUT: "/auth/logout",
-} as const;
+function parseAuthMeResult(result: ApiResult<unknown>): ServerAuthResult {
+  if (!result.ok) {
+    const status = result.error.status;
 
+    if (status === 401 || status === 403) {
+      return { ok: false, reason: "unauthenticated" };
+    }
 
-function isAuthUser(value: unknown): value is AuthUser {
-  if (!value || typeof value !== "object") return false;
-  const v = value as Record<string, unknown>;
-  return (
-    typeof v["id"] === "string" &&
-    typeof v["name"] === "string" &&
-    typeof v["email"] === "string"
-  );
-}
-
-
-export async function fetchCurrentUser(): Promise<ApiResult<AuthUser>> {
-  const result = await apiGet<AuthUser>(ENDPOINTS.ME, {
-    next: { revalidate: 0 },
-  });
-
-  if (result.ok && !isAuthUser(result.data)) {
-    return {
-      ok: false,
-      error: {
-        message: "Unexpected response shape from /auth/me",
-        errors: { "": [] },
-        status: 502,
-      },
-    };
+    return { ok: false, reason: "network_error" };
   }
 
-  return result;
+  const parsed = AuthMeResponseSchema.safeParse(result.data);
+
+  if (!parsed.success) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[Auth] /api/auth/me schema violation:", parsed.error.format());
+      console.log("[Auth] Raw response:", result.data);
+    }
+    return { ok: false, reason: "parse_error" };
+  }
+
+  return { ok: true, user: parsed.data as AuthUser };
 }
 
-export async function login(
-  credentials: LoginCredentials
-): Promise<ApiResult<AuthResponse>> {
-  return apiPost<AuthResponse>(ENDPOINTS.LOGIN, credentials);
+export async function getServerAuthUser(): Promise<ServerAuthResult> {
+  try {
+    const result = await apiGet<unknown>("/auth/me", {
+      cache: "no-store",
+    });
+
+    return parseAuthMeResult(result);
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[Auth] Unexpected error in getServerAuthUser:", err);
+    }
+    return { ok: false, reason: "network_error" };
+  }
 }
 
-export async function register(
-  credentials: RegisterCredentials
-): Promise<ApiResult<AuthResponse>> {
-  return apiPost<AuthResponse>(ENDPOINTS.REGISTER, credentials);
+
+export async function fetchClientAuthUser(): Promise<{
+  user: AuthUser | null;
+  reason: "ok" | "unauthenticated" | "network_error" | "parse_error";
+}> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10_000);
+
+  try {
+    const res = await fetch("/api/auth/me", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Cache-Control": "no-cache, no-store",
+        "Pragma": "no-cache",
+      },
+      signal: controller.signal,
+      cache: "no-store",
+    });
+
+    clearTimeout(timeoutId);
+
+    if (res.status === 401 || res.status === 403) {
+      return { user: null, reason: "unauthenticated" };
+    }
+
+    if (!res.ok) {
+      return { user: null, reason: "network_error" };
+    }
+
+    const contentType = res.headers.get("content-type");
+    if (!contentType?.includes("application/json")) {
+      return { user: null, reason: "parse_error" };
+    }
+
+    const json: unknown = await res.json();
+
+    const raw =
+      json !== null &&
+      typeof json === "object" &&
+      "success" in json &&
+      (json as Record<string, unknown>).success === true &&
+      "data" in json
+        ? (json as Record<string, unknown>).data
+        : json;
+
+    const parsed = AuthMeResponseSchema.safeParse(raw);
+
+    if (!parsed.success) {
+      if (process.env.NODE_ENV !== "production") {
+        console.error("[Auth] Client /api/auth/me schema violation:", parsed.error.format());
+      }
+      return { user: null, reason: "parse_error" };
+    }
+
+    return { user: parsed.data as AuthUser, reason: "ok" };
+  } catch (err) {
+    clearTimeout(timeoutId);
+
+    if (err instanceof DOMException && err.name === "AbortError") {
+      return { user: null, reason: "network_error" };
+    }
+
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[Auth] fetchClientAuthUser unexpected error:", err);
+    }
+    return { user: null, reason: "network_error" };
+  }
 }
 
-export async function logout(): Promise<ApiResult<void>> {
-  return apiPost<void>(ENDPOINTS.LOGOUT, {});
+export async function logoutUser(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Cache-Control": "no-cache, no-store",
+      },
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }

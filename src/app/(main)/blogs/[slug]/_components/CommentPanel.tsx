@@ -12,11 +12,11 @@ import type { BlogComment } from "../_types/post.type";
 const UNAUTHENTICATED_PREVIEW_COUNT = 2;
 
 export function BlogCommentsPanel({
-  postId,
+  // postId,
   postSlug,
   comments: initialComments,
   isAuthenticated,
-  currentUser,
+  // currentUser,
 }: BlogCommentsPanelProps) {
   const {
     visibleComments,
@@ -24,7 +24,7 @@ export function BlogCommentsPanel({
     hasMore,
     isSubmitting,
     loadMore,
-    handleSubmit,
+    // handleSubmit,
     handleReaction,
     reactionCounts,
   } = useComments({ postSlug, initialComments });
@@ -130,7 +130,7 @@ export function BlogCommentsPanel({
             <CommentForm
               postSlug={postSlug}
               onSuccess={(comment: BlogComment) => {
-                // This callback can be used for analytics, etc.
+                console.log(comment)
               }}
             />
           </div>

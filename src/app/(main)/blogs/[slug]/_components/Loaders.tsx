@@ -1,20 +1,26 @@
 import { notFound } from "next/navigation";
 
-import { getAuthUser } from "@/lib/auth/getAuthUser";
+import { getServerAuthUser } from "@/lib/services/auth.service";
 import { fetchBlogPost, fetchRelatedBlogs } from "@/lib/services/post.service";
 import { FALLBACK_BLOG_POST, FALLBACK_RELATED_BLOGS } from "../_fallback/post.fallback";
 import { BlogDetailClient } from "./Client";
 import { RelatedBlogsSection } from "./RelatedBlogs";
-
+import { AuthUser } from "@/lib/types/auth.type";
 
 export async function BlogDetailLoader({ slug }: { slug: string }) {
-  const [postResult, authUser] = await Promise.all([
+  const [postResult, authResult] = await Promise.all([
     fetchBlogPost(slug),
-    getAuthUser(),
+    getServerAuthUser(),
   ]);
+
+  const authUser: AuthUser | null = authResult.ok ? authResult.user : null;
 
   if (!postResult.ok) {
     if (postResult.error.status === 404) notFound();
+
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[BlogDetailPage] fetchBlogPost failed:", postResult.error);
+    }
     return (
       <BlogDetailClient
         post={FALLBACK_BLOG_POST}
@@ -26,7 +32,7 @@ export async function BlogDetailLoader({ slug }: { slug: string }) {
 
   const post = postResult.data;
 
-  if (!post.is_published && !authUser) notFound();
+  // if (!post.is_published && !authUser) notFound();
 
   return (
     <BlogDetailClient
@@ -38,14 +44,14 @@ export async function BlogDetailLoader({ slug }: { slug: string }) {
 }
 
 export async function RelatedBlogsLoader({ slug }: { slug: string }) {
-  const postResult = await fetchBlogPost(slug);
+  // const postResult = await fetchBlogPost(slug);
 
-  if (!postResult.ok) {
-    return <RelatedBlogsSection posts={FALLBACK_RELATED_BLOGS} currentSlug={slug} />;
-  }
+  // if (!postResult.ok) {
+  //   return <RelatedBlogsSection posts={FALLBACK_RELATED_BLOGS} currentSlug={slug} />;
+  // }
 
-  const relatedResult = await fetchRelatedBlogs(postResult.data.category_id, slug);
-  const posts = relatedResult.ok ? relatedResult.data : FALLBACK_RELATED_BLOGS;
+  const relatedResult = await fetchRelatedBlogs(slug);
+  const posts = relatedResult.ok && relatedResult.data.length > 0 ? relatedResult.data : FALLBACK_RELATED_BLOGS;
 
   return <RelatedBlogsSection posts={posts} currentSlug={slug} />;
 }

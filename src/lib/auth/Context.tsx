@@ -1,133 +1,139 @@
 "use client";
+
 import {
   createContext,
-  useCallback,
+  useContext,
+  useState,
   useEffect,
-  useReducer,
+  useCallback,
   useRef,
+  useMemo,
+  // type ReactNode,
 } from "react";
-import {
-  fetchCurrentUser,
-  login as loginService,
-  logout as logoutService,
-  register as registerService,
-} from "@/lib/services/auth.service";
-import type {
-  AuthState,
-  AuthUser,
-  LoginCredentials,
-  RegisterCredentials,
-} from "@/lib/types/auth.type";
-import type { ApiResult } from "@/lib/types";
-import type { AuthAction } from "@/lib/types/auth.type";
-import type { AuthProviderProps } from "@/lib/props/auth.props";
-
-function authReducer(state: AuthState, action: AuthAction): AuthState {
-  switch (action.type) {
-    case "LOADING":
-      return { ...state, status: "loading", error: null };
-    case "AUTHENTICATED":
-      return { status: "authenticated", user: action.user, error: null };
-    case "UNAUTHENTICATED":
-      return { status: "unauthenticated", user: null, error: null };
-    case "ERROR":
-      return { ...state, status: "unauthenticated", error: action.message };
-    default:
-      return state;
-  }
-}
-
-function buildInitialState(serverUser: AuthUser | null): AuthState {
-  return {
-    status: serverUser ? "authenticated" : "unauthenticated",
-    user: serverUser,
-    error: null,
-  };
-}
-
-interface AuthContextValue extends AuthState {
-  refresh: () => Promise<void>;
-  login: (credentials: LoginCredentials) => Promise<ApiResult<AuthUser>>;
-  register: (credentials: RegisterCredentials) => Promise<ApiResult<AuthUser>>;
-  logout: () => Promise<void>;
-}
+import { fetchClientAuthUser } from "@/lib/services/auth.service";
+import type { AuthContextValue, AuthStatus, AuthUser } from "@/lib/types/auth.type";
+import type { AuthProviderProps } from "../props/auth.props";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+AuthContext.displayName = "AuthContext";
 
+export function AuthProvider({
+  children,
+  initialUser = null,
+  skipInitialFetch = false,
+}: AuthProviderProps) {
+  const initialStatus: AuthStatus =
+    initialUser !== null ? "authenticated" : "loading";
 
-export function AuthProvider({ initialUser, children }: AuthProviderProps) {
-  const [state, dispatch] = useReducer(authReducer, buildInitialState(initialUser));
+  const [user, setUser] = useState<AuthUser | null>(initialUser);
+  const [status, setStatus] = useState<AuthStatus>(initialStatus);
+  const [error, setError] = useState<string | null>(null);
 
-  const verified = useRef(false);
+  const fetchingRef = useRef(false);
+  const mountedRef = useRef(true);
+
+  const doFetch = useCallback(async () => {
+    if (fetchingRef.current) return;
+    fetchingRef.current = true;
+
+    if (mountedRef.current) {
+      setStatus("loading");
+      setError(null);
+    }
+
+    const { user: fetchedUser, reason } = await fetchClientAuthUser();
+
+    if (!mountedRef.current) {
+      fetchingRef.current = false;
+      return;
+    }
+
+    fetchingRef.current = false;
+
+    switch (reason) {
+      case "ok":
+        setUser(fetchedUser);
+        setStatus("authenticated");
+        setError(null);
+        break;
+
+      case "unauthenticated":
+        setUser(null);
+        setStatus("unauthenticated");
+        setError(null);
+        break;
+
+      case "network_error":
+      case "parse_error":
+        if (user === null) {
+          setStatus("error");
+          setError(
+            reason === "network_error"
+              ? "Unable to reach the authentication service. Please check your connection."
+              : "Received an unexpected response from the authentication service."
+          );
+        }
+        break;
+
+      default: {
+        const _exhaustive: never = reason;
+        console.log(_exhaustive);
+        break;
+      }
+    }
+  }, [user]);
+
+  const refresh = useCallback(async (): Promise<void> => {
+    await doFetch();
+  }, [doFetch]);
 
   useEffect(() => {
-    if (verified.current) return;
-    verified.current = true;
+    mountedRef.current = true;
 
-    if (!initialUser) return;
-
-    fetchCurrentUser().then((result) => {
-      if (result.ok) {
-        dispatch({ type: "AUTHENTICATED", user: result.data });
-      } else {
-        dispatch({ type: "UNAUTHENTICATED" });
-      }
-    });
-  }, [initialUser]);
-
-  const refresh = useCallback(async () => {
-    dispatch({ type: "LOADING" });
-    const result = await fetchCurrentUser();
-    if (result.ok) {
-      dispatch({ type: "AUTHENTICATED", user: result.data });
-    } else {
-      dispatch({ type: "UNAUTHENTICATED" });
+    const shouldSkip = skipInitialFetch && initialUser !== null;
+    if (!shouldSkip) {
+      Promise.resolve().then(() => {
+        doFetch();
+      });
     }
-  }, []);
 
-  const login = useCallback(
-    async (credentials: LoginCredentials): Promise<ApiResult<AuthUser>> => {
-      dispatch({ type: "LOADING" });
-      const result = await loginService(credentials);
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [doFetch, initialUser, skipInitialFetch]);
 
-      if (result.ok) {
-        dispatch({ type: "AUTHENTICATED", user: result.data.user });
-        return { ok: true, data: result.data.user, status: 200, message: "Login successful" };
+  useEffect(() => {
+    const handleFocus = () => {
+      if (status === "authenticated") {
+        doFetch();
       }
+    };
 
-      dispatch({ type: "ERROR", message: result.error.message });
-      return { ok: false, error: result.error };
-    },
-    []
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [status, doFetch]);
+
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      status,
+      user,
+      isAuthenticated: status === "authenticated",
+      error,
+      refresh,
+    }),
+    [status, user, error, refresh]
   );
 
-  const register = useCallback(
-    async (credentials: RegisterCredentials): Promise<ApiResult<AuthUser>> => {
-      dispatch({ type: "LOADING" });
-      const result = await registerService(credentials);
-
-      if (result.ok) {
-        dispatch({ type: "AUTHENTICATED", user: result.data.user });
-        return { ok: true, data: result.data.user, status: 201, message: "Registration successful" };
-      }
-
-      dispatch({ type: "ERROR", message: result.error.message });
-      return { ok: false, error: result.error };
-    },
-    []
-  );
-
-  const logout = useCallback(async () => {
-    dispatch({ type: "LOADING" });
-    await logoutService(); // backend clears the HttpOnly cookie
-    dispatch({ type: "UNAUTHENTICATED" });
-  }, []);
-
-  return (
-    <AuthContext.Provider value={{ ...state, refresh, login, register, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export { AuthContext };
+export function useAuthContext(): AuthContextValue {
+  const ctx = useContext(AuthContext);
+  if (ctx === null) {
+    throw new Error(
+      "[useAuthContext] Must be used within <AuthProvider>. " +
+        "Ensure <AuthProvider> wraps your component tree in app/layout.tsx."
+    );
+  }
+  return ctx;
+}

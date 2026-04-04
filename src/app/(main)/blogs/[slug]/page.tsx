@@ -1,35 +1,18 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+
+import { Navbar } from "@/app/(main)/_components/Navbar";
+import { Footer } from "@/app/(main)/_components/Footer";
 import { BlogDetailLoader, RelatedBlogsLoader } from "./_components/Loaders";
 import { BlogDetailFallback } from "./_components/Fallback";
 import { fetchBlogPost } from "@/lib/services/post.service";
 import { RelatedBlogsSkeleton } from "./_components/Skeleton";
 import type { BlogDetailPageParams } from "./_types/post.type";
-import type { AuthUser } from "@/lib/types/auth.type"
-
-// ─── Auth helper ──────────────────────────────────────────────────────────────
-// Replace this stub with your real auth provider. This function runs
-// server-side only — never leaks tokens to the client.
-//
-// NextAuth v5:
-//   import { auth } from "@/lib/auth";
-//   const session = await auth();
-//   return session?.user ? { id: session.user.id!, name: session.user.name!, email: session.user.email! } : null;
-//
-// Clerk:
-//   import { currentUser } from "@clerk/nextjs/server";
-//   const user = await currentUser();
-//   return user ? { id: user.id, name: user.fullName ?? "", email: user.primaryEmailAddress?.emailAddress ?? "" } : null;
-
-async function getAuthUser(): Promise<AuthUser | null> {
-  return null; // TODO: replace with real auth
-}
-
 
 export async function generateMetadata(
   { params }: BlogDetailPageParams,
-  _parent: ResolvingMetadata
+  // _parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = await params;
   const result = await fetchBlogPost(slug);
@@ -80,13 +63,17 @@ export default async function BlogDetailPage({ params }: BlogDetailPageParams) {
 
   return (
     <>
-      <Suspense fallback={<BlogDetailFallback />}>
-        <BlogDetailLoader slug={slug} />
-      </Suspense>
+      <Navbar activeRoute="/blogs" />
 
-      <Suspense fallback={<RelatedBlogsSkeleton />}>
-        <RelatedBlogsLoader slug={slug} />
-      </Suspense>
+        <Suspense fallback={<BlogDetailFallback />}>
+          <BlogDetailLoader slug={slug} />
+        </Suspense>
+
+        <Suspense fallback={<RelatedBlogsSkeleton />}>
+          <RelatedBlogsLoader slug={slug} />
+        </Suspense>
+
+      <Footer />
     </>
   );
 }
