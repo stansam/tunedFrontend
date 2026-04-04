@@ -88,8 +88,6 @@ export async function apiRequest<T>(
     let message = res.statusText;
 
     if (jsonBody && typeof jsonBody === "object" && jsonBody.success === true && "data" in jsonBody) {
-      // If the response contains pagination or other metadata alongside data, 
-      // return the whole object so the caller can parse it (e.g., BlogsPageResponseSchema).
       if ("pagination" in jsonBody) {
         data = jsonBody as T;
       } else {

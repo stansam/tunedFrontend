@@ -21,7 +21,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
 
   return (
     <Link
-      href={"#"} // /blogs/${post.slug}
+      href={{ pathname: `/blogs/${post.slug}` }} // /blogs/${post.slug}
       className={cn(
         "group relative flex flex-col justify-end overflow-hidden rounded-2xl w-full h-full",
         "bg-slate-900 bg-opacity-80 text-white",
