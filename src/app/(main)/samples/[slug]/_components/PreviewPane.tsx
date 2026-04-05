@@ -17,7 +17,6 @@ export function SamplePreviewPane({
   title,
   excerpt,
   wordCount,
-  image,
 }: SamplePreviewPaneProps) {
   const paragraphs = splitIntoParagraphs(excerpt);
 
