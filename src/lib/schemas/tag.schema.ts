@@ -5,5 +5,5 @@ export const TagSchema = z.object({
   name:        z.string().min(1, "Tag name is required"),
   description: z.string().nullable().optional(),
   slug:        z.string().min(1, "Tag slug is required"),
-  usage_count: z.number().int().positive("usage_count must be a positive integer"),
+  usage_count: z.number().int().nonnegative("usage_count must be a non-negative integer"),
 });

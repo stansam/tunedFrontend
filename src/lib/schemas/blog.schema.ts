@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { TagSchema } from "./tag.schema";
-import { isoUtcDatetime } from "../utils";
 
 export const BlogPostSchema = z.object({
   id:               z.string().min(1, "Blog id is required"),
@@ -14,7 +13,7 @@ export const BlogPostSchema = z.object({
   meta_description: z.string().min(1, "meta_description is required"),
   is_published:     z.boolean(),
   is_featured:      z.boolean(),
-  published_at:     isoUtcDatetime,
+  published_at:     z.string().min(1, "published_at is required"),
   tags:             z.array(TagSchema),
 });
 

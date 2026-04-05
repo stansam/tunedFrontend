@@ -34,6 +34,10 @@ export async function fetchBlogs(
   const parsed = BlogsPageResponseSchema.safeParse(result.data);
 
   if (!parsed.success) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("BLOGS PARSE ERROR:", parsed.error.format());
+      console.log("BLOGS RAW DATA:", result.data);
+    }
     const fieldErrors = parsed.error.flatten().fieldErrors;
     const normalizedErrors: Record<string, string[]> = Object.fromEntries(
       Object.entries(fieldErrors).map(([key, value]) => [key, value ?? []])
@@ -75,6 +79,10 @@ export async function fetchBlogCategories(): Promise<ApiResult<readonly BlogCate
   const parsed = z.array(BlogCategorySchema).safeParse(result.data);
 
   if (!parsed.success) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("BLOG CATEGORIES PARSE ERROR:", parsed.error.flatten());
+      console.log("BLOG CATEGORIES RAW DATA:", result.data);
+    }
     const fieldErrors = parsed.error.flatten().fieldErrors;
     const normalizedErrors: Record<string, string[]> = Object.fromEntries(
       Object.entries(fieldErrors).map(([key, value]) => [key, value ?? []])

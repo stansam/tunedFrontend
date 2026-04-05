@@ -22,7 +22,7 @@ export function SampleCard({ sample }: SampleCardProps) {
 
   return (
     <Link
-      href={"#"} ///samples/${sample.slug}
+      href={{pathname:`/samples/${sample.slug}`}} ///samples/${sample.slug}
       className={cn(
         "group flex flex-col overflow-hidden rounded-2xl bg-white",
         "shadow-sm ring-1 transition-all duration-200",

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "@/app/globals.css";
+import { AuthProvider } from "@/lib/auth/Context";
+import { AuthUser } from "@/lib/types/auth.type";
+import { getServerAuthUser } from "@/lib/services/auth.service";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -28,14 +31,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authResult = await getServerAuthUser();
+  const initialUser: AuthUser | null = authResult.ok ? authResult.user : null;
+
   return (
     <html lang="en" className={dmSans.variable}>
-      <body className={`${dmSans.className} antialiased`}>{children}</body>
+      <body className={`${dmSans.className} antialiased`}>
+         <AuthProvider initialUser={initialUser} skipInitialFetch={false}>
+          {children}
+         </AuthProvider>
+      </body>
     </html>
   );
 }

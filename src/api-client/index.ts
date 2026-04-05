@@ -88,7 +88,12 @@ export async function apiRequest<T>(
     let message = res.statusText;
 
     if (jsonBody && typeof jsonBody === "object" && jsonBody.success === true && "data" in jsonBody) {
-      data = jsonBody.data as T;
+      if ("pagination" in jsonBody) {
+        data = jsonBody as T;
+      } else {
+        data = jsonBody.data as T;
+      }
+      
       if (typeof jsonBody.message === "string") message = jsonBody.message;
     } else {
       data = jsonBody as T;

@@ -4,6 +4,7 @@ declare namespace NodeJS {
   interface ProcessEnv {
     /** Backend API base URL. Example: https://api.tunedessays.com/api/v1 */
     NEXT_PUBLIC_API_BASE_URL: string;
+    AUTH_ME_URL: string;
 
     /**
      * Number of words per page.
@@ -12,7 +13,6 @@ declare namespace NodeJS {
      */
     NEXT_PUBLIC_WORDS_PER_PAGE: string;
 
-    /** Standard Next.js env */
     NODE_ENV: "development" | "production" | "test";
     NEXT_PUBLIC_VERCEL_ENV?: "production" | "preview" | "development";
   }

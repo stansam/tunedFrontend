@@ -16,7 +16,7 @@ export const SampleListItemSchema = z.object({
   featured: z.boolean(),
   image: z.string().nullable(),
   created_at: z.string().nullable(),
-  service: SampleServiceSchema.nullable(),
+  service: SampleServiceSchema.nullable().optional(),
   tags: z.array(TagSchema).optional().default([]),
 });
 

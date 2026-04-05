@@ -9,6 +9,7 @@ import type {
 export interface SamplesClientProps {
   readonly initialResponse: SamplesPageResponse;
   readonly initialFilters:  SampleFilters;
+  readonly services:        readonly SampleService[];
 }
 
 export interface SamplesControlBarProps {

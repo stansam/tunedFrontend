@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect, useRef, useTransition } from "react";
+import { useState, useCallback, useEffect, useRef, useTransition } from "react";
 import { fetchSamples } from "@/lib/services/samples.service";
 import { ALL_SERVICE } from "../_types/samples.types";
 import type { 
@@ -14,7 +14,8 @@ import type { UseSamplesReturnProps } from "../_props/samples.props";
 
 export function useSamples(
   initialResponse: SamplesPageResponse,
-  initialFilters:  SampleFilters
+  initialFilters:  SampleFilters,
+  initialServices: readonly SampleService[]
 ): UseSamplesReturnProps {
   const [response, setResponse] = useState<SamplesPageResponse>(initialResponse);
   const [filters,  setFilters]  = useState<SampleFilters>(initialFilters);
@@ -23,13 +24,13 @@ export function useSamples(
   
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const services = useMemo(() => {
-    const map = new Map<string, SampleService>();
-    response.data.forEach(item => {
-      if (item.service) map.set(item.service.id, item.service);
-    });
-    return Array.from(map.values());
-  }, [response.data]);
+  // const services = useMemo(() => {
+  //   const map = new Map<string, SampleService>();
+  //   response.data.forEach(item => {
+  //     if (item.service) map.set(item.service.id, item.service);
+  //   });
+  //   return Array.from(map.values());
+  // }, [response.data]);
 
   const fetchAndUpdate = useCallback((newFilters: SampleFilters, newPage: number) => {
     startTransition(async () => {
@@ -111,7 +112,7 @@ export function useSamples(
     filters,
     response,
     isLoading: isPending,
-    services,
+    services: initialServices,
     setSearch,
     setService,
     setSort,
