@@ -1,6 +1,7 @@
 import type { 
   SampleListItem, 
-  SamplesPageResponse 
+  SamplesPageResponse,
+  SampleService
 } from "../_types/samples.types";
 
 export const FALLBACK_SAMPLES: SampleListItem[] = [
@@ -13,7 +14,6 @@ export const FALLBACK_SAMPLES: SampleListItem[] = [
     featured: true,
     created_at: "2026-03-20T10:00:00Z",
     image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80", // Nature/forest
-    service: { id: "essay-writing", name: "Essay Writing", slug: "essay-writing" },
     tags: [{ id: "t1", name: "Climate", slug: "climate", usage_count: 1 }],
   },
   {
@@ -25,7 +25,6 @@ export const FALLBACK_SAMPLES: SampleListItem[] = [
     featured: true,
     created_at: "2026-03-18T14:30:00Z",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80", // Office/charts
-    service: { id: "research", name: "Research", slug: "research" },
     tags: [{ id: "t2", name: "Business", slug: "business", usage_count: 1 }],
   },
   {
@@ -37,7 +36,6 @@ export const FALLBACK_SAMPLES: SampleListItem[] = [
     featured: false,
     created_at: "2026-03-15T09:15:00Z",
     image: "https://images.unsplash.com/photo-1551288049-bbda3865c67d?w=600&q=80", // Data/screen
-    service: { id: "data-analysis", name: "Data Analysis", slug: "data-analysis" },
     tags: [{ id: "t3", name: "Analysis", slug: "analysis", usage_count: 1 }],
   },
   {
@@ -49,7 +47,6 @@ export const FALLBACK_SAMPLES: SampleListItem[] = [
     featured: true,
     created_at: "2026-03-10T16:45:00Z",
     image: "https://images.unsplash.com/photo-1576091160550-2173599bd14e?w=600&q=80", // Medical/tech
-    service: { id: "research", name: "Research", slug: "research" },
     tags: [{ id: "t4", name: "AI", slug: "ai", usage_count: 1 }],
   },
   {
@@ -61,7 +58,6 @@ export const FALLBACK_SAMPLES: SampleListItem[] = [
     featured: false,
     created_at: "2026-03-05T11:20:00Z",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80", // Writing/desk
-    service: { id: "proofreading-editing", name: "Proofreading & Editing", slug: "proofreading-editing" },
     tags: [{ id: "t5", name: "Medical", slug: "medical", usage_count: 1 }],
   },
   {
@@ -73,8 +69,35 @@ export const FALLBACK_SAMPLES: SampleListItem[] = [
     featured: false,
     created_at: "2026-02-28T13:00:00Z",
     image: "https://images.unsplash.com/photo-1475721027785-f74dea327912?w=600&q=80", // Presentation/stage
-    service: { id: "presentations", name: "Presentations", slug: "presentations" },
     tags: [{ id: "t6", name: "Startup", slug: "startup", usage_count: 1 }],
+  },
+];
+
+export const FALLBACK_SAMPLE_SERVICES: SampleService[] = [
+  {
+    id: "essay-writing",
+    name: "Essay Writing",
+    slug: "essay-writing",
+  },
+  {
+    id: "research",
+    name: "Research",
+    slug: "research",
+  },
+  {
+    id: "data-analysis",
+    name: "Data Analysis",
+    slug: "data-analysis",
+  },
+  {
+    id: "proofreading-editing",
+    name: "Proofreading & Editing",
+    slug: "proofreading-editing",
+  },
+  {
+    id: "presentations",
+    name: "Presentations",
+    slug: "presentations",
   },
 ];
 
@@ -89,3 +112,4 @@ export const FALLBACK_SAMPLES_PAGE: SamplesPageResponse = {
     has_prev: false,
   },
 };
+

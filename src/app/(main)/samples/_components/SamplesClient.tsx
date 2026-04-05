@@ -7,19 +7,18 @@ import { SamplesPagination } from "./SamplesPagination";
 import { SamplesEmptyState } from "./SamplesEmptyState";
 import type { SamplesClientProps } from "../_props/samples.props";
 
-export function SamplesClient({ initialResponse, initialFilters }: SamplesClientProps) {
+export function SamplesClient({ initialResponse, initialFilters, services }: SamplesClientProps) {
   const {
     filters,
     response,
     isLoading,
-    services,
     setSearch,
     setService,
     setSort,
     toggleOrder,
     setPage,
     clearFilters,
-  } = useSamples(initialResponse, initialFilters);
+  } = useSamples(initialResponse, initialFilters, services);
 
   return (
     <section className="bg-[#f8f7f4] pb-16 pt-8 md:pb-24 md:pt-10 h-full min-h-[400px]">

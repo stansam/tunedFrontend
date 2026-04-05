@@ -13,16 +13,16 @@ export interface SampleService {
 }
 
 export interface SampleListItem {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  word_count: number;
-  featured: boolean;
-  image: string | null;
-  created_at: string | null;
-  service: SampleService | null;
-  tags: readonly Tag[];
+  readonly id: string;
+  readonly title: string;
+  readonly slug: string;
+  readonly excerpt: string;
+  readonly word_count: number;
+  readonly featured: boolean;
+  readonly image: string | null;
+  readonly created_at: string | null;
+  readonly tags: readonly Tag[];
+  readonly service?: SampleService | null;
 }
 
 export interface SamplePagination {

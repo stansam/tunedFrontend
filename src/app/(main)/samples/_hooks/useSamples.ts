@@ -14,7 +14,8 @@ import type { UseSamplesReturnProps } from "../_props/samples.props";
 
 export function useSamples(
   initialResponse: SamplesPageResponse,
-  initialFilters:  SampleFilters
+  initialFilters:  SampleFilters,
+  initialServices: readonly SampleService[]
 ): UseSamplesReturnProps {
   const [response, setResponse] = useState<SamplesPageResponse>(initialResponse);
   const [filters,  setFilters]  = useState<SampleFilters>(initialFilters);
@@ -111,7 +112,7 @@ export function useSamples(
     filters,
     response,
     isLoading: isPending,
-    services,
+    services: initialServices,
     setSearch,
     setService,
     setSort,

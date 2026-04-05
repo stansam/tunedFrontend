@@ -80,7 +80,7 @@ export async function fetchBlogCategories(): Promise<ApiResult<readonly BlogCate
 
   if (!parsed.success) {
     if (process.env.NODE_ENV !== "production") {
-      console.error("BLOG CATEGORIES PARSE ERROR:", parsed.error.format());
+      console.error("BLOG CATEGORIES PARSE ERROR:", parsed.error.flatten());
       console.log("BLOG CATEGORIES RAW DATA:", result.data);
     }
     const fieldErrors = parsed.error.flatten().fieldErrors;

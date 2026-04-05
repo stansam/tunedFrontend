@@ -14,7 +14,7 @@ import {
     SampleServiceSchema, 
     SampleListItemSchema, 
     PaginationSchema, 
-    SamplesPageResponseSchema 
+    SamplesPageResponseSchema,
 } from "./samples.schema";
 import { 
     BlogCategorySchema,
