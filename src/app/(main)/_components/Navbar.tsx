@@ -135,7 +135,7 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
             className="text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 font-bold px-6 rounded-full"
             asChild
           >
-            <Link href="#">Sign in</Link>
+            <Link href={{pathname:"/auth/login"}}>Sign in</Link>
           </Button>
           <Button
             size="default"
