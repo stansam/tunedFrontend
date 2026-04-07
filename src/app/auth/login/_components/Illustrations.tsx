@@ -7,9 +7,6 @@ export function MainIllustration() {
       className="w-full h-full select-none pointer-events-none"
       aria-hidden="true"
     >
-      {/* Woman illustration — uses your actual image asset */}
-      {/* Replace src with the real illustration path */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <Image
         src="/Loginactor.png"
         alt=""

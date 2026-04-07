@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { BenefitsList } from "./BenefitsList";
 import { PlayButton } from "./PlayButton";
@@ -33,9 +33,9 @@ export function LoginLeftPanel() {
 
         <BenefitsList />
 
-        <div className="absolute top-8 right-6 z-20">
+        {/* <div className="absolute top-8 right-6 z-20">
           <PlayButton />
-        </div>
+        </div> */}
       </div>
       <MainIllustration />
     </div>
