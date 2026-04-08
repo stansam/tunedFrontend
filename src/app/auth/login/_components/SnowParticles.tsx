@@ -1,69 +1,117 @@
 "use client";
 
-const PARTICLES: ReadonlyArray<{
-  readonly left: number;
-  readonly top: number;
-  readonly size: number;
-  readonly duration: number;
-  readonly delay: number;
-  readonly opacity: number;
-}> = [
-  { left: 3,  top: 12, size: 3, duration: 6,  delay: 0,   opacity: 40 },
-  { left: 8,  top: 35, size: 2, duration: 8,  delay: 1,   opacity: 25 },
-  { left: 15, top: 68, size: 4, duration: 7,  delay: 2,   opacity: 50 },
-  { left: 22, top: 20, size: 2, duration: 9,  delay: 0.5, opacity: 35 },
-  { left: 28, top: 80, size: 3, duration: 6,  delay: 3,   opacity: 30 },
-  { left: 35, top: 45, size: 2, duration: 11, delay: 1.5, opacity: 35 },
-  { left: 42, top: 10, size: 3, duration: 8,  delay: 4,   opacity: 45 },
-  { left: 48, top: 72, size: 2, duration: 7,  delay: 0.8, opacity: 25 },
-  { left: 55, top: 30, size: 4, duration: 9,  delay: 2.5, opacity: 40 },
-  { left: 62, top: 88, size: 2, duration: 6,  delay: 1.2, opacity: 30 },
-  { left: 68, top: 55, size: 3, duration: 10, delay: 3.5, opacity: 45 },
-  { left: 75, top: 15, size: 2, duration: 7,  delay: 0.3, opacity: 30 },
-  { left: 82, top: 42, size: 4, duration: 8,  delay: 4.5, opacity: 35 },
-  { left: 88, top: 78, size: 3, duration: 9,  delay: 1.8, opacity: 40 },
-  { left: 92, top: 25, size: 2, duration: 6,  delay: 2.2, opacity: 25 },
-  { left: 97, top: 60, size: 3, duration: 11, delay: 0.7, opacity: 40 },
-  { left: 5,  top: 90, size: 2, duration: 8,  delay: 3.8, opacity: 30 },
-  { left: 18, top: 5,  size: 3, duration: 7,  delay: 1.1, opacity: 45 },
-  { left: 33, top: 62, size: 2, duration: 9,  delay: 4.2, opacity: 30 },
-  { left: 50, top: 50, size: 4, duration: 6,  delay: 2.8, opacity: 35 },
-  { left: 65, top: 95, size: 2, duration: 8,  delay: 0.9, opacity: 25 },
-  { left: 78, top: 8,  size: 3, duration: 10, delay: 3.2, opacity: 40 },
-  { left: 90, top: 38, size: 2, duration: 7,  delay: 1.6, opacity: 30 },
-  { left: 12, top: 52, size: 4, duration: 6,  delay: 4.8, opacity: 40 },
-  { left: 45, top: 85, size: 3, duration: 9,  delay: 0.4, opacity: 45 },
-];
+import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
-export function SnowParticles() {
+class Particle {
+  x: number;
+  y: number;
+  radius: number;
+  speedY: number;
+  wind: number;
+  opacity: number;
+
+  constructor(w: number, h: number) {
+    this.x = Math.random() * w;
+    this.y = Math.random() * h;
+    this.radius = Math.random() * 2 + 1;
+    this.speedY = Math.random() * 0.8 + this.radius * 0.4;
+    this.wind = Math.random() * 0.5 - 0.25;
+    this.opacity = Math.random() * 0.4 + 0.2;
+  }
+
+  update(w: number, h: number) {
+    this.y += this.speedY;
+    this.x += this.wind;
+
+    if (this.y > h) {
+      this.y = -10;
+      this.x = Math.random() * w;
+    }
+    if (this.x > w) {
+      this.x = 0;
+    } else if (this.x < 0) {
+      this.x = w;
+    }
+  }
+
+  draw(context: CanvasRenderingContext2D) {
+    context.beginPath();
+    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    context.fillStyle = `rgba(148, 163, 184, ${this.opacity})`; // slate-400
+    context.fill();
+    context.closePath();
+  }
+}
+
+function useSnowEngine(canvasRef: React.RefObject<HTMLCanvasElement | null>) {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let particles: Particle[] = [];
+    let width = 0;
+    let height = 0;
+
+    function init() {
+      if (!canvas) return;
+      const ratio = window.devicePixelRatio || 1;
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx?.scale(ratio, ratio);
+
+      particles = [];
+      const count = window.innerWidth < 768 ? 40 : 100;
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle(width, height));
+      }
+    }
+
+    function render() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+      for (const p of particles) {
+        p.update(width, height);
+        p.draw(ctx);
+      }
+      animationFrameId = requestAnimationFrame(render);
+    }
+
+    init();
+    render();
+
+    window.addEventListener("resize", init);
+
+    return () => {
+      window.removeEventListener("resize", init);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [canvasRef]);
+}
+
+export function SnowParticles({ className }: { className?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  useSnowEngine(canvasRef);
+
   return (
-    <div
+    <canvas
+      ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden z-10"
-    >
-      {PARTICLES.map((p, i) => (
-        <span
-          key={i}
-          className={`absolute rounded-full bg-slate-500 ${i > 12 ? 'hidden md:block' : ''}`}
-          style={{
-            left: `${p.left}%`,
-            top: `${p.top}%`,
-            width: p.size,
-            height: p.size,
-            opacity: p.opacity / 100,
-            animation: `floatParticle ${p.duration}s ease-in-out ${p.delay}s infinite alternate`,
-            willChange: "transform",
-          }}
-        />
-      ))}
-
-      <style>{`
-        @keyframes floatParticle {
-          0%   { transform: translateY(0px)   scale(1);   }
-          50%  { transform: translateY(-8px)  scale(1.1); }
-          100% { transform: translateY(-16px) scale(0.9); }
-        }
-      `}</style>
-    </div>
+      className={cn(
+        "pointer-events-none absolute inset-0 z-10 block motion-reduce:hidden",
+        className
+      )}
+    />
   );
 }

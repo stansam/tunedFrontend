@@ -7,3 +7,5 @@ export const TagSchema = z.object({
   slug:        z.string().min(1, "Tag slug is required"),
   usage_count: z.number().int().nonnegative("usage_count must be a non-negative integer"),
 });
+
+export const TagListResponseSchema = z.array(TagSchema);
