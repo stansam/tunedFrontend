@@ -2,7 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const hasFlaskSession = request.cookies.has("session");
+  const cookieName = process.env.SESSION_COOKIE_NAME || "tuned_session";
+  const hasFlaskSession = request.cookies.has(cookieName);
 
   const isAuthRoute = path.startsWith("/auth");
   const isAdminRoute = path.startsWith("/admin");

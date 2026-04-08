@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Send, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CommentFormSchema } from "@/lib/schemas/post.schema";
@@ -18,6 +18,13 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    };
+  }, []);
 
   const set = (field: keyof CommentFormValues) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -62,7 +69,8 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
     setSubmitSuccess(true);
     setValues(EMPTY_FORM);
     onSuccess(result.data);
-    setTimeout(() => setSubmitSuccess(false), 5000);
+    if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    successTimerRef.current = setTimeout(() => setSubmitSuccess(false), 5_000);
   };
 
   if (submitSuccess) {

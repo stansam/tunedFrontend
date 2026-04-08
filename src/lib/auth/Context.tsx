@@ -8,7 +8,6 @@ import {
   useCallback,
   useRef,
   useMemo,
-  // type ReactNode,
 } from "react";
 import { fetchClientAuthUser } from "@/lib/services/auth.service";
 import type { AuthContextValue, AuthStatus, AuthUser } from "@/lib/types/auth.type";
@@ -31,6 +30,11 @@ export function AuthProvider({
 
   const fetchingRef = useRef(false);
   const mountedRef = useRef(true);
+  const userRef = useRef<AuthUser | null>(user);
+
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   const doFetch = useCallback(async () => {
     if (fetchingRef.current) return;
@@ -65,7 +69,7 @@ export function AuthProvider({
 
       case "network_error":
       case "parse_error":
-        if (user === null) {
+        if (userRef.current === null) {
           setStatus("error");
           setError(
             reason === "network_error"
@@ -81,7 +85,7 @@ export function AuthProvider({
         break;
       }
     }
-  }, [user]);
+  }, []);
 
   const refresh = useCallback(async (): Promise<void> => {
     await doFetch();

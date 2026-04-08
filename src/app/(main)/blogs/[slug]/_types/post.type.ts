@@ -96,4 +96,5 @@ export interface UseCommentsReturn {
 
 export type OptimisticAction =
   | { type: "ADD"; comment: BlogComment }
-  | { type: "UPDATE_REACTION"; commentId: string; likes: number; dislikes: number };
+  | { type: "UPDATE_REACTION"; commentId: string; likes: number; dislikes: number }
+  | { type: "REMOVE"; id: string };

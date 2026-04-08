@@ -101,7 +101,7 @@ export async function fetchServiceBySlug(slug: string): Promise<ApiResult<Servic
 }
 
 export async function fetchRelatedContent(serviceId: string): Promise<ApiResult<RelatedContentResponse>> {
-  const result = await apiGet<unknown>(`/services/${serviceId}/related-content`, {
+  const result = await apiGet<unknown>(`/services/${serviceId}/related`, {
     next: { revalidate: 3600 }
   });
 

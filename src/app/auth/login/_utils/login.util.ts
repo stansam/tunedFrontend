@@ -1,5 +1,5 @@
 export const SAFE_RELATIVE_PATH_RE = /^\/[a-zA-Z0-9/._~:@!$&'()*+,;=%-]*$/;
-export const DEFAULT_AUTHENTICATED_REDIRECT = "/client";
+export const DEFAULT_AUTHENTICATED_REDIRECT = "/client/dashboard";
 
 export function sanitizeCallbackUrl(raw: string): string {
   const trimmed = raw.trim();

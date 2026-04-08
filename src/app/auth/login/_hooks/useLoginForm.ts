@@ -1,6 +1,5 @@
 import { useState, useCallback, useId, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { LoginFormSchema } from "../_schemas/login.schema";
 import { submitLogin } from "@/lib/services/login.service";
 import type { LoginFormValues, LoginFormStatus, LoginFieldErrors } from "../_types/login.type";
@@ -8,7 +7,6 @@ import { sanitizeCallbackUrl } from "../_utils/login.util";
 
 export function useLoginForm(callbackUrl: string) {
   const router = useRouter();
-  const { refresh } = useAuth();
   const formId = useId();
 
   const [identifier, setIdentifier] = useState("");
@@ -60,12 +58,10 @@ export function useLoginForm(callbackUrl: string) {
       }
 
       setFormStatus("success");
-      try {
-        await refresh();
-      } catch {}
+      setIsSubmitting(false);
       router.push(sanitizeCallbackUrl(callbackUrl) as never);
     },
-    [identifier, password, rememberMe, isSubmitting, isSuccess, refresh, router, callbackUrl]
+    [identifier, password, rememberMe, isSubmitting, isSuccess, router, callbackUrl]
   );
 
   return {

@@ -15,7 +15,7 @@ import type {
   UseCommentsOptions,
   UseCommentsReturn
 } from "../_types/post.type";
-import { commentsReducer } from "../utils";
+import { commentsReducer, generateFallbackComments } from "../utils";
 
 const COMMENTS_PER_PAGE = 8;
 
@@ -28,10 +28,14 @@ export function useComments({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  const effectiveComments = initialComments.length > 0 
+    ? initialComments 
+    : generateFallbackComments(postSlug);
+
   const [optimisticComments, dispatchOptimistic] = useOptimistic<
     readonly BlogComment[],
     OptimisticAction
-  >(initialComments, commentsReducer);
+  >(effectiveComments, commentsReducer);
 
   const [reactionCounts, setReactionCounts] = useState<
     Record<string, { likes: number; dislikes: number }>
@@ -72,6 +76,9 @@ export function useComments({
       const result = await submitComment(postSlug, values);
 
       if (!result.ok) {
+        startTransition(() => {
+          dispatchOptimistic({ type: "REMOVE", id: tempComment.id });
+        });
         setSubmitError(result.error.message);
         return false;
       }

@@ -84,7 +84,7 @@ export function CommentsAuthGate({ visibleCount, totalCount }: CommentsAuthGateP
             className={cn(
               "w-full sm:w-auto flex-1 text-center",
               "rounded-full border border-slate-200 bg-white",
-              "px-6 py-2.5 text-sm font-semibold text-slate-700",
+              "px-3 py-2 text-sm font-semibold text-slate-700",
               "hover:border-emerald-300 hover:text-emerald-700 shadow-sm transition-all"
             )}
           >

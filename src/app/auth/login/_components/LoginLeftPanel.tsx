@@ -1,7 +1,7 @@
 // import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { BenefitsList } from "./BenefitsList";
-import { PlayButton } from "./PlayButton";
+// import { PlayButton } from "./PlayButton";
 import { MainIllustration } from "./Illustrations";
 
 export function LoginLeftPanel() {

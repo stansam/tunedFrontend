@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-const CATEGORIES = [
+const FALLBACK_TAGS = [
   { label: "Popular",                       icon: "🔥", featured: true  },
   { label: "Proofreading and Editing",      icon: null, featured: false },
   { label: "Writing",                       icon: null, featured: false },
@@ -11,10 +11,10 @@ const CATEGORIES = [
   { label: "Technical Writing & Calculations", icon: null, featured: false },
 ] as const;
 
-export function ServiceCategoriesBar() {
+export function TagsBar() {
   return (
     <nav
-      aria-label="Service categories"
+      aria-label="tags"
       className={cn(
         "w-full",
         "bg-[#f2f1ec] border-b border-slate-200/60 shadow-sm",
@@ -28,7 +28,7 @@ export function ServiceCategoriesBar() {
           "relative"
         )}
       >
-        {CATEGORIES.map((cat) => (
+        {FALLBACK_TAGS.map((cat) => (
           <li key={cat.label} className="shrink-0 flex">
             <button
               type="button"

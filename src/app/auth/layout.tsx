@@ -32,7 +32,7 @@ export default async function AuthRootLayout({
   return (
     <html lang="en" className={dmSans.variable}>
       <body className={`${dmSans.className} antialiased`}>
-         <AuthProvider initialUser={initialUser} skipInitialFetch={false}>
+         <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
           {children}
          </AuthProvider>
       </body>
