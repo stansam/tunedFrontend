@@ -3,13 +3,14 @@ import { DM_Sans } from "next/font/google";
 import "@/app/globals.css";
 import { AuthProvider } from "@/lib/auth/Context";
 import type { AuthUser } from "@/lib/types/auth.type";
-import { getServerAuthUser } from "@/lib/services/auth.service";
+import { getServerAuthUser } from "@/lib/services/auth.server.service";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-dm-sans",
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {

@@ -1,39 +1,54 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+/**
+ * @file CommentForm.tsx
+ * @description Pure-UI comment form component.
+ *
+ * Architecture note
+ * ─────────────────
+ * This component owns ONLY field state and client-side validation.
+ * It does NOT own the API call, isSubmitting, submitError, or submitSuccess —
+ * those are provided as props from the parent (CommentPanel via useComments).
+ *
+ * This separation ensures:
+ *  - CommentForm is rendered exactly ONCE (no duplicate stateful instances).
+ *  - Optimistic updates in useComments apply correctly to the comment list.
+ *  - The form is composable and independently testable.
+ *
+ * Data flow:
+ *   CommentPanel (owns comment list state via useComments)
+ *     └─ CommentForm (owns field state + client validation)
+ *           └─ onSubmitValues (delegates API call back to parent)
+ */
+
+import { useState } from "react";
 import { Send, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CommentFormSchema } from "@/lib/schemas/post.schema";
 import type { CommentFormProps } from "../_props/post.prop";
 import type { CommentFormValues } from "../_types/post.type";
-import { submitComment } from "@/lib/services/post.service";
 
 type FieldErrors = Partial<Record<keyof CommentFormValues, string>>;
 
 const EMPTY_FORM: CommentFormValues = { name: "", email: "", content: "" };
 
-export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
+export function CommentForm({
+  onSubmitValues,
+  isSubmitting,
+  submitError,
+  submitSuccess,
+}: CommentFormProps) {
   const [values, setValues] = useState<CommentFormValues>(EMPTY_FORM);
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+  const set =
+    (field: keyof CommentFormValues) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const val = e.target.value;
+      setValues((prev) => ({ ...prev, [field]: val }));
+      // Clear the field error on each keystroke for instant feedback.
+      if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
     };
-  }, []);
-
-  const set = (field: keyof CommentFormValues) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const val = e.target.value;
-    setValues((prev) => ({ ...prev, [field]: val }));
-    // Clear field error on change
-    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
 
   const validate = (): boolean => {
     const result = CommentFormSchema.safeParse(values);
@@ -54,31 +69,25 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
     e.preventDefault();
     if (!validate()) return;
 
-    setIsSubmitting(true);
-    setSubmitError(null);
-
-    const result = await submitComment(postSlug, values);
-
-    setIsSubmitting(false);
-
-    if (!result.ok) {
-      setSubmitError(result.error.message);
-      return;
+    const success = await onSubmitValues(values);
+    if (success) {
+      // Reset field values only — success banner state is parent-owned.
+      setValues(EMPTY_FORM);
+      setErrors({});
     }
-
-    setSubmitSuccess(true);
-    setValues(EMPTY_FORM);
-    onSuccess(result.data);
-    if (successTimerRef.current) clearTimeout(successTimerRef.current);
-    successTimerRef.current = setTimeout(() => setSubmitSuccess(false), 5_000);
   };
 
+  // The success banner is shown at the parent level, but we also show it here
+  // as an inline confirmation so the user sees immediate feedback without
+  // scrolling to find the new comment in the optimistic list.
   if (submitSuccess) {
     return (
-      <div className={cn(
-        "flex flex-col items-center justify-center gap-3 rounded-2xl py-10 px-6",
-        "border border-emerald-200 bg-emerald-50/50 text-center"
-      )}>
+      <div
+        className={cn(
+          "flex flex-col items-center justify-center gap-3 rounded-2xl py-10 px-6",
+          "border border-emerald-200 bg-emerald-50/50 text-center",
+        )}
+      >
         <CheckCircle2 size={36} className="text-emerald-500" aria-hidden="true" />
         <p className="font-semibold text-slate-700">Comment submitted!</p>
         <p className="text-sm text-slate-500 max-w-xs">
@@ -102,7 +111,11 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
           role="alert"
           className="mb-4 flex items-start gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2.5"
         >
-          <AlertCircle size={16} className="text-red-500 mt-0.5 shrink-0" aria-hidden="true" />
+          <AlertCircle
+            size={16}
+            className="text-red-500 mt-0.5 shrink-0"
+            aria-hidden="true"
+          />
           <p className="text-sm text-red-600">{submitError}</p>
         </div>
       )}
@@ -122,18 +135,20 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
             onChange={set("name")}
             placeholder="Your name"
             autoComplete="name"
+            disabled={isSubmitting}
             aria-invalid={!!errors.name}
-            aria-describedby={errors.name ? "name-error" : undefined}
+            aria-describedby={errors.name ? "comment-name-error" : undefined}
             className={cn(
               "w-full rounded-lg border px-3 py-2.5 text-sm text-slate-700 outline-none",
               "bg-white placeholder:text-slate-300 transition-all",
+              "disabled:opacity-60 disabled:cursor-not-allowed",
               errors.name
                 ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
-                : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100",
             )}
           />
           {errors.name && (
-            <p id="name-error" role="alert" className="mt-1 text-xs text-red-500">
+            <p id="comment-name-error" role="alert" className="mt-1 text-xs text-red-500">
               {errors.name}
             </p>
           )}
@@ -153,18 +168,20 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
             onChange={set("email")}
             placeholder="your@email.com"
             autoComplete="email"
+            disabled={isSubmitting}
             aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? "email-error" : undefined}
+            aria-describedby={errors.email ? "comment-email-error" : undefined}
             className={cn(
               "w-full rounded-lg border px-3 py-2.5 text-sm text-slate-700 outline-none",
               "bg-white placeholder:text-slate-300 transition-all",
+              "disabled:opacity-60 disabled:cursor-not-allowed",
               errors.email
                 ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
-                : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100",
             )}
           />
           {errors.email && (
-            <p id="email-error" role="alert" className="mt-1 text-xs text-red-500">
+            <p id="comment-email-error" role="alert" className="mt-1 text-xs text-red-500">
               {errors.email}
             </p>
           )}
@@ -185,29 +202,37 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
           placeholder="Share your thoughts..."
           rows={4}
           maxLength={2000}
+          disabled={isSubmitting}
           aria-invalid={!!errors.content}
-          aria-describedby={errors.content ? "content-error" : "content-count"}
+          aria-describedby={
+            errors.content ? "comment-content-error" : "comment-content-count"
+          }
           className={cn(
             "w-full resize-none rounded-lg border px-3 py-2.5 text-sm text-slate-700 outline-none",
             "bg-white placeholder:text-slate-300 transition-all",
+            "disabled:opacity-60 disabled:cursor-not-allowed",
             errors.content
               ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100"
-              : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100",
           )}
         />
         <div className="flex items-start justify-between mt-1">
           {errors.content ? (
-            <p id="content-error" role="alert" className="text-xs text-red-500">
+            <p
+              id="comment-content-error"
+              role="alert"
+              className="text-xs text-red-500"
+            >
               {errors.content}
             </p>
           ) : (
             <span />
           )}
           <p
-            id="content-count"
+            id="comment-content-count"
             className={cn(
               "text-xs tabular-nums",
-              values.content.length > 1800 ? "text-red-400" : "text-slate-300"
+              values.content.length > 1800 ? "text-red-400" : "text-slate-300",
             )}
             aria-live="polite"
           >
@@ -224,7 +249,7 @@ export function CommentForm({ postSlug, onSuccess }: CommentFormProps) {
           "rounded-full bg-emerald-500 hover:bg-emerald-600",
           "px-6 py-3 text-sm font-semibold text-white",
           "shadow-[0_4px_12px_rgba(16,185,129,0.25)] transition-all",
-          "disabled:opacity-60 disabled:cursor-not-allowed"
+          "disabled:opacity-60 disabled:cursor-not-allowed",
         )}
       >
         {isSubmitting ? (

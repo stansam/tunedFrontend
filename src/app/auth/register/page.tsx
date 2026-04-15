@@ -1,11 +1,19 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getServerAuthUser } from "@/lib/services/auth.service";
+import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { TagsBar } from "@/app/auth/login/_components/TagsBar";
 import { SnowParticles } from "@/app/auth/login/_components/SnowParticles";
 import { sanitizeCallbackUrl } from "@/app/auth/login/_utils/login.util";
 import { Suspense } from "react";
 import { RegisterCard } from "./_components/RegisterCard";
 import { RegistrationBenefits } from "./_components/RegistrationBenefits";
+
+export const metadata: Metadata = {
+  title: "Create Account | TunedEssays",
+  description:
+    "Create your free TunedEssays account and get access to expert academic writing services, plagiarism-free samples, and 24/7 support.",
+  robots: { index: false, follow: false },
+};
 
 interface RegisterPageProps {
   readonly searchParams: Promise<{ callbackUrl?: string }>;

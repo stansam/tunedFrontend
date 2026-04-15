@@ -9,10 +9,7 @@ import { z } from "zod";
  *    without breaking the frontend (passthrough is intentional)
  */
 export const AuthUserSchema = z.object({
-  id: z
-    .union([z.string(), z.number()])
-    .transform((v) => String(v))
-    .refine((v) => v.length > 0, { message: "User id must not be empty" }),
+  id: z.string().uuid(),
   name: z
     .string()
     .min(1, "Name must not be empty")
@@ -25,15 +22,12 @@ export const AuthUserSchema = z.object({
     .url()
     .nullable()
     .optional()
-    .transform((v) => v ?? null),
+    .default(null),
   session_created_at: z
     .string()
-    .nullable()
-    .optional()
-    .transform((v) => v ?? null),
 });
 
-export const AuthMeResponseSchema = AuthUserSchema;
+export const AuthMeResponseSchema = AuthUserSchema.passthrough();
 
 export type AuthMeResponse = z.infer<typeof AuthMeResponseSchema>;
 

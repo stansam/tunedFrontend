@@ -1,4 +1,4 @@
-import type { BlogPost, BlogComment, BlogPostViewModel } from "../_types/post.type";
+import type { BlogPost, BlogComment, BlogPostViewModel, CommentFormValues } from "../_types/post.type";
 import type { BlogListItem } from "@/app/(main)/blogs/_types/blog.types";
 import type { AuthUser } from "@/lib/types/auth.type";
 
@@ -26,7 +26,18 @@ export interface BlogCommentItemProps {
 
 export interface CommentFormProps {
   readonly postSlug: string;
-  readonly onSuccess: (comment: BlogComment) => void;
+  /**
+   * Submission handler owned by the parent (CommentPanel via useComments).
+   * Receives validated form values and returns true on success, false on failure.
+   * CommentForm delegates the API call up to keep it as a pure UI component.
+   */
+  readonly onSubmitValues: (values: CommentFormValues) => Promise<boolean>;
+  /** Submission-in-progress flag — controls button and field disabled state. */
+  readonly isSubmitting: boolean;
+  /** Server or network error to display inside the form. Null when no error. */
+  readonly submitError: string | null;
+  /** True when the most recent submission succeeded — shows success banner. */
+  readonly submitSuccess: boolean;
 }
 
 

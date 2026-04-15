@@ -1,52 +1,37 @@
-import { apiGet } from "@/api-client";
-import { AuthMeResponseSchema } from "@/lib/schemas/auth.schema";
-import type { AuthUser, ServerAuthResult } from "@/lib/types/auth.type";
-import type { ApiResult } from "@/lib/types";
+/**
+ * @file auth.service.ts
+ * @description Client-safe authentication service.
+ *
+ * This module is safe to import from Client Components, hooks, and the
+ * server-side (RSC) that do NOT need cookie forwarding.
+ *
+ * It does NOT import from "next/headers" — keeping it free of any
+ * Server-only module contamination so Client Component bundlers can safely
+ * include it.
+ *
+ * For the server-side session check (SSR / RSC), import from:
+ *   "@/lib/services/auth.server.service"
+ */
 
-function parseAuthMeResult(result: ApiResult<unknown>): ServerAuthResult {
-  if (!result.ok) {
-    const status = result.error.status;
+import { AuthMeResponseSchema, LogoutResponseSchema } from "@/lib/schemas/auth.schema";
+import type { AuthUser } from "@/lib/types/auth.type";
 
-    if (status === 401 || status === 403) {
-      return { ok: false, reason: "unauthenticated" };
-    }
+// ---------------------------------------------------------------------------
+// fetchClientAuthUser — Client-side session check
+//
+// Calls the Next.js rewrite proxy at /api/auth/me (same-origin relative URL).
+// The rewrite proxy forwards all headers — including the session cookie —
+// to Flask, so `credentials: "include"` is all that is needed here.
+//
+// Returns a discriminated result type, never throws.
+// ---------------------------------------------------------------------------
 
-    return { ok: false, reason: "network_error" };
-  }
+export type FetchClientAuthResult = {
+  readonly user: AuthUser | null;
+  readonly reason: "ok" | "unauthenticated" | "network_error" | "parse_error";
+};
 
-  const parsed = AuthMeResponseSchema.safeParse(result.data);
-
-  if (!parsed.success) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("[Auth] /api/auth/me schema violation:", parsed.error.format());
-      console.log("[Auth] Raw response:", result.data);
-    }
-    return { ok: false, reason: "parse_error" };
-  }
-
-  return { ok: true, user: parsed.data as AuthUser };
-}
-
-export async function getServerAuthUser(): Promise<ServerAuthResult> {
-  try {
-    const result = await apiGet<unknown>("/auth/me", {
-      cache: "no-store",
-    });
-
-    return parseAuthMeResult(result);
-  } catch (err) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("[Auth] Unexpected error in getServerAuthUser:", err);
-    }
-    return { ok: false, reason: "network_error" };
-  }
-}
-
-
-export async function fetchClientAuthUser(): Promise<{
-  user: AuthUser | null;
-  reason: "ok" | "unauthenticated" | "network_error" | "parse_error";
-}> {
+export async function fetchClientAuthUser(): Promise<FetchClientAuthResult> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10_000);
 
@@ -57,7 +42,7 @@ export async function fetchClientAuthUser(): Promise<{
       headers: {
         Accept: "application/json",
         "Cache-Control": "no-cache, no-store",
-        "Pragma": "no-cache",
+        Pragma: "no-cache",
       },
       signal: controller.signal,
       cache: "no-store",
@@ -80,6 +65,8 @@ export async function fetchClientAuthUser(): Promise<{
 
     const json: unknown = await res.json();
 
+    // Unwrap the Flask success envelope { success: true, data: {...} } if
+    // present, then fall back to treating the raw body as the user object.
     const raw =
       json !== null &&
       typeof json === "object" &&
@@ -93,7 +80,10 @@ export async function fetchClientAuthUser(): Promise<{
 
     if (!parsed.success) {
       if (process.env.NODE_ENV !== "production") {
-        console.error("[Auth] Client /api/auth/me schema violation:", parsed.error.format());
+        console.error(
+          "[Auth] Client /api/auth/me schema violation:",
+          parsed.error.format(),
+        );
       }
       return { user: null, reason: "parse_error" };
     }
@@ -113,6 +103,17 @@ export async function fetchClientAuthUser(): Promise<{
   }
 }
 
+// ---------------------------------------------------------------------------
+// logoutUser — POST /api/auth/logout via the Next.js rewrite proxy.
+//
+// Validates the response body using LogoutResponseSchema so that an HTTP 200
+// with { success: false } in the body is correctly treated as a failure,
+// rather than blindly trusting the HTTP status code alone.
+//
+// Returns true on successful logout, false on any failure.
+// Never throws.
+// ---------------------------------------------------------------------------
+
 export async function logoutUser(): Promise<boolean> {
   try {
     const res = await fetch("/api/auth/logout", {
@@ -123,7 +124,28 @@ export async function logoutUser(): Promise<boolean> {
         "Cache-Control": "no-cache, no-store",
       },
     });
-    return res.ok;
+
+    if (!res.ok) return false;
+
+    // Attempt to validate the response body.  If the body is missing or
+    // non-JSON (e.g. server timed out mid-response), fall back to trusting
+    // the HTTP 200 status code.
+    let body: unknown;
+    try {
+      body = await res.json();
+    } catch {
+      // HTTP 200 but body could not be parsed → trust the status code.
+      return true;
+    }
+
+    const parsed = LogoutResponseSchema.safeParse(body);
+    if (!parsed.success) {
+      // Non-standard body shape but HTTP 200 → trust the status code.
+      return true;
+    }
+
+    // If the body explicitly says success: false, honour that signal.
+    return parsed.data.success !== false;
   } catch {
     return false;
   }

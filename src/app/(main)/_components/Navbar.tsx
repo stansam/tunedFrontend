@@ -3,10 +3,12 @@
 import React from "react";
 import Link, { type LinkProps } from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ServicesDropdown } from "./ServicesDropdown";
 import { MobileServicesMenu } from "./MobileServicesMenu";
+import { NavbarAuthSection } from "./NavbarAuthSection";
+import { MobileNavbarAuthSection } from "./MobileNavbarAuthSection";
 import { useNavbar } from "@/lib/hooks/useNavbar";
 import { useNavbarServices } from "@/lib/hooks/useNavbarServices";
 import type { NavbarProps } from "@/lib/props/index.props";
@@ -127,23 +129,9 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
           })}
         </ul>
 
-        {/* Desktop Actions */}
+        {/* Desktop Actions — auth-aware (loading / authenticated / unauthenticated) */}
         <div className="hidden md:flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="default"
-            className="text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 font-bold px-6 rounded-full"
-            asChild
-          >
-            <Link href={{pathname:"/auth/login"}}>Sign in</Link>
-          </Button>
-          <Button
-            size="default"
-            className="bg-slate-900 hover:bg-emerald-600 text-white font-bold px-7 rounded-full shadow-lg shadow-slate-900/10 hover:shadow-emerald-500/20 transition-all active:scale-95"
-            asChild
-          >
-            <Link href="#">Order Now</Link>
-          </Button>
+          <NavbarAuthSection />
         </div>
 
         {/* Mobile Toggle */}
@@ -197,20 +185,9 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
             })}
           </ul>
           
-          <div className="mt-8 flex flex-col gap-3">
-             <Button
-              variant="outline"
-              className="w-full h-14 border-slate-200 text-slate-700 font-bold rounded-2xl text-base"
-              asChild
-            >
-              <Link href="#">Sign in</Link>
-            </Button>
-            <Button
-              className="w-full h-14 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl text-base shadow-xl shadow-emerald-500/10"
-              asChild
-            >
-              <Link href="#">Order Now</Link>
-            </Button>
+          {/* Mobile auth — auth-aware (loading / authenticated / unauthenticated) */}
+          <div className="mt-8">
+            <MobileNavbarAuthSection />
           </div>
         </div>
       )}

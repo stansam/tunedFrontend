@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getServerAuthUser } from "@/lib/services/auth.service";
+import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { TagsBar } from "./_components/TagsBar";
 import { LoginCard } from "./_components/LoginCard";
 import { SnowParticles } from "./_components/SnowParticles";
