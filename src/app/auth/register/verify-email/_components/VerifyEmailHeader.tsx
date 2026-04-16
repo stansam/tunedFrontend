@@ -1,15 +1,8 @@
-/**
- * VerifyEmailHeader — static display component.
- *
- * Shows the envelope icon, headline, and instructional copy.
- * Pure presentation — no state, no network calls.
- */
 import type { VerifyEmailHeaderProps } from "../_props/verify-email.prop";
 
 export function VerifyEmailHeader({ email }: VerifyEmailHeaderProps) {
   return (
     <div className="flex flex-col items-center text-center gap-4">
-      {/* Animated envelope icon */}
       <div
         className="flex items-center justify-center w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 shadow-sm"
         aria-hidden="true"

@@ -1,8 +1,3 @@
-/**
- * SignInLink — navigates to /auth/login with optional callbackUrl.
- *
- * Pure display component with no state.
- */
 import Link from "next/link";
 import type { SignInLinkProps } from "../_props/verify-email.prop";
 

@@ -1,17 +1,3 @@
-/**
- * verify-email/page.tsx — Server Component
- *
- * Reads `email` and optional `callbackUrl` from searchParams.
- * If `email` is missing or malformed → redirect back to /auth/register.
- *
- * The page is stateless and renders instantly (no network calls here).
- * Client-side interactivity (resend / countdown) is handled in VerifyEmailCard.
- *
- * The parent register/layout.tsx is NOT used here because verify-email
- * has its own visual shell (no RegisterCard / RegistrationBenefits needed).
- * We reuse SnowParticles and TagsBar from the login module for visual
- * consistency with the overall auth flow.
- */
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { SnowParticles } from "@/app/auth/login/_components/SnowParticles";
@@ -19,7 +5,6 @@ import { TagsBar } from "@/app/auth/login/_components/TagsBar";
 import { VerifyEmailCard } from "./_components/VerifyEmailCard";
 import type { VerifyEmailPageProps } from "./_types/verify-email.type";
 
-/** Minimal email format check — Zod is overkill here for a Server Component guard. */
 function isLooksLikeEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
@@ -29,7 +14,6 @@ async function VerifyEmailContent({ searchParams }: VerifyEmailPageProps) {
   const email = params.email?.trim() ?? "";
   const callbackUrl = params.callbackUrl?.trim();
 
-  // Guard: if email is absent or obviously not an email, bounce back to register
   if (!email || !isLooksLikeEmail(email)) {
     redirect("/auth/register");
   }
@@ -53,8 +37,6 @@ export default function VerifyEmailPage(props: VerifyEmailPageProps) {
       >
         <Suspense
           fallback={
-            /* Instant UI skeleton — same dimensions as the card so there's no
-               layout shift when the async searchParams resolve. */
             <div
               className="flex w-full max-w-md min-h-[460px] items-center justify-center rounded-2xl bg-white shadow-xl border border-slate-100"
               aria-hidden="true"

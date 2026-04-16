@@ -1,14 +1,3 @@
-/**
- * ResendButton — timed resend control.
- *
- * Displays:
- * - While disabled (cooldown > 0): a countdown pill + disabled button
- * - While enabled: an active "Resend email" button
- * - While loading: spinner inside button
- * - After resent: subtle success indicator (managed by parent via status)
- *
- * This component is purely controlled — all state lives in useVerifyEmail.
- */
 import type { ResendButtonProps } from "../_props/verify-email.prop";
 import type { VerifyEmailStatus } from "../_types/verify-email.type";
 
@@ -25,7 +14,6 @@ export function ResendButton({ cooldownSeconds, onResend, status }: ResendButton
 
   return (
     <div className="flex flex-col items-center gap-2 w-full">
-      {/* Countdown pill — visible only while cooldown is active */}
       {cooldownSeconds > 0 && (
         <p
           className="text-xs font-medium text-slate-500"

@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
 
-/**
- * Metadata for the verify-email page.
- *
- * noindex/nofollow: this is a transient, user-specific page that should
- * never appear in search results and can change per session.
- */
 export const metadata: Metadata = {
   title: "Verify Your Email | TunedEssays",
   description:

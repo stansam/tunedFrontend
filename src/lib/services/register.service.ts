@@ -31,8 +31,9 @@ export async function submitRegistration(
     name: validated.data.name,
     gender: validated.data.gender,
     password: validated.data.password,
+    confirm_password: validated.data.confirmPassword,
     email: validated.data.email,
-    phone: validated.data.phone,
+    phone_number: validated.data.phone,
   });
 
   if (!result.ok) {

@@ -15,7 +15,7 @@ export function RegisterCard({ callbackUrl }: RegisterCardProps) {
         "rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.08)]",
         "flex-col max-w-[420px]",
         "md:flex-row md:max-w-[880px]",
-        "bg-[#fcfcfa]", // Slightly off-white background based on image reference
+        "bg-[#fcfcfa]",
         "z-20"
       )}
     >

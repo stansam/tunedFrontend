@@ -46,7 +46,6 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         </div>
       )}
 
-      {/* Username Field */}
       <RegisterField id={`${formId}-username`} label="Username" required error={fieldErrors.username}>
         <div className="relative">
           <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
@@ -73,7 +72,6 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         </div>
       </RegisterField>
 
-      {/* Name and Gender Fields */}
       <div className="grid grid-cols-[1fr_100px] gap-3">
         <RegisterField id={`${formId}-name`} label="Name" required error={fieldErrors.name}>
           <div className="relative">
@@ -103,7 +101,6 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
             value={formValues.gender as "M" | "F" | ""}
             onChange={(val) => {
                handleChange("gender", val);
-               // Delayed validation to ensure state matches
                setTimeout(() => validateField("gender"), 0);
             }}
             disabled={isSubmitting || isSuccess}
@@ -145,7 +142,6 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         </div>
       </RegisterField>
 
-      {/* Confirm Password Field */}
       <RegisterField id={`${formId}-confirmPassword`} label="Confirm password" required error={fieldErrors.confirmPassword}>
         <div className="relative">
           <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
@@ -179,7 +175,6 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         </div>
       </RegisterField>
 
-      {/* Email Field */}
       <RegisterField id={`${formId}-email`} label="Email" required error={fieldErrors.email}>
         <div className="flex flex-col gap-1.5">
           <div className="relative">
@@ -209,7 +204,6 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         </div>
       </RegisterField>
 
-      {/* Phone Field */}
       <RegisterField id={`${formId}-phone`} label="Phone Number" required error={fieldErrors.phone}>
         <PhoneInput
            id={`${formId}-phone`}

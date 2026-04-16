@@ -40,7 +40,7 @@ export function useRegisterForm(callbackUrl: string) {
     (field: keyof RegisterFormValues) => {
       let errorMsg: string | undefined = undefined;
 
-      const currentValues = field === "confirmPassword" ? formValues : formValues;
+      const currentValues = formValues;
       const result = RegisterFormSchema.safeParse(currentValues);
       
       if (!result.success) {
@@ -93,10 +93,6 @@ export function useRegisterForm(callbackUrl: string) {
       setFormStatus('success');
       setIsSubmitting(false);
 
-      // Redirect to the verify-email page, carrying the email address so
-      // the page can display it and use it for resend requests.
-      // The original callbackUrl is preserved so the login page can
-      // redirect back to the intended destination after the user signs in.
       const verifyParams = new URLSearchParams({
         email: result.email,
         ...(sanitizeCallbackUrl(callbackUrl) ? { callbackUrl: sanitizeCallbackUrl(callbackUrl) } : {}),
