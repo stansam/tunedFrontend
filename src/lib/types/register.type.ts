@@ -13,7 +13,7 @@ export type RegisterFieldErrors = Partial<
 >;
 
 export type RegisterResult =
-  | { readonly ok: true }
+  | { readonly ok: true; readonly email: string }
   | {
       readonly ok: false;
       readonly message: string;

@@ -81,14 +81,15 @@ function parseAuthMeResult(result: ApiResult<unknown>): ServerAuthResult {
 export async function getServerAuthUser(): Promise<ServerAuthResult> {
   try {
     const cookieStore = await cookies();
-    const cookieName = process.env.SESSION_COOKIE_NAME ?? "tuned_session";
+    const cookieHeader = cookieStore.toString();
+    const cookieName = process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME ?? "tuned_session";
     const sessionCookie = cookieStore.get(cookieName);
 
     // Only include the Cookie header when we actually have the session cookie.
     // An empty Cookie header still triggers Flask's cookie parser, adding
     // unnecessary overhead.
-    const extraHeaders: Record<string, string> | undefined = sessionCookie
-      ? { Cookie: `${sessionCookie.name}=${sessionCookie.value}` }
+    const extraHeaders: Record<string, string> | undefined = cookieHeader
+      ? { Cookie: cookieHeader }
       : undefined;
 
     const result = await apiGet<unknown>("/auth/me", {

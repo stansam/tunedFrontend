@@ -59,12 +59,19 @@ export async function submitRegistration(
 
   const successData = RegisterSuccessDataSchema.safeParse(result.data);
 
-  if (!successData.success && process.env.NODE_ENV !== "production") {
-    console.warn(
-      "[Register] Unexpected success data shape (non-critical):",
-      successData.error.format()
-    );
+  if (!successData.success) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        '[Register] Unexpected success data shape:',
+        successData.error.format()
+      );
+    }
+    return {
+      ok: false,
+      message: 'Registration succeeded but the server response was malformed. Please sign in.',
+      status: 'PARSE_ERROR',
+    };
   }
 
-  return { ok: true };
+  return { ok: true, email: successData.data.email };
 }

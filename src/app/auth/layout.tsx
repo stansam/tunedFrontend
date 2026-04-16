@@ -11,6 +11,7 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   display: "swap",
   preload: false,
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {

@@ -90,9 +90,18 @@ export function useRegisterForm(callbackUrl: string) {
         return;
       }
 
-      setFormStatus("success");
+      setFormStatus('success');
       setIsSubmitting(false);
-      router.push(sanitizeCallbackUrl(callbackUrl) as never);
+
+      // Redirect to the verify-email page, carrying the email address so
+      // the page can display it and use it for resend requests.
+      // The original callbackUrl is preserved so the login page can
+      // redirect back to the intended destination after the user signs in.
+      const verifyParams = new URLSearchParams({
+        email: result.email,
+        ...(sanitizeCallbackUrl(callbackUrl) ? { callbackUrl: sanitizeCallbackUrl(callbackUrl) } : {}),
+      });
+      router.push(`/auth/register/verify-email?${verifyParams.toString()}` as never);
     },
     [formValues, isSubmitting, isSuccess, router, callbackUrl]
   );

@@ -51,13 +51,9 @@ export const RegisterFormSchema = z.object({
 
 export type RegisterFormInput = z.infer<typeof RegisterFormSchema>;
 
-export const RegisterSuccessDataSchema = z
-  .object({
-    redirect_to: z.string().optional(),
-  })
-  .passthrough()
-  .nullable()
-  .optional();
+export const RegisterSuccessDataSchema = z.object({
+  email: z.string().email(),
+});
 
 export type RegisterSuccessData = z.infer<typeof RegisterSuccessDataSchema>;
 
