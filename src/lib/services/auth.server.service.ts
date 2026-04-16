@@ -36,11 +36,11 @@ function parseAuthMeResult(result: ApiResult<unknown>): ServerAuthResult {
 export async function getServerAuthUser(): Promise<ServerAuthResult> {
   try {
     const cookieStore = await cookies();
-    // const cookieHeader = cookieStore.toString();
-    const cookieName = process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME ?? "tuned_session";
-    const sessionCookie = cookieStore.get(cookieName);
-    const extraHeaders: Record<string, string> | undefined = sessionCookie
-      ? { Cookie: `${sessionCookie.name}=${sessionCookie.value}` }
+    const cookieHeader = cookieStore.toString();
+    // const cookieName = process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME ?? "tuned_session";
+    // const sessionCookie = cookieStore.get(cookieName);
+    const extraHeaders: Record<string, string> | undefined = cookieHeader
+      ? { Cookie: cookieHeader  } //`${sessionCookie.name}=${sessionCookie.value}`
       : undefined;
 
     const result = await apiGet<unknown>("/auth/me", {
