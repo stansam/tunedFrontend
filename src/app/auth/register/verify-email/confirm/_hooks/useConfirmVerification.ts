@@ -13,9 +13,17 @@ const REASON_MESSAGES: Readonly<Record<string, string>> = {
 
 
 export function useConfirmVerification(uid: string, token: string): ConfirmState {
-  const [state, setState] = useState<ConfirmState>({
-    status: "verifying",
-    message: null,
+  const [state, setState] = useState<ConfirmState>(() => {
+    if (!uid || !token) {
+      return {
+        status: "error",
+        message: "Missing verification parameters. Please use the link from your email.",
+      };
+    }
+    return {
+      status: "verifying",
+      message: null,
+    };
   });
 
   const hasCalledRef = useRef(false);
@@ -25,10 +33,6 @@ export function useConfirmVerification(uid: string, token: string): ConfirmState
     hasCalledRef.current = true;
 
     if (!uid || !token) {
-      setState({
-        status: "error",
-        message: "Missing verification parameters. Please use the link from your email.",
-      });
       return;
     }
 

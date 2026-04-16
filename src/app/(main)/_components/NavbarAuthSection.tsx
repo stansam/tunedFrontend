@@ -34,6 +34,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { NotificationBell } from "./NotificationBell";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -88,6 +89,8 @@ export function NavbarAuthSection(): React.ReactElement {
         >
           <Link href="#">Order Now</Link>
         </Button>
+
+        <NotificationBell />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

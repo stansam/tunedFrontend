@@ -4,6 +4,8 @@ import "@/app/globals.css";
 import { AuthProvider } from "@/lib/auth/Context";
 import type { AuthUser } from "@/lib/types/auth.type";
 import { getServerAuthUser } from "@/lib/services/auth.server.service";
+import { NotificationProvider } from "@/lib/contexts/NotificationContext";
+import { Toaster } from "sonner";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -35,7 +37,10 @@ export default async function AuthRootLayout({
     <html lang="en" className={dmSans.variable}>
       <body className={`${dmSans.className} antialiased`}>
          <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
-          {children}
+          <NotificationProvider>
+            {children}
+            <Toaster position="top-center" richColors theme="light" />
+          </NotificationProvider>
          </AuthProvider>
       </body>
     </html>

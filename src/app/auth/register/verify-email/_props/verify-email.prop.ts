@@ -1,4 +1,4 @@
-import type { VerifyEmailStatus, ResendResult } from "../_types/verify-email.type";
+import type { VerifyEmailStatus } from "../_types/verify-email.type";
 
 export interface VerifyEmailCardProps {
   readonly email: string;

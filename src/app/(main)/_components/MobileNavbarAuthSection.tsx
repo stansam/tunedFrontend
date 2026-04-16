@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { NotificationBell } from "./NotificationBell";
 
 // ---------------------------------------------------------------------------
 // Helper
@@ -84,10 +85,11 @@ export function MobileNavbarAuthSection(): React.ReactElement {
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-bold text-slate-800 truncate">{user.name}</p>
             <p className="text-xs text-slate-500 truncate">{user.email}</p>
           </div>
+          <NotificationBell />
         </div>
 
         {/* Dashboard link */}
