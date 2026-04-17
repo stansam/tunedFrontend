@@ -21,6 +21,7 @@ export interface RequestOptions {
   timeoutMs?: number;
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
+  credentials?: RequestCredentials;
 }
 
 export type NavLink = {

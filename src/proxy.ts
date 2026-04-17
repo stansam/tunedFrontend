@@ -1,26 +1,53 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export function proxy(request: NextRequest) {
-  const path = request.nextUrl.pathname;
-  const hasFlaskSession = request.cookies.has("session");
+export const config = {
+  matcher: [
+    "/client/:path*",
+    "/admin/:path*",
+    "/auth/login",
+    "/auth/register",
+  ],
+};
 
-  const isAuthRoute = path.startsWith("/auth");
-  const isAdminRoute = path.startsWith("/admin");
-  const isClientRoute = path.startsWith("/client");
+function sanitizeProxyPath(path: string): string {
+  return path.replace(/[^\w/.\-%~]/g, "");
+}
 
-  if (isAuthRoute && hasFlaskSession) {
-    return NextResponse.redirect(new URL("/client", request.url));
+const SESSION_COOKIE_NAME =
+  process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME ?? "tuned_session";
+
+function isProtectedRoute(pathname: string): boolean {
+  return (
+    pathname.startsWith("/client") ||
+    pathname.startsWith("/admin")
+  );
+}
+
+function isAuthRoute(pathname: string): boolean {
+  return (
+    pathname.startsWith("/auth/login") ||
+    pathname.startsWith("/auth/register")
+  );
+}
+
+export function proxy(request: NextRequest): NextResponse {
+  const { pathname } = request.nextUrl;
+  const hasSession = request.cookies.has(SESSION_COOKIE_NAME);
+
+  if (isProtectedRoute(pathname) && !hasSession) {
+    const loginUrl = new URL("/auth/login", request.url);
+    const safePath = sanitizeProxyPath(pathname);
+    loginUrl.searchParams.set("callbackUrl", safePath);
+    return NextResponse.redirect(loginUrl);
   }
 
-  if ((isAdminRoute || isClientRoute) && !hasFlaskSession) {
-    const loginUrl = new URL("/auth/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", path);
-    return NextResponse.redirect(loginUrl);
+  if (isAuthRoute(pathname) && hasSession) {
+    const dashboard = new URL(
+      process.env.NEXT_PUBLIC_AUTH_REDIRECT_URL ?? "/client",
+      request.url,
+    );
+    return NextResponse.redirect(dashboard);
   }
 
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: ["/admin/:path*", "/client/:path*", "/auth/:path*"],
-};

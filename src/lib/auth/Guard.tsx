@@ -1,9 +1,13 @@
 "use client";
 
-import React, { type ComponentType} from "react";
+import React, { type ComponentType } from "react";
 import { useAuth } from "@/lib/hooks/useAuth";
 import type { AuthUser } from "@/lib/types/auth.type";
-import type { AuthGuardBaseProps, AuthGuardProps, WithAuthInjectedProps } from "@/lib/props/auth.props";
+import type {
+  AuthGuardBaseProps,
+  AuthGuardProps,
+  WithAuthInjectedProps,
+} from "@/lib/props/auth.props";
 
 export function AuthGuard({
   children,
@@ -25,22 +29,25 @@ export function AuthGuard({
 
     default: {
       const _exhaustive: never = status;
-      console.log(_exhaustive);
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          "[AuthGuard] Unhandled status variant — this should be unreachable:",
+          _exhaustive,
+        );
+      }
       return null;
     }
   }
 }
 
-
-
 export function withAuth<TProps extends WithAuthInjectedProps>(
   WrappedComponent: ComponentType<TProps>,
-  options: AuthGuardBaseProps = {}
+  options: AuthGuardBaseProps = {},
 ): ComponentType<Omit<TProps, "user">> {
   const { loadingFallback = null, unauthenticatedFallback = null } = options;
 
   function WithAuthWrapper(
-    props: Omit<TProps, "user">
+    props: Omit<TProps, "user">,
   ): React.ReactElement | null {
     const { status, user } = useAuth();
 
@@ -50,10 +57,7 @@ export function withAuth<TProps extends WithAuthInjectedProps>(
 
       case "authenticated":
         return (
-          <WrappedComponent
-            {...(props as TProps)}
-            user={user as AuthUser}
-          />
+          <WrappedComponent {...(props as TProps)} user={user as AuthUser} />
         );
 
       case "unauthenticated":
@@ -62,7 +66,12 @@ export function withAuth<TProps extends WithAuthInjectedProps>(
 
       default: {
         const _exhaustive: never = status;
-        console.log(_exhaustive)
+        if (process.env.NODE_ENV !== "production") {
+          console.warn(
+            "[withAuth] Unhandled status variant — this should be unreachable:",
+            _exhaustive,
+          );
+        }
         return null;
       }
     }

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getServerAuthUser } from "@/lib/services/auth.service";
+import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { fetchBlogPost, fetchRelatedBlogs } from "@/lib/services/post.service";
 import { FALLBACK_BLOG_POST, FALLBACK_RELATED_BLOGS } from "../_fallback/post.fallback";
 import { BlogDetailClient } from "./Client";

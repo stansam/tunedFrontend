@@ -1,7 +1,7 @@
 import type { ApiResult, RequestOptions } from "@/lib/types";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000/api"; // 
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 const UNEXPECTED_ERROR = "An unexpected error occurred"
@@ -11,7 +11,12 @@ const BASE_HEADERS = {
 } as const;
 
 function buildUrl(path: string): string {
-  return `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+
+  if (normalizedPath.startsWith("http")) {
+    return normalizedPath;
+  }
+  return `${API_BASE_URL}${normalizedPath}`;
 }
 
 function buildHeaders(extra?: HeadersInit): HeadersInit {
@@ -51,6 +56,7 @@ export async function apiRequest<T>(
     headers,
     timeoutMs = DEFAULT_TIMEOUT_MS,
     next,
+    credentials = "include",
   } = options;
 
   const controller = new AbortController();
@@ -62,6 +68,7 @@ export async function apiRequest<T>(
       headers: buildHeaders(headers),
       body: body != null ? JSON.stringify(body) : undefined,
       signal: controller.signal,
+      credentials,
       ...(next ? { next } : {}),
     });
 

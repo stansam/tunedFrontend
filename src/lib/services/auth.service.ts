@@ -1,52 +1,12 @@
-import { apiGet } from "@/api-client";
-import { AuthMeResponseSchema } from "@/lib/schemas/auth.schema";
-import type { AuthUser, ServerAuthResult } from "@/lib/types/auth.type";
-import type { ApiResult } from "@/lib/types";
+import { AuthMeResponseSchema, LogoutResponseSchema } from "@/lib/schemas/auth.schema";
+import type { AuthUser } from "@/lib/types/auth.type";
 
-function parseAuthMeResult(result: ApiResult<unknown>): ServerAuthResult {
-  if (!result.ok) {
-    const status = result.error.status;
+export type FetchClientAuthResult = {
+  readonly user: AuthUser | null;
+  readonly reason: "ok" | "unauthenticated" | "network_error" | "parse_error";
+};
 
-    if (status === 401 || status === 403) {
-      return { ok: false, reason: "unauthenticated" };
-    }
-
-    return { ok: false, reason: "network_error" };
-  }
-
-  const parsed = AuthMeResponseSchema.safeParse(result.data);
-
-  if (!parsed.success) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("[Auth] /api/auth/me schema violation:", parsed.error.format());
-      console.log("[Auth] Raw response:", result.data);
-    }
-    return { ok: false, reason: "parse_error" };
-  }
-
-  return { ok: true, user: parsed.data as AuthUser };
-}
-
-export async function getServerAuthUser(): Promise<ServerAuthResult> {
-  try {
-    const result = await apiGet<unknown>("/auth/me", {
-      cache: "no-store",
-    });
-
-    return parseAuthMeResult(result);
-  } catch (err) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error("[Auth] Unexpected error in getServerAuthUser:", err);
-    }
-    return { ok: false, reason: "network_error" };
-  }
-}
-
-
-export async function fetchClientAuthUser(): Promise<{
-  user: AuthUser | null;
-  reason: "ok" | "unauthenticated" | "network_error" | "parse_error";
-}> {
+export async function fetchClientAuthUser(): Promise<FetchClientAuthResult> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10_000);
 
@@ -57,7 +17,7 @@ export async function fetchClientAuthUser(): Promise<{
       headers: {
         Accept: "application/json",
         "Cache-Control": "no-cache, no-store",
-        "Pragma": "no-cache",
+        Pragma: "no-cache",
       },
       signal: controller.signal,
       cache: "no-store",
@@ -79,7 +39,6 @@ export async function fetchClientAuthUser(): Promise<{
     }
 
     const json: unknown = await res.json();
-
     const raw =
       json !== null &&
       typeof json === "object" &&
@@ -93,7 +52,10 @@ export async function fetchClientAuthUser(): Promise<{
 
     if (!parsed.success) {
       if (process.env.NODE_ENV !== "production") {
-        console.error("[Auth] Client /api/auth/me schema violation:", parsed.error.format());
+        console.error(
+          "[Auth] Client /api/auth/me schema violation:",
+          parsed.error.format(),
+        );
       }
       return { user: null, reason: "parse_error" };
     }
@@ -123,7 +85,22 @@ export async function logoutUser(): Promise<boolean> {
         "Cache-Control": "no-cache, no-store",
       },
     });
-    return res.ok;
+
+    if (!res.ok) return false;
+
+    let body: unknown;
+    try {
+      body = await res.json();
+    } catch {
+      return true;
+    }
+
+    const parsed = LogoutResponseSchema.safeParse(body);
+    if (!parsed.success) {
+      return true;
+    }
+
+    return parsed.data.success !== false;
   } catch {
     return false;
   }

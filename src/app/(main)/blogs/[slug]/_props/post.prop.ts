@@ -1,4 +1,4 @@
-import type { BlogPost, BlogComment, BlogPostViewModel } from "../_types/post.type";
+import type { BlogPost, BlogComment, BlogPostViewModel, CommentFormValues } from "../_types/post.type";
 import type { BlogListItem } from "@/app/(main)/blogs/_types/blog.types";
 import type { AuthUser } from "@/lib/types/auth.type";
 
@@ -26,7 +26,10 @@ export interface BlogCommentItemProps {
 
 export interface CommentFormProps {
   readonly postSlug: string;
-  readonly onSuccess: (comment: BlogComment) => void;
+  readonly onSubmitValues: (values: CommentFormValues) => Promise<boolean>;
+  readonly isSubmitting: boolean;
+  readonly submitError: string | null;
+  readonly submitSuccess: boolean;
 }
 
 

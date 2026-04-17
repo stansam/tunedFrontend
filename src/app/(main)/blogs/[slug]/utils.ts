@@ -290,7 +290,37 @@ export function commentsReducer(
           : c
       );
 
+    case "REMOVE":
+      return state.filter((c) => c.id !== action.id);
+
     default:
       return state;
   }
 }
+
+export const generateFallbackComments = (postId: string): BlogComment[] => [
+  {
+    id: "fallback-1",
+    post_id: postId,
+    content: "This is a brilliantly written article! I learned a lot from the insights shared here.",
+    name: "Alex Doe",
+    email: "alex@example.com",
+    user_id: null,
+    approved: true,
+    reactions: [],
+    total_likes: 12,
+    total_dislikes: 0,
+  },
+  {
+    id: "fallback-2",
+    post_id: postId,
+    content: "Could you expand more on the technical methodology you used in the second section?",
+    name: "Jamie Smith",
+    email: "jamie@example.com",
+    user_id: null,
+    approved: true,
+    reactions: [],
+    total_likes: 4,
+    total_dislikes: 1,
+  }
+];
