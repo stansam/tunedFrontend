@@ -1,26 +1,5 @@
 "use client";
 
-/**
- * @file CommentForm.tsx
- * @description Pure-UI comment form component.
- *
- * Architecture note
- * ─────────────────
- * This component owns ONLY field state and client-side validation.
- * It does NOT own the API call, isSubmitting, submitError, or submitSuccess —
- * those are provided as props from the parent (CommentPanel via useComments).
- *
- * This separation ensures:
- *  - CommentForm is rendered exactly ONCE (no duplicate stateful instances).
- *  - Optimistic updates in useComments apply correctly to the comment list.
- *  - The form is composable and independently testable.
- *
- * Data flow:
- *   CommentPanel (owns comment list state via useComments)
- *     └─ CommentForm (owns field state + client validation)
- *           └─ onSubmitValues (delegates API call back to parent)
- */
-
 import { useState } from "react";
 import { Send, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -46,7 +25,6 @@ export function CommentForm({
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const val = e.target.value;
       setValues((prev) => ({ ...prev, [field]: val }));
-      // Clear the field error on each keystroke for instant feedback.
       if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
     };
 
@@ -71,15 +49,11 @@ export function CommentForm({
 
     const success = await onSubmitValues(values);
     if (success) {
-      // Reset field values only — success banner state is parent-owned.
       setValues(EMPTY_FORM);
       setErrors({});
     }
   };
 
-  // The success banner is shown at the parent level, but we also show it here
-  // as an inline confirmation so the user sees immediate feedback without
-  // scrolling to find the new comment in the optimistic list.
   if (submitSuccess) {
     return (
       <div

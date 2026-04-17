@@ -1,19 +1,5 @@
 "use client";
 
-/**
- * @file MobileNavbarAuthSection.tsx
- * @description Mobile menu auth-aware section — three discriminated states.
- *
- * Renders inside the mobile menu overlay (full-width stacked layout).
- * Same state logic as NavbarAuthSection but adapted for mobile UX.
- *
- * States
- * ──────
- * "loading"         → Full-width skeleton buttons.
- * "authenticated"   → User info card + Dashboard + Order Now + Sign out.
- * "unauthenticated" → Full-width "Sign in" + "Order Now" buttons.
- */
-
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,10 +10,6 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { NotificationBell } from "./NotificationBell";
 
-// ---------------------------------------------------------------------------
-// Helper
-// ---------------------------------------------------------------------------
-
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
@@ -36,10 +18,6 @@ function getInitials(name: string): string {
     (parts[0]![0] ?? "") + (parts[parts.length - 1]![0] ?? "")
   ).toUpperCase();
 }
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function MobileNavbarAuthSection(): React.ReactElement {
   const { status, user, logoutAndRefresh } = useAuth();
@@ -54,7 +32,6 @@ export function MobileNavbarAuthSection(): React.ReactElement {
     router.refresh();
   };
 
-  // ── Loading ────────────────────────────────────────────────────────────────
   if (status === "loading") {
     return (
       <div className="flex flex-col gap-3" aria-hidden="true">
@@ -64,13 +41,11 @@ export function MobileNavbarAuthSection(): React.ReactElement {
     );
   }
 
-  // ── Authenticated ──────────────────────────────────────────────────────────
   if (status === "authenticated" && user !== null) {
     const initials = getInitials(user.name);
 
     return (
       <div className="flex flex-col gap-3">
-        {/* User info card */}
         <div
           className={cn(
             "flex items-center gap-3 rounded-2xl border border-slate-100",
@@ -92,7 +67,6 @@ export function MobileNavbarAuthSection(): React.ReactElement {
           <NotificationBell />
         </div>
 
-        {/* Dashboard link */}
         <Button
           variant="outline"
           className="w-full h-14 border-slate-200 text-slate-700 font-bold rounded-2xl text-base justify-start gap-3 pl-5"
@@ -112,7 +86,6 @@ export function MobileNavbarAuthSection(): React.ReactElement {
           <Link href="#">Order Now</Link>
         </Button>
 
-        {/* Sign out */}
         <button
           type="button"
           onClick={handleLogout}
@@ -134,7 +107,6 @@ export function MobileNavbarAuthSection(): React.ReactElement {
     );
   }
 
-  // ── Unauthenticated / error ────────────────────────────────────────────────
   return (
     <div className="flex flex-col gap-3">
       <Button

@@ -1,13 +1,5 @@
 import { z } from "zod";
 
-/**
- * Schema for the user 
- * Strict on:
- *  - name and email must be non-empty strings
- *  - email must pass basic format validation
- *  - No extra data is stripped by .strict() to allow backend to add fields
- *    without breaking the frontend (passthrough is intentional)
- */
 export const AuthUserSchema = z.object({
   id: z.string().uuid(),
   name: z

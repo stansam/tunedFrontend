@@ -1,23 +1,5 @@
 "use client";
 
-/**
- * @file CommentsAuthGate.tsx
- * @description Renders a locked-comment preview for unauthenticated users.
- *
- * Issue 6 fix
- * ───────────
- * All Sign in / Create account links now include a `callbackUrl` query param
- * containing the current page's pathname (encoded).  This ensures users are
- * returned to the exact blog post they were reading after authentication,
- * rather than landing on the default /client/dashboard.
- *
- * Why "use client"
- * ──────────────────
- * usePathname() is a client-only hook, so this component must be a Client
- * Component.  The component has no heavy logic — the "use client" boundary is
- * minimal and does not force any parent Server Components to become clients.
- */
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Lock, Eye } from "lucide-react";
@@ -27,7 +9,6 @@ import type { CommentsAuthGateProps } from "../_props/post.prop";
 export function CommentsAuthGate({ visibleCount, totalCount }: CommentsAuthGateProps) {
   const pathname = usePathname();
 
-  // Use UrlObject form so Next.js typed routing is satisfied (#cd58389b).
   const loginHref = {
     pathname: "/auth/login" as const,
     query: { callbackUrl: pathname },
@@ -49,7 +30,6 @@ export function CommentsAuthGate({ visibleCount, totalCount }: CommentsAuthGateP
       role="region"
       aria-label="Comments locked – sign in to view"
     >
-      {/* Blurred comment skeletons — decorative, hidden from AT */}
       <div
         className="space-y-4 p-5 pb-2 select-none pointer-events-none"
         aria-hidden="true"
@@ -78,7 +58,6 @@ export function CommentsAuthGate({ visibleCount, totalCount }: CommentsAuthGateP
         ))}
       </div>
 
-      {/* CTA overlay */}
       <div
         className={cn(
           "absolute inset-0 flex flex-col items-center justify-center",

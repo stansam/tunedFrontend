@@ -1,23 +1,5 @@
 "use client";
 
-/**
- * @file NavbarAuthSection.tsx
- * @description Desktop auth-aware Navbar section — three discriminated states.
- *
- * States
- * ──────
- * "loading"         → Skeleton buttons matching real dimensions (prevents layout
- *                     shift while /api/auth/me is resolving).
- * "authenticated"   → User avatar with initials fallback + dropdown menu.
- * "unauthenticated" → "Sign in" ghost button + "Order Now" primary button.
- *
- * Routing after logout
- * ─────────────────────
- * The router.push() call lives HERE, not in useAuth or logoutUser. The hook
- * is kept framework-agnostic (no useRouter dependency). The component owns
- * the redirect because it knows the desired destination ("/" home page).
- */
-
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -36,10 +18,6 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { NotificationBell } from "./NotificationBell";
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
@@ -49,23 +27,16 @@ function getInitials(name: string): string {
   ).toUpperCase();
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function NavbarAuthSection(): React.ReactElement {
   const { status, user, logoutAndRefresh } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
     await logoutAndRefresh();
-    // Navigate home and force a full server-render refresh so any
-    // server-side auth checks update correctly.
     router.push("/");
     router.refresh();
   };
 
-  // ── Loading — fixed-dimension skeletons prevent layout shift ──────────────
   if (status === "loading") {
     return (
       <div className="flex items-center gap-4" aria-hidden="true">
@@ -75,13 +46,11 @@ export function NavbarAuthSection(): React.ReactElement {
     );
   }
 
-  // ── Authenticated — avatar + dropdown ─────────────────────────────────────
   if (status === "authenticated" && user !== null) {
     const initials = getInitials(user.name);
 
     return (
       <div className="flex items-center gap-3">
-        {/* Order Now CTA remains visible for authenticated users */}
         <Button
           size="default"
           className="bg-slate-900 hover:bg-emerald-600 text-white font-bold px-7 rounded-full shadow-lg shadow-slate-900/10 hover:shadow-emerald-500/20 transition-all active:scale-95"
@@ -158,7 +127,6 @@ export function NavbarAuthSection(): React.ReactElement {
     );
   }
 
-  // ── Unauthenticated / error — Sign in + Order Now ─────────────────────────
   return (
     <div className="flex items-center gap-4">
       <Button

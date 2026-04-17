@@ -9,10 +9,6 @@ import type {
   WithAuthInjectedProps,
 } from "@/lib/props/auth.props";
 
-// ---------------------------------------------------------------------------
-// AuthGuard — renders children only when authenticated
-// ---------------------------------------------------------------------------
-
 export function AuthGuard({
   children,
   loadingFallback = null,
@@ -43,10 +39,6 @@ export function AuthGuard({
     }
   }
 }
-
-// ---------------------------------------------------------------------------
-// withAuth — HOC that injects the authenticated user into the wrapped component
-// ---------------------------------------------------------------------------
 
 export function withAuth<TProps extends WithAuthInjectedProps>(
   WrappedComponent: ComponentType<TProps>,

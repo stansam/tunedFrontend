@@ -1,21 +1,5 @@
 "use client";
 
-/**
- * @file CommentPanel.tsx
- * @description Blog post comments panel.
- *
- * Fixes applied
- * ─────────────
- * Issue 5  — CommentForm rendered exactly ONCE (was rendered twice — real +
- *             blurred ghost). The unauthenticated state now uses a lightweight
- *             static HTML skeleton with no React state.
- * Issue 6  — All auth links include ?callbackUrl= so users return to this
- *             blog post after signing in, not to /client/dashboard.
- * Issue 14 — useComments.handleSubmit (with optimistic updates) is now wired
- *             to CommentForm. The old direct submitComment call and the
- *             console.log(comment) debug statement are removed.
- */
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MessageSquare, ChevronDown, Loader2 } from "lucide-react";
@@ -29,15 +13,11 @@ import type { BlogCommentsPanelProps } from "../_props/post.prop";
 const UNAUTHENTICATED_PREVIEW_COUNT = 2;
 
 export function BlogCommentsPanel({
-  // postId,
   postSlug,
   comments: initialComments,
   isAuthenticated,
-  // currentUser,
 }: BlogCommentsPanelProps) {
   const pathname = usePathname();
-  // Use the UrlObject form so Next.js typed routing is satisfied.
-  // The query.callbackUrl becomes ?callbackUrl=%2Fblogs%2Fslug in the URL.
   const loginHref = {
     pathname: "/auth/login" as const,
     query: { callbackUrl: pathname },
@@ -58,7 +38,6 @@ export function BlogCommentsPanel({
 
   return (
     <aside aria-label="Blog comments" className="flex flex-col gap-6">
-      {/* ── Header ──────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3">
         <div
           className={cn(
@@ -81,7 +60,6 @@ export function BlogCommentsPanel({
         </div>
       </div>
 
-      {/* ── Unauthenticated: auth gate + comment count ───────────────── */}
       {!isAuthenticated && (
         <>
           {totalCount === 0 ? (
@@ -107,7 +85,6 @@ export function BlogCommentsPanel({
         </>
       )}
 
-      {/* ── Authenticated: comment list + paginator ──────────────────── */}
       {isAuthenticated && (
         <>
           {totalCount === 0 ? (
@@ -165,12 +142,6 @@ export function BlogCommentsPanel({
               )}
             </div>
           )}
-
-          {/*
-           * CommentForm — rendered ONCE (Issue 5).
-           * Submission is delegated to useComments.handleSubmit which applies
-           * an optimistic update before the API call resolves (Issue 14).
-           */}
           <div className="mt-2">
             <CommentForm
               postSlug={postSlug}
@@ -183,20 +154,8 @@ export function BlogCommentsPanel({
         </>
       )}
 
-      {/*
-       * Unauthenticated form placeholder — Issue 5 fix.
-       *
-       * This is a STATIC HTML skeleton (no React state, no event handlers,
-       * no stateful components).  It provides a visual impression of the
-       * form behind a sign-in prompt without the performance and correctness
-       * problems of rendering a live <CommentForm /> instance.
-       *
-       * Accessibility: aria-hidden="true" prevents screen readers from
-       * traversing the decorative skeleton content.
-       */}
       {!isAuthenticated && (
         <div className="relative rounded-2xl border border-slate-200 bg-white overflow-hidden">
-          {/* Static skeleton rows — pure decorative divs */}
           <div
             aria-hidden="true"
             className="p-5 space-y-3 blur-[3px] opacity-40 pointer-events-none select-none"
@@ -210,7 +169,6 @@ export function BlogCommentsPanel({
             <div className="h-10 w-full rounded-full bg-emerald-100" />
           </div>
 
-          {/* Sign-in CTA overlay */}
           <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-white/70 backdrop-blur-[2px]">
             <p className="text-sm font-semibold text-slate-600 text-center px-4">
               <Link

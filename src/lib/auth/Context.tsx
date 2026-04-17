@@ -13,24 +13,10 @@ import { fetchClientAuthUser } from "@/lib/services/auth.service";
 import type { AuthContextValue, AuthStatus, AuthUser } from "@/lib/types/auth.type";
 import type { AuthProviderProps } from "../props/auth.props";
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-/** Minimum interval between auth re-fetches triggered by window focus events.
- *  Prevents hammering the backend when the user rapidly switches tabs. */
 const AUTH_REFETCH_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-
-// ---------------------------------------------------------------------------
-// Context
-// ---------------------------------------------------------------------------
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 AuthContext.displayName = "AuthContext";
-
-// ---------------------------------------------------------------------------
-// Provider
-// ---------------------------------------------------------------------------
 
 export function AuthProvider({
   children,
@@ -47,7 +33,6 @@ export function AuthProvider({
   const fetchingRef = useRef(false);
   const mountedRef = useRef(true);
   const userRef = useRef<AuthUser | null>(user);
-  /** Timestamp of the last completed auth fetch (used to debounce focus re-fetches). */
   const lastFetchedAtRef = useRef<number>(0);
 
   useEffect(() => {
@@ -97,8 +82,6 @@ export function AuthProvider({
               : "Received an unexpected response from the authentication service.",
           );
         }
-        // If the user is already authenticated, keep the current state and do
-        // not overwrite a valid session with a transient error.
         break;
 
       default: {
@@ -118,23 +101,15 @@ export function AuthProvider({
     await doFetch();
   }, [doFetch]);
 
-  // ---------------------------------------------------------------------------
-  // Initial fetch on mount
-  // ---------------------------------------------------------------------------
-
   useEffect(() => {
     mountedRef.current = true;
 
-    // Skip the initial network call when we already have a server-side user
-    // AND the consumer explicitly opts out (e.g. pages using getServerAuthUser).
     const shouldSkip = skipInitialFetch && initialUser !== null;
     if (!shouldSkip) {
       Promise.resolve().then(() => {
         doFetch();
       });
     } else {
-      // Still record a valid fetch time so the focus handler doesn't immediately
-      // re-fetch when the user first focuses the window.
       lastFetchedAtRef.current = Date.now();
     }
 
@@ -142,14 +117,6 @@ export function AuthProvider({
       mountedRef.current = false;
     };
   }, [doFetch, initialUser, skipInitialFetch]);
-
-  // ---------------------------------------------------------------------------
-  // Debounced window-focus re-check
-  //
-  // Re-validates the session when the user returns to the tab, but enforces a
-  // minimum interval (AUTH_REFETCH_INTERVAL_MS) to avoid hammering the backend
-  // on rapid tab switches or DevTools interactions.
-  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     const handleFocus = () => {
@@ -166,10 +133,6 @@ export function AuthProvider({
     return () => window.removeEventListener("focus", handleFocus);
   }, [status, doFetch]);
 
-  // ---------------------------------------------------------------------------
-  // Memoised context value
-  // ---------------------------------------------------------------------------
-
   const value = useMemo<AuthContextValue>(
     () => ({
       status,
@@ -183,10 +146,6 @@ export function AuthProvider({
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-// ---------------------------------------------------------------------------
-// Consumer hook
-// ---------------------------------------------------------------------------
 
 export function useAuthContext(): AuthContextValue {
   const ctx = useContext(AuthContext);

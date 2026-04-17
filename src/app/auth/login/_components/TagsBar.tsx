@@ -12,7 +12,6 @@ export function TagsBar() {
     return <TagsFallback />;
   }
 
-  // Edge case: Endpoints active but empty array returned or error resolving array size.
   if (!tags || tags.length === 0) {
     return <TagsFallback />;
   }
