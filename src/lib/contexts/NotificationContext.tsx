@@ -21,7 +21,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (!isAuthenticated) return;
     setIsLoading(true);
     try {
-      const res = await apiGet<NotificationItem[]>("/api/notifications");
+      const res = await apiGet<NotificationItem[]>("/notifications");
       if (res.ok && res.data) {
         setNotifications(res.data);
       }
@@ -86,7 +86,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (socket?.connected) {
       socket.emit("notification:mark_read", { notification_id: id });
     } else {
-      await apiPost(`/api/notifications/${id}/read`, {});
+      await apiPost(`/notifications/${id}/read`, {});
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
       );
@@ -99,7 +99,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (socket?.connected) {
       socket.emit("notification:mark_all_read");
     } else {
-      await apiPost(`/api/notifications/read-all`, {});
+      await apiPost(`/notifications/read-all`, {});
       setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
       setUnreadCount(0);
     }

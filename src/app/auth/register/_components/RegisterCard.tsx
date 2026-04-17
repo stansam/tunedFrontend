@@ -2,6 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { RegisterLeftPanel } from "./RegisterLeftPanel";
 import { RegisterForm } from "./RegisterForm";
+import { MobileRegisterHero } from "./MobileRegisterHero";
 
 interface RegisterCardProps {
   readonly callbackUrl: string;
@@ -19,6 +20,7 @@ export function RegisterCard({ callbackUrl }: RegisterCardProps) {
         "z-20"
       )}
     >
+      <MobileRegisterHero />
       <RegisterLeftPanel />
       
       <div

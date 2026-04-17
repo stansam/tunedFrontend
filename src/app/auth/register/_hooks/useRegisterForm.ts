@@ -27,32 +27,47 @@ export function useRegisterForm(callbackUrl: string) {
   const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [dirty, setDirty] = useState<Record<string, boolean>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
   const isSuccess = formStatus === "success";
 
   const handleChange = useCallback(
     (field: keyof RegisterFormValues, value: string) => {
-      setFormValues((prev) => ({ ...prev, [field]: value }));
+      setFormValues((prev) => {
+        const newValues = { ...prev, [field]: value };
+        
+        if (submitAttempted) {
+          let errorMsg: string | undefined = undefined;
+          const result = RegisterFormSchema.safeParse(newValues);
+          if (!result.success) {
+            errorMsg = result.error.flatten().fieldErrors[field]?.[0];
+          }
+          setFieldErrors((prevErr) => ({ ...prevErr, [field]: errorMsg }));
+        }
+
+        return newValues;
+      });
+      setDirty((prev) => ({ ...prev, [field]: true }));
     },
-    []
+    [submitAttempted]
   );
 
-  const validateField = useCallback(
+  const handleBlur = useCallback(
     (field: keyof RegisterFormValues) => {
-      let errorMsg: string | undefined = undefined;
+      setTouched((prev) => ({ ...prev, [field]: true }));
 
-      const currentValues = formValues;
-      const result = RegisterFormSchema.safeParse(currentValues);
-      
-      if (!result.success) {
-         errorMsg = result.error.flatten().fieldErrors[field]?.[0];
+      if (dirty[field] || submitAttempted) {
+        let errorMsg: string | undefined = undefined;
+        const result = RegisterFormSchema.safeParse(formValues);
+        if (!result.success) {
+          errorMsg = result.error.flatten().fieldErrors[field]?.[0];
+        }
+        setFieldErrors((prev) => ({ ...prev, [field]: errorMsg }));
       }
-
-      setFieldErrors((prev) => ({
-        ...prev,
-        [field]: errorMsg,
-      }));
     },
-    [formValues]
+    [dirty, submitAttempted, formValues]
   );
 
   const handleSubmit = useCallback(
@@ -60,6 +75,7 @@ export function useRegisterForm(callbackUrl: string) {
       e.preventDefault();
       if (isSubmitting || isSuccess) return;
 
+      setSubmitAttempted(true);
       const validated = RegisterFormSchema.safeParse(formValues);
       
       if (!validated.success) {
@@ -106,6 +122,7 @@ export function useRegisterForm(callbackUrl: string) {
     formId,
     formValues,
     handleChange,
+    handleBlur,
     showPassword,
     setShowPassword,
     showConfirmPassword,
@@ -115,7 +132,9 @@ export function useRegisterForm(callbackUrl: string) {
     fieldErrors,
     isSubmitting,
     isSuccess,
-    validateField,
     handleSubmit,
+    touched,
+    dirty,
+    submitAttempted
   };
 }

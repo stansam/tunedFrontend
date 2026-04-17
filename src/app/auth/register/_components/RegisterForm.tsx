@@ -25,7 +25,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
     fieldErrors,
     isSubmitting,
     isSuccess,
-    validateField,
+    handleBlur,
     handleSubmit,
   } = useRegisterForm(callbackUrl);
 
@@ -58,7 +58,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
             spellCheck={false}
             value={formValues.username}
             onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange("username", e.target.value)}
-            onBlur={() => validateField("username")}
+            onBlur={() => handleBlur("username")}
             placeholder="Username"
             aria-invalid={!!fieldErrors.username}
             aria-describedby={getErrorId("username")}
@@ -82,7 +82,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
               autoComplete="name"
               value={formValues.name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange("name", e.target.value)}
-              onBlur={() => validateField("name")}
+              onBlur={() => handleBlur("name")}
               placeholder="Full Name"
               aria-invalid={!!fieldErrors.name}
               aria-describedby={getErrorId("name")}
@@ -101,7 +101,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
             value={formValues.gender as "M" | "F" | ""}
             onChange={(val) => {
                handleChange("gender", val);
-               setTimeout(() => validateField("gender"), 0);
+               setTimeout(() => handleBlur("gender"), 0);
             }}
             disabled={isSubmitting || isSuccess}
           />
@@ -118,7 +118,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
             autoComplete="new-password"
             value={formValues.password}
             onChange={(e) => handleChange("password", e.target.value)}
-            onBlur={() => { validateField("password"); if (formValues.confirmPassword) validateField("confirmPassword"); }}
+            onBlur={() => { handleBlur("password"); if (formValues.confirmPassword) handleBlur("confirmPassword"); }}
             placeholder="••••••••"
             aria-invalid={!!fieldErrors.password}
             aria-describedby={getErrorId("password")}
@@ -151,7 +151,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
             autoComplete="new-password"
             value={formValues.confirmPassword}
             onChange={(e) => handleChange("confirmPassword", e.target.value)}
-            onBlur={() => validateField("confirmPassword")}
+            onBlur={() => handleBlur("confirmPassword")}
             placeholder="••••••••••••"
             aria-invalid={!!fieldErrors.confirmPassword}
             aria-describedby={getErrorId("confirmPassword")}
@@ -188,7 +188,7 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
               spellCheck={false}
               value={formValues.email}
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange("email", e.target.value)}
-              onBlur={() => validateField("email")}
+              onBlur={() => handleBlur("email")}
               placeholder="your@email.xyz"
               aria-invalid={!!fieldErrors.email}
               aria-describedby={getErrorId("email")}
@@ -208,8 +208,8 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         <PhoneInput
            id={`${formId}-phone`}
            value={formValues.phone}
-           onChange={(val) => { handleChange("phone", val || ""); setTimeout(() => validateField("phone"), 0); }}
-           onBlur={() => validateField("phone")}
+           onChange={(val) => { handleChange("phone", val || ""); setTimeout(() => handleBlur("phone"), 0); }}
+           onBlur={() => handleBlur("phone")}
            disabled={isSubmitting || isSuccess}
            error={!!fieldErrors.phone}
            aria-invalid={!!fieldErrors.phone}

@@ -11,9 +11,9 @@ import { LoginSubmitButton } from "./LoginSubmitButton";
 
 export function LoginForm({ callbackUrl }: LoginFormProps) {
   const {
-    formId, identifier, setIdentifier, password, setPassword, rememberMe, setRememberMe,
+    formId, identifier, handleChange, handleBlur, password, rememberMe, setRememberMe,
     showPassword, setShowPassword, formStatus, globalError, fieldErrors,
-    isSubmitting, isSuccess, validateField, handleSubmit
+    isSubmitting, isSuccess, handleSubmit
   } = useLoginForm(callbackUrl);
 
   const identifierErrorId = fieldErrors.identifier ? `${formId}-identifier-error` : undefined;
@@ -38,8 +38,8 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
           <input
             id={`${formId}-identifier`} type="text" autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false}
-            value={identifier} onChange={(e: ChangeEvent<HTMLInputElement>) => setIdentifier(e.target.value)}
-            onBlur={() => validateField("identifier", identifier)} placeholder="Email or Username"
+            value={identifier} onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange("identifier", e.target.value)}
+            onBlur={(e) => handleBlur("identifier", e.target.value)} placeholder="Email or Username"
             aria-invalid={!!fieldErrors.identifier} aria-describedby={identifierErrorId} disabled={isSubmitting || isSuccess} maxLength={254}
             className={cn("w-full rounded-xl border bg-white py-3 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed", fieldErrors.identifier ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100" : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100")}
           />
@@ -50,7 +50,7 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
           <Shield size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
           <input
             id={`${formId}-password`} type={showPassword ? "text" : "password"} autoComplete="current-password" value={password}
-            onChange={(e) => setPassword(e.target.value)} onBlur={() => validateField("password", password)}
+            onChange={(e) => handleChange("password", e.target.value)} onBlur={(e) => handleBlur("password", e.target.value)}
             placeholder="••••••••••" aria-invalid={!!fieldErrors.password} aria-describedby={passwordErrorId} disabled={isSubmitting || isSuccess} maxLength={256}
             className={cn("w-full rounded-xl border bg-white py-3 pl-10 pr-11 text-sm text-slate-800 placeholder:text-slate-500 outline-none transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed", fieldErrors.password ? "border-red-300 focus:border-red-400 focus:ring-2 focus:ring-red-100" : "border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100")}
           />
