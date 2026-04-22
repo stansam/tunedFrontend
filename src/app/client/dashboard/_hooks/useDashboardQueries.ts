@@ -13,6 +13,7 @@ import type {
   DashboardAnalytics,
   DashboardTracking,
   DashboardAlerts,
+  ActionableAlertType,
 } from "../_types/dashboard.types";
 import {
   FALLBACK_KPI,
@@ -46,13 +47,14 @@ export function useDashboardQueries() {
   }, []);
 
   useEffect(() => {
-    fetchAll();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchAll();
   }, [fetchAll]);
 
   useEffect(() => {
     const socket = webSocketService.connect();
 
-    socket.on("order.updated", (data: any) => {
+    socket.on("order.updated", (data: { order_id: string; status: "PENDING" | "ACTIVE" | "COMPLETED_PENDING_REVIEW" | "COMPLETED" | "OVERDUE" | "CANCELED" | "REVISION"; progress: number; delivered_at: string | null }) => {
       setTracking((prev) => {
         if (!prev || !prev.latest_order) return prev;
         if (prev.latest_order.id === data.order_id) {
@@ -70,7 +72,7 @@ export function useDashboardQueries() {
       });
     });
 
-    socket.on("actionable_alert.new", (data: any) => {
+    socket.on("actionable_alert.new", (data: { id: string; type: ActionableAlertType; message: string; metadata?: Record<string, string>; created_at: string; }) => {
       setAlerts((prev) => {
         if (!prev) return prev;
         return {

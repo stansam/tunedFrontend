@@ -6,6 +6,8 @@ export const OrderStatusZodSchema = z.enum([
 
 export const PriorityZodSchema = z.enum(["LOW", "NORMAL", "HIGH", "URGENT"]);
 
+export const ActionableAlertTypeZodSchema = z.enum(["EXTENSION_REQUEST", "PENDING_REVIEW"]);
+
 export const KPIDataSchema = z.object({
   active_projects: z.number(),
   portfolio_value: z.number(),
@@ -61,7 +63,7 @@ export const DashboardTrackingSchema = z.object({
 
 export const ActionableAlertSchema = z.object({
   id: z.string(),
-  type: z.enum(["EXTENSION_REQUEST", "PENDING_REVIEW"]),
+  type: ActionableAlertTypeZodSchema,
   message: z.string(),
   metadata: z.record(z.string(), z.string()).optional(),
   created_at: z.string(),

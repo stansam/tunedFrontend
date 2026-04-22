@@ -1,7 +1,7 @@
 "use client";
 
 import type { UpcomingDeadline } from "../_types/dashboard.types";
-import { usePathname, useRouter } from "next/navigation";
+
 
 export function UpcomingDeadlines({ deadlines }: { readonly deadlines: UpcomingDeadline[] }) {
   if (deadlines.length === 0) {

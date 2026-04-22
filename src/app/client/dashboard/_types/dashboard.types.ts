@@ -3,6 +3,7 @@ import * as schemas from "../_schemas/dashboard.schema";
 
 export type OrderStatus = z.infer<typeof schemas.OrderStatusZodSchema>;
 export type Priority = z.infer<typeof schemas.PriorityZodSchema>;
+export type ActionableAlertType = z.infer<typeof schemas.ActionableAlertTypeZodSchema>;
 
 export type KPIData = z.infer<typeof schemas.KPIDataSchema>;
 export type ChartData = z.infer<typeof schemas.ChartDataSchema>;
