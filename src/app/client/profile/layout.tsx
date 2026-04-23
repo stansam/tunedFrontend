@@ -1,5 +1,11 @@
-import React from "react";
+import type { Metadata } from "next";
 
-export default function Layout({ children }: { readonly children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: "Profile | TunedEssays",
+  description: "Manage your personal profile, security settings, and account details.",
+  robots: { index: false, follow: false },
+};
+
+export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }

@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth/Context";
 import type { AuthUser } from "@/lib/types/auth.type";
 import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { NotificationProvider } from "@/lib/contexts/NotificationContext";
+import { QueryProvider } from "@/lib/providers/QueryProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import { ClientSidebar } from "./_components/ClientSidebar";
@@ -40,6 +41,7 @@ export default async function ClientRootLayout({
     <html lang="en" className={dmSans.variable} data-scroll-behavior="smooth">
       <body className={`${dmSans.className} antialiased bg-[#e8e6e1]`}>
          <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
+          <QueryProvider>
           <NotificationProvider>
             <TooltipProvider delayDuration={300}>
               <SidebarProvider
@@ -61,6 +63,7 @@ export default async function ClientRootLayout({
             </TooltipProvider>
             <Toaster position="top-center" richColors theme="light" />
           </NotificationProvider>
+          </QueryProvider>
          </AuthProvider>
       </body>
     </html>

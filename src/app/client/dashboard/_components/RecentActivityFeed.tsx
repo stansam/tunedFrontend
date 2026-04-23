@@ -1,8 +1,7 @@
 "use client";
 
+import { RelativeTime } from "./relativeTime";
 import type { RecentActivityFeedProps } from "../_props/dashboard.props";
-import { formatDistanceToNow } from "date-fns";
-
 const ACTION_LABELS: Record<string, string> = {
   order_created:        "New order submitted",
   order_updated:        "Order updated",
@@ -55,7 +54,7 @@ export function RecentActivityFeed({ feed }: RecentActivityFeedProps) {
                     dateTime={entry.created_at}
                     className="text-xs text-slate-500 mt-1 block"
                   >
-                    {formatDistanceToNow(new Date(entry.created_at), { addSuffix: true })}
+                    {RelativeTime(entry.created_at)}
                   </time>
                 </div>
               </li>
