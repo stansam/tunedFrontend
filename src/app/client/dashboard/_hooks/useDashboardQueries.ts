@@ -1,62 +1,98 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { webSocketService } from "@/lib/services/websocket.service";
 import {
   fetchDashboardKPIs, fetchDashboardAnalytics,
   fetchDashboardTracking, fetchDashboardAlerts,
 } from "../_services/dashboard.service";
 import type {
-  KPIData, DashboardAnalytics, DashboardTracking, DashboardAlerts,
+  DashboardTracking, DashboardAlerts,
+  MilestoneOrder, ActionableAlert,
 } from "../_types/dashboard.types";
 import {
   FALLBACK_KPI, FALLBACK_ANALYTICS, FALLBACK_TRACKING, FALLBACK_ALERTS,
 } from "../_fallback/dashboard.fallback";
-import type { MilestoneOrder, ActionableAlert } from "../_types/dashboard.types";
 
 export function useDashboardQueries() {
-  const [kpis, setKpis] = useState<KPIData>(FALLBACK_KPI);
-  const [analytics, setAnalytics] = useState<DashboardAnalytics>(FALLBACK_ANALYTICS);
-  const [tracking, setTracking] = useState<DashboardTracking>(FALLBACK_TRACKING);
-  const [alerts, setAlerts] = useState<DashboardAlerts>(FALLBACK_ALERTS);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  const fetchAll = useCallback(async () => {
-    setLoading(true);
-    const [kpiRes, analyticsRes, trackingRes, alertRes] = await Promise.all([
-      fetchDashboardKPIs(),
-      fetchDashboardAnalytics(),
-      fetchDashboardTracking(),
-      fetchDashboardAlerts(),
-    ]);
-    setKpis(kpiRes.ok ? kpiRes.data : FALLBACK_KPI);
-    setAnalytics(analyticsRes.ok ? analyticsRes.data : FALLBACK_ANALYTICS);
-    setTracking(trackingRes.ok ? trackingRes.data : FALLBACK_TRACKING);
-    setAlerts(alertRes.ok ? alertRes.data : FALLBACK_ALERTS);
-    setLoading(false);
-  }, []);
+  // Queries
+  const kpiQuery = useQuery({
+    queryKey: ["dashboard", "kpis"],
+    queryFn: async () => {
+      const res = await fetchDashboardKPIs();
+      if (!res.ok) throw new Error(res.error.message);
+      return res.data;
+    },
+    placeholderData: FALLBACK_KPI,
+  });
 
-  useEffect(() => { void fetchAll(); }, [fetchAll]);
+  const analyticsQuery = useQuery({
+    queryKey: ["dashboard", "analytics"],
+    queryFn: async () => {
+      const res = await fetchDashboardAnalytics();
+      if (!res.ok) throw new Error(res.error.message);
+      return res.data;
+    },
+    placeholderData: FALLBACK_ANALYTICS,
+  });
 
+  const trackingQuery = useQuery({
+    queryKey: ["dashboard", "tracking"],
+    queryFn: async () => {
+      const res = await fetchDashboardTracking();
+      if (!res.ok) throw new Error(res.error.message);
+      return res.data;
+    },
+    placeholderData: FALLBACK_TRACKING,
+  });
+
+  const alertsQuery = useQuery({
+    queryKey: ["dashboard", "alerts"],
+    queryFn: async () => {
+      const res = await fetchDashboardAlerts();
+      if (!res.ok) throw new Error(res.error.message);
+      return res.data;
+    },
+    placeholderData: FALLBACK_ALERTS,
+  });
+
+  // WebSocket Sync
   useEffect(() => {
     const socket = webSocketService.connect();
 
     socket.on("order.updated", (data: MilestoneOrder) => {
-      setTracking((prev) => {
-        if (!prev.latest_order || prev.latest_order.id !== data.id) return prev;
-        return { ...prev, latest_order: data };
+      queryClient.setQueryData(["dashboard", "tracking"], (old: DashboardTracking | undefined) => {
+        if (!old || !old.latest_order || old.latest_order.id !== data.id) return old;
+        return { ...old, latest_order: data };
       });
     });
 
     socket.on("actionable_alert.new", (data: ActionableAlert) => {
-      setAlerts((prev) => ({ ...prev, alerts: [data, ...prev.alerts] }));
+      queryClient.setQueryData(["dashboard", "alerts"], (old: DashboardAlerts | undefined) => {
+        if (!old) return { alerts: [data] };
+        return { ...old, alerts: [data, ...old.alerts] };
+      });
     });
 
     return () => {
       socket.off("order.updated");
       socket.off("actionable_alert.new");
     };
-  }, []);
+  }, [queryClient]);
 
-  return { kpis, analytics, tracking, alerts, loading, refresh: fetchAll };
+  const refresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  }, [queryClient]);
+
+  return {
+    kpis: kpiQuery.data ?? FALLBACK_KPI,
+    analytics: analyticsQuery.data ?? FALLBACK_ANALYTICS,
+    tracking: trackingQuery.data ?? FALLBACK_TRACKING,
+    alerts: alertsQuery.data ?? FALLBACK_ALERTS,
+    loading: kpiQuery.isLoading || analyticsQuery.isLoading || trackingQuery.isLoading || alertsQuery.isLoading,
+    refresh,
+  };
 }
