@@ -49,10 +49,11 @@ export const UpcomingDeadlineSchema = z.object({
 });
 
 export const ActivityLogEntrySchema = z.object({
-  id: z.string(),
-  action: z.string(),
-  message: z.string(),
-  created_at: z.string(),
+  id:          z.string(),
+  action:      z.string(),
+  entity_type: z.string().nullable(),
+  entity_id:   z.string().nullable(),
+  created_at:  z.string(),
 });
 
 export const DashboardTrackingSchema = z.object({

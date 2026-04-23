@@ -1,7 +1,8 @@
 "use client";
 
-import { PieChart, Pie, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { PieChart, Pie, Tooltip, Legend } from "recharts";
 import type { ChartData } from "../_types/dashboard.types";
+import { ChartFrame } from "./ChartFrame";
 
 const COLORS = ["#059669", "#10b981", "#34d399", "#6ee7b7", "#a7f3d0", "#d1fae5"];
 
@@ -19,7 +20,7 @@ export function ProjectLifecycleChart({ data }: { readonly data: ChartData[] }) 
         <h3 className="tracking-tight text-sm font-semibold">Project Lifecycle</h3>
       </div>
       <div className="p-6 pt-0 flex-1 min-h-[250px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ChartFrame>
           <PieChart>
             <Pie
               data={chartData}
@@ -30,9 +31,9 @@ export function ProjectLifecycleChart({ data }: { readonly data: ChartData[] }) 
             />
 
             <Tooltip wrapperStyle={{ borderRadius: '8px', outline: 'none' }} />
-            <Legend verticalAlign="bottom" height={36} iconType="circle" />
+            <Legend verticalAlign="bottom" height={25} iconType="circle" fontSize={8} />
           </PieChart>
-        </ResponsiveContainer>
+          </ChartFrame>
       </div>
     </div>
   );

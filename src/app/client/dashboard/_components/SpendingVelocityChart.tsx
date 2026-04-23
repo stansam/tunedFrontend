@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, Tooltip, XAxis, YAxis } from "recharts";
 import type { SpendingVelocity } from "../_types/dashboard.types";
+import { ChartFrame } from "./ChartFrame";
 
 export function SpendingVelocityChart({ data }: { readonly data: SpendingVelocity[] }) {
   const chartData = useMemo(() => data, [data]);
@@ -14,7 +15,7 @@ export function SpendingVelocityChart({ data }: { readonly data: SpendingVelocit
         <p className="text-xs text-slate-500">Monthly confirmed payments</p>
       </div>
       <div className="p-6 pt-0 flex-1 min-h-[200px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ChartFrame>
           <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
@@ -29,7 +30,7 @@ export function SpendingVelocityChart({ data }: { readonly data: SpendingVelocit
             />
             <Area type="monotone" dataKey="amount" stroke="#059669" strokeWidth={2} fillOpacity={1} fill="url(#colorAmount)" />
           </AreaChart>
-        </ResponsiveContainer>
+        </ChartFrame>
       </div>
     </div>
   );

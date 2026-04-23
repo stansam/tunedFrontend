@@ -1,7 +1,8 @@
 "use client";
 
-import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip } from "recharts";
 import type { ChartData } from "../_types/dashboard.types";
+import { ChartFrame } from "./ChartFrame";
 
 export function ReferralGrowthChart({ data }: { readonly data: ChartData[] }) {
   if (!data || data.length === 0) return null;
@@ -13,14 +14,14 @@ export function ReferralGrowthChart({ data }: { readonly data: ChartData[] }) {
         <p className="text-xs text-slate-500">Cumulative commission</p>
       </div>
       <div className="p-6 pt-0 flex-1 min-h-[200px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ChartFrame>
           <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-            <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
+            <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${v}`} />
             <RechartsTooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
             <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} dot={{ r: 4, fill: '#3b82f6' }} />
           </LineChart>
-        </ResponsiveContainer>
+        </ChartFrame>
       </div>
     </div>
   );

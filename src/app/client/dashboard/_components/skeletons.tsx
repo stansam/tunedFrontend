@@ -4,9 +4,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function KPICardsSkeleton() {
   return (
-    <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <Skeleton key={i} className="h-32 w-full rounded-xl" />
+        <Skeleton key={i} className="h-[120px] w-full rounded-xl" />
       ))}
     </div>
   );
@@ -17,7 +17,7 @@ export function MilestoneTrackerSkeleton() {
 }
 
 export function ChartSkeleton() {
-  return <Skeleton className="h-64 w-full rounded-xl" />;
+  return <Skeleton className="h-[280px] w-full rounded-xl" />;
 }
 
 export function FeedSkeleton() {
@@ -26,7 +26,7 @@ export function FeedSkeleton() {
 
 export function AlertsSkeleton() {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <Skeleton className="h-16 w-full rounded-xl" />
       <Skeleton className="h-16 w-full rounded-xl" />
     </div>

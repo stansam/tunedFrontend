@@ -3,31 +3,22 @@
 import { useState, useEffect, useCallback } from "react";
 import { webSocketService } from "@/lib/services/websocket.service";
 import {
-  fetchDashboardKPIs,
-  fetchDashboardAnalytics,
-  fetchDashboardTracking,
-  fetchDashboardAlerts,
+  fetchDashboardKPIs, fetchDashboardAnalytics,
+  fetchDashboardTracking, fetchDashboardAlerts,
 } from "../_services/dashboard.service";
 import type {
-  KPIData,
-  DashboardAnalytics,
-  DashboardTracking,
-  DashboardAlerts,
-  ActionableAlertType,
+  KPIData, DashboardAnalytics, DashboardTracking, DashboardAlerts,
 } from "../_types/dashboard.types";
 import {
-  FALLBACK_KPI,
-  FALLBACK_ANALYTICS,
-  FALLBACK_TRACKING,
-  FALLBACK_ALERTS,
+  FALLBACK_KPI, FALLBACK_ANALYTICS, FALLBACK_TRACKING, FALLBACK_ALERTS,
 } from "../_fallback/dashboard.fallback";
+import type { MilestoneOrder, ActionableAlert } from "../_types/dashboard.types";
 
 export function useDashboardQueries() {
-  const [kpis, setKpis] = useState<KPIData | null>(null);
-  const [analytics, setAnalytics] = useState<DashboardAnalytics | null>(null);
-  const [tracking, setTracking] = useState<DashboardTracking | null>(null);
-  const [alerts, setAlerts] = useState<DashboardAlerts | null>(null);
-
+  const [kpis, setKpis] = useState<KPIData>(FALLBACK_KPI);
+  const [analytics, setAnalytics] = useState<DashboardAnalytics>(FALLBACK_ANALYTICS);
+  const [tracking, setTracking] = useState<DashboardTracking>(FALLBACK_TRACKING);
+  const [alerts, setAlerts] = useState<DashboardAlerts>(FALLBACK_ALERTS);
   const [loading, setLoading] = useState(true);
 
   const fetchAll = useCallback(async () => {
@@ -38,7 +29,6 @@ export function useDashboardQueries() {
       fetchDashboardTracking(),
       fetchDashboardAlerts(),
     ]);
-
     setKpis(kpiRes.ok ? kpiRes.data : FALLBACK_KPI);
     setAnalytics(analyticsRes.ok ? analyticsRes.data : FALLBACK_ANALYTICS);
     setTracking(trackingRes.ok ? trackingRes.data : FALLBACK_TRACKING);
@@ -46,40 +36,20 @@ export function useDashboardQueries() {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void fetchAll();
-  }, [fetchAll]);
+  useEffect(() => { void fetchAll(); }, [fetchAll]);
 
   useEffect(() => {
     const socket = webSocketService.connect();
 
-    socket.on("order.updated", (data: { order_id: string; status: "PENDING" | "ACTIVE" | "COMPLETED_PENDING_REVIEW" | "COMPLETED" | "OVERDUE" | "CANCELED" | "REVISION"; progress: number; delivered_at: string | null }) => {
+    socket.on("order.updated", (data: MilestoneOrder) => {
       setTracking((prev) => {
-        if (!prev || !prev.latest_order) return prev;
-        if (prev.latest_order.id === data.order_id) {
-          return {
-            ...prev,
-            latest_order: {
-              ...prev.latest_order,
-              status: data.status,
-              progress: data.progress,
-              delivered_at: data.delivered_at,
-            },
-          };
-        }
-        return prev;
+        if (!prev.latest_order || prev.latest_order.id !== data.id) return prev;
+        return { ...prev, latest_order: data };
       });
     });
 
-    socket.on("actionable_alert.new", (data: { id: string; type: ActionableAlertType; message: string; metadata?: Record<string, string>; created_at: string; }) => {
-      setAlerts((prev) => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          alerts: [data, ...prev.alerts],
-        };
-      });
+    socket.on("actionable_alert.new", (data: ActionableAlert) => {
+      setAlerts((prev) => ({ ...prev, alerts: [data, ...prev.alerts] }));
     });
 
     return () => {
@@ -88,12 +58,5 @@ export function useDashboardQueries() {
     };
   }, []);
 
-  return {
-    kpis,
-    analytics,
-    tracking,
-    alerts,
-    loading,
-    refresh: fetchAll,
-  };
+  return { kpis, analytics, tracking, alerts, loading, refresh: fetchAll };
 }

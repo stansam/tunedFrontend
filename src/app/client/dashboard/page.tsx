@@ -11,61 +11,39 @@ import { ProjectLifecycleChart } from "./_components/ProjectLifecycleChart";
 import { ServiceMixChart } from "./_components/ServiceMixChart";
 import { ReferralGrowthChart } from "./_components/ReferralGrowthChart";
 import {
-  KPICardsSkeleton,
-  ChartSkeleton,
-  MilestoneTrackerSkeleton,
-  FeedSkeleton,
-  AlertsSkeleton
+  ChartSkeleton, MilestoneTrackerSkeleton, KPICardsSkeleton,
+  FeedSkeleton, AlertsSkeleton,
 } from "./_components/skeletons";
 
 export default function DashboardPage() {
   const { kpis, analytics, tracking, alerts, loading } = useDashboardQueries();
 
   return (
-    <>
-      <div className="flex flex-col gap-4 md:gap-8">
-        {loading || !kpis ? <KPICardsSkeleton /> : <KPICards data={kpis} />}
+    <div className="@container/main flex min-h-screen flex-col gap-6 overflow-scroll">
+      {loading ? <KPICardsSkeleton /> : <KPICards data={kpis} />}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-          <div className="lg:col-span-2 space-y-4 md:space-y-8">
-            {loading || !tracking ? (
-              <MilestoneTrackerSkeleton />
-            ) : (
-              <OrderMilestoneTracker order={tracking.latest_order} />
-            )}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 px-4 lg:px-6">
+        <div className="lg:col-span-2 space-y-4">
+          {loading ? <MilestoneTrackerSkeleton /> : <OrderMilestoneTracker order={tracking.latest_order} />}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-              {loading || !analytics ? <ChartSkeleton /> : <SpendingVelocityChart data={analytics.spending_velocity} />}
-              {loading || !analytics ? <ChartSkeleton /> : <ProjectLifecycleChart data={analytics.project_lifecycle} />}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-              {loading || !analytics ? <ChartSkeleton /> : <ServiceMixChart data={analytics.service_mix} />}
-              {loading || !analytics ? <ChartSkeleton /> : <ReferralGrowthChart data={analytics.referral_growth} />}
-            </div>
-            
-            {loading || !tracking ? (
-               <ChartSkeleton />
-            ) : (
-               <UpcomingDeadlines deadlines={tracking.upcoming_deadlines} />
-            )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[220px] sm:auto-rows-[260px] md:auto-rows-[300px]">
+            {loading ? <ChartSkeleton /> : <SpendingVelocityChart data={analytics.spending_velocity} />}
+            {loading ? <ChartSkeleton /> : <ProjectLifecycleChart data={analytics.project_lifecycle} />}
           </div>
 
-          <div className="space-y-4 md:space-y-8">
-             {loading || !alerts ? (
-               <AlertsSkeleton />
-             ) : (
-               <ActionableAlerts alerts={alerts.alerts} />
-             )}
-
-             {loading || !tracking ? (
-               <FeedSkeleton />
-             ) : (
-               <RecentActivityFeed feed={tracking.activity_feed} />
-             )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[220px] sm:auto-rows-[260px] md:auto-rows-[300px]">
+            {loading ? <ChartSkeleton /> : <ServiceMixChart data={analytics.service_mix} />}
+            {loading ? <ChartSkeleton /> : <ReferralGrowthChart data={analytics.referral_growth} />}
           </div>
+
+          {loading ? <ChartSkeleton /> : <UpcomingDeadlines deadlines={tracking.upcoming_deadlines} />}
+        </div>
+
+        <div className="space-y-4">
+          {loading ? <AlertsSkeleton /> : <ActionableAlerts alerts={alerts.alerts} />}
+          {loading ? <FeedSkeleton /> : <RecentActivityFeed feed={tracking.activity_feed} />}
         </div>
       </div>
-    </>
+    </div>
   );
 }
