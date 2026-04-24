@@ -50,12 +50,7 @@ export function RecentActivityFeed({ feed }: RecentActivityFeedProps) {
                       </span>
                     )}
                   </p>
-                  <time
-                    dateTime={entry.created_at}
-                    className="text-xs text-slate-500 mt-1 block"
-                  >
-                    {RelativeTime(entry.created_at)}
-                  </time>
+                  <RelativeTime date={entry.created_at} />
                 </div>
               </li>
             ))}

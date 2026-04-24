@@ -26,10 +26,10 @@ export function ChangePasswordModal({ open, onClose }: ChangePasswordModalProps)
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="sm:max-w-md rounded-2xl" aria-describedby="dialog-description">
+      <DialogContent className="sm:max-w-md rounded-2xl">
         <DialogHeader>
           <DialogTitle>Change Password</DialogTitle>
-          <DialogDescription id="dialog-description">
+          <DialogDescription>
             Enter your current password then choose a new one.
           </DialogDescription>
         </DialogHeader>

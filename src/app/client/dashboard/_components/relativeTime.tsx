@@ -3,16 +3,33 @@
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 
-export function RelativeTime(date: string) {
-  const [value, setValue] = useState<string | null>(null);
+interface RelativeTimeProps {
+  date: string;
+}
+
+export function RelativeTime({ date }: RelativeTimeProps) {
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setValue(formatDistanceToNow(new Date(date), { addSuffix: true }));
-  }, [date]);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <time dateTime={date} className="text-xs text-slate-500 mt-1 block">
+        ...
+      </time>
+    );
+  }
 
   return (
-    <time dateTime={date} className="text-xs text-slate-500 mt-1 block">
-      {value ?? "—"}
+    <time 
+      dateTime={date} 
+      className="text-xs text-slate-500 mt-1 block"
+      suppressHydrationWarning
+    >
+      {formatDistanceToNow(new Date(date), { addSuffix: true })}
     </time>
   );
 }

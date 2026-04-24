@@ -1,6 +1,5 @@
 import type { DashboardTracking, DashboardAlerts } from "../_types/dashboard.types";
 
-const H = 1000 * 60 * 60;
 
 export const FALLBACK_TRACKING: DashboardTracking = {
   latest_order: {
@@ -15,14 +14,14 @@ export const FALLBACK_TRACKING: DashboardTracking = {
       id: "ord_123",
       order_number: "ORD-9876-TYQ",
       title: "Strategic Management Analysis",
-      due_date: new Date(Date.now() + H * 24 * 2).toISOString(),
+      due_date: "2026-05-01T12:00:00.000Z",
       priority: "HIGH",
     },
     {
       id: "ord_124",
       order_number: "ORD-4567-XYZ",
       title: "Market Research Report",
-      due_date: new Date(Date.now() + H * 24 * 5).toISOString(),
+      due_date: "2026-05-05T12:00:00.000Z",
       priority: "NORMAL",
     },
   ],
@@ -32,21 +31,21 @@ export const FALLBACK_TRACKING: DashboardTracking = {
       action: "order_created",
       entity_type: "Order",
       entity_id: "ord_123",
-      created_at: new Date(Date.now() - H * 5).toISOString(),
+      created_at: "2026-04-20T10:00:00.000Z",
     },
     {
       id: "act_2",
       action: "payment_confirmed",
       entity_type: "Payment",
       entity_id: "pay_001",
-      created_at: new Date(Date.now() - H * 48).toISOString(),
+      created_at: "2026-04-19T14:30:00.000Z",
     },
     {
       id: "act_3",
       action: "order_completed",
       entity_type: "Order",
       entity_id: "ord_100",
-      created_at: new Date(Date.now() - H * 96).toISOString(),
+      created_at: "2026-04-18T09:15:00.000Z",
     },
   ],
 };
@@ -57,8 +56,9 @@ export const FALLBACK_ALERTS: DashboardAlerts = {
       id: "alert_1",
       type: "EXTENSION_REQUEST",
       message: "You have 1 pending extension request from admin on order ORD-4567-XYZ.",
-      created_at: new Date(Date.now() - H).toISOString(),
+      created_at: "2026-04-24T08:00:00.000Z",
       metadata: { order_id: "ord_124" },
     },
   ],
 };
+

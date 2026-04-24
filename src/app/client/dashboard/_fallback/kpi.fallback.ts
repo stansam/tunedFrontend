@@ -1,13 +1,13 @@
 import type { KPIData, DashboardAnalytics } from "../_types/dashboard.types";
 
-const TWO_DAYS_MS = 1000 * 60 * 60 * 24 * 2;
 
 export const FALLBACK_KPI: KPIData = {
   active_projects: 3,
   portfolio_value: 450.50,
   reward_points: 1250,
-  next_deadline: new Date(Date.now() + TWO_DAYS_MS).toISOString(),
+  next_deadline: "2026-05-15T10:00:00.000Z",
 };
+
 
 export const FALLBACK_ANALYTICS: DashboardAnalytics = {
   spending_velocity: [
