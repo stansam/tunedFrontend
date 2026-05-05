@@ -4,6 +4,7 @@ export const config = {
   matcher: [
     "/client/:path*",
     "/admin/:path*",
+    "/order/:path*",
     "/auth/login",
     "/auth/register",
   ],
@@ -19,7 +20,8 @@ const SESSION_COOKIE_NAME =
 function isProtectedRoute(pathname: string): boolean {
   return (
     pathname.startsWith("/client") ||
-    pathname.startsWith("/admin")
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/order")
   );
 }
 

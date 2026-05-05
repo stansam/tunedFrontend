@@ -15,6 +15,11 @@ export const AuthUserSchema = z.object({
     .nullable()
     .optional()
     .default(null),
+  reward_points: z
+    .number()
+    .nonnegative("Reward points cannot be negative")
+    .optional()
+    .default(0),
   session_created_at: z
     .string()
 });
