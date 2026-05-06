@@ -5,7 +5,7 @@ import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { QueryProvider } from "@/lib/providers/QueryProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import type { AuthUser } from "@/lib/types/auth.type";
 
 const dmSans = DM_Sans({

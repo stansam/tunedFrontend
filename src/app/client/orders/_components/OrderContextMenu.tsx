@@ -30,7 +30,7 @@ export function OrderContextMenu({ order }: OrderContextMenuProps) {
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem
           className="cursor-pointer gap-2"
-          onClick={() => router.push(`/client/orders/${order.id}` as never)}
+          onClick={() => router.push(`/client/orders/${order.order_number}` as never)}
         >
           <Eye className="h-4 w-4" />
           View Details
@@ -38,7 +38,7 @@ export function OrderContextMenu({ order }: OrderContextMenuProps) {
 
         <DropdownMenuItem
           className="cursor-pointer gap-2"
-          onClick={() => router.push(`/client/orders/${order.id}/files` as never)}
+          onClick={() => router.push(`/client/orders/${order.order_number}/files` as never)}
         >
           <FileText className="h-4 w-4" />
           View Files
@@ -46,7 +46,7 @@ export function OrderContextMenu({ order }: OrderContextMenuProps) {
 
         <DropdownMenuItem
           className="cursor-pointer gap-2"
-          onClick={() => router.push(`/client/orders/${order.id}/revision` as never)}
+          onClick={() => router.push(`/client/orders/${order.order_number}/revision` as never)}
         >
           <RefreshCcw className="h-4 w-4" />
           Request Revision

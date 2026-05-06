@@ -1,0 +1,4 @@
+export const MESSAGE_MAX_CHARS = 2_500;
+export const MESSAGES_STALE_TIME_MS = 30_000;
+export const ORDER_DETAIL_STALE_TIME_MS = 60_000;
+export const ORDER_DETAIL_GC_TIME_MS = 5 * 60_000;

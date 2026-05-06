@@ -41,7 +41,7 @@ export function useOrderFilters() {
         router.replace(`${pathname}${qs ? `?${qs}` : ""}` as never, { scroll: false });
       });
     },
-    [filters, pathname, router],
+    [filters, pathname, router, searchParams],
   );
 
   const debouncedPushParams = useDebounce(pushParams, 400);
@@ -51,7 +51,7 @@ export function useOrderFilters() {
     [pushParams],
   );
   const setSearch = useCallback(
-    (q: string) => pushParams({ q, page: 1 }),
+    (q: string) => debouncedPushParams({ q, page: 1 }),
     [debouncedPushParams],
   );
   const setSort = useCallback(

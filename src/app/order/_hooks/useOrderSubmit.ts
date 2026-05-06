@@ -13,7 +13,7 @@ export function useOrderSubmit() {
   const mutation = useMutation({
     mutationFn: async ({ state, priceState }: { state: OrderFormState; priceState: OrderPriceState }) => {
       const deadline = computeDeadlineISO(state.step1.deadlineDate!, state.step1.deadlineTime);
-
+      console.log(priceState); 
       const payload = {
         service_id: state.step1.serviceId,
         level_id: state.step1.levelId,
