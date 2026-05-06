@@ -22,13 +22,13 @@ export function useOrderSubmit() {
         title: state.step2.title,
         word_count: state.step2.wordCount,
         page_count: state.step2.wordCount / 275,
-        line_spacing: state.step2.lineSpacing.toUpperCase(),
+        line_spacing: state.step2.lineSpacing.toLowerCase(),
         format_style: state.step2.formatStyle,
         sources: state.step2.sources,
         instructions: state.step2.instructions,
         discount_code: state.step3.discountCode,
         points_to_redeem: state.step3.pointsToRedeem,
-        total_price: priceState.total,
+        // total_price: priceState.total,
       };
 
       const res = await submitOrder(payload);

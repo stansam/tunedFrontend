@@ -29,10 +29,10 @@ export const Step2Schema = z.object({
 });
 
 export const CreateOrderResponseSchema = z.object({
-  success: z.boolean(),
+  // success: z.boolean(),
   order_id: z.string().uuid(),
   order_number: z.string(),
-  message: z.string().optional(),
+  // message: z.string().optional(),
 });
 
 export const DiscountValidationSchema = z.object({
