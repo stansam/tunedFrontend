@@ -1,6 +1,6 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchOrderDetail } from "../_services/order-detail.service";
 import {
   ORDER_DETAIL_STALE_TIME_MS,
@@ -13,7 +13,7 @@ export function orderDetailQueryKey(orderNumber: string) {
 }
 
 export function useOrderDetail(orderNumber: string) {
-  return useSuspenseQuery<OrderDetailResponseDTO, Error>({
+  return useQuery<OrderDetailResponseDTO, Error>({
     queryKey: orderDetailQueryKey(orderNumber),
     queryFn: async () => {
       const result = await fetchOrderDetail(orderNumber);

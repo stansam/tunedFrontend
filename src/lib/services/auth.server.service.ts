@@ -55,6 +55,7 @@ export async function getServerAuthUser(): Promise<ServerAuthResult> {
     const result = await apiGet<unknown>("/auth/me", {
       cache: "no-store",
       headers: extraHeaders,
+      // credentials: "omit",
     });
 
     return parseAuthMeResult(result);

@@ -5,7 +5,7 @@ class WebSocketService {
   private backendUrl: string;
 
   constructor() {
-    this.backendUrl = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api', '') || "http://localhost:5000";
+    this.backendUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
   }
 
   public connect(): Socket {

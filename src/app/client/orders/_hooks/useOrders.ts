@@ -1,6 +1,6 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchClientOrders } from "../_services/orders.service";
 import { DEFAULT_PER_PAGE } from "../_fallback";
 import type { OrderFiltersState, OrderListResponseDTO, StatusTab } from "../_types";
@@ -21,7 +21,7 @@ export function ordersQueryKey(filters: OrderFiltersState) {
 }
 
 export function useOrders(filters: OrderFiltersState) {
-  return useSuspenseQuery<OrderListResponseDTO, Error>({
+  return useQuery<OrderListResponseDTO, Error>({
     queryKey: ordersQueryKey(filters),
     queryFn: async () => {
       const result = await fetchClientOrders({
@@ -39,6 +39,8 @@ export function useOrders(filters: OrderFiltersState) {
 
       return result.data;
     },
+    // staleTime: 0,
+    // gcTime: 0,
     staleTime: 30_000,
     gcTime: 5 * 60_000,
   });
