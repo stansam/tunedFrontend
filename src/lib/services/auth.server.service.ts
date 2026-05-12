@@ -1,6 +1,6 @@
 import "server-only";
 
-import { cookies, headers } from "next/headers";
+// import { cookies, headers } from "next/headers";
 import { apiGet } from "@/api-client";
 import { AuthMeResponseSchema } from "@/lib/schemas/auth.schema";
 import type { AuthUser, ServerAuthResult } from "@/lib/types/auth.type";
@@ -35,26 +35,26 @@ function parseAuthMeResult(result: ApiResult<unknown>): ServerAuthResult {
 
 export async function getServerAuthUser(): Promise<ServerAuthResult> {
   try {
-    const cookieStore = await cookies();
-    const cookieHeader = cookieStore.toString();
-    // console.log({cookieHeader})
+    // const cookieStore = await cookies();
+    // const cookieHeader = cookieStore.toString();
+    // // console.log({cookieHeader})
 
-    const headerStore = await headers();
-    const userAgent = headerStore.get("user-agent") || "";
-    const forwardedFor = headerStore.get("x-forwarded-for") || "";
+    // const headerStore = await headers();
+    // const userAgent = headerStore.get("user-agent") || "";
+    // const forwardedFor = headerStore.get("x-forwarded-for") || "";
 
-    // const extraHeaders: Record<string, string> | undefined = cookieHeader
-    //   ? { Cookie: cookieHeader  } //`${sessionCookie.name}=${sessionCookie.value}`
-    //   : undefined;
-    const extraHeaders: Record<string, string> = {};
-    if (cookieHeader) extraHeaders["Cookie"] = cookieHeader;
-    if (userAgent) extraHeaders["User-Agent"] = userAgent;
-    if (forwardedFor) extraHeaders["X-Forwarded-For"] = forwardedFor;
+    // // const extraHeaders: Record<string, string> | undefined = cookieHeader
+    // //   ? { Cookie: cookieHeader  } //`${sessionCookie.name}=${sessionCookie.value}`
+    // //   : undefined;
+    // const extraHeaders: Record<string, string> = {};
+    // if (cookieHeader) extraHeaders["Cookie"] = cookieHeader;
+    // if (userAgent) extraHeaders["User-Agent"] = userAgent;
+    // if (forwardedFor) extraHeaders["X-Forwarded-For"] = forwardedFor;
 
 
     const result = await apiGet<unknown>("/auth/me", {
       cache: "no-store",
-      headers: extraHeaders,
+      // headers: extraHeaders,
       // credentials: "omit",
     });
 

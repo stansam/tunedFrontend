@@ -1,7 +1,6 @@
 import type { ApiResult, RequestOptions } from "@/lib/types";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL; // 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 const UNEXPECTED_ERROR = "An unexpected error occurred"
