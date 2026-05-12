@@ -7,6 +7,7 @@ declare namespace NodeJS {
     NEXT_PUBLIC_AUTH_REDIRECT_URL: string;
     NEXT_PUBLIC_WORDS_PER_PAGE: string;
     BACKEND_API_URL: string;
+    EXTERNAL_API_URL: string;
 
     NODE_ENV: "development" | "production" | "test";
     NEXT_PUBLIC_VERCEL_ENV?: "production" | "preview" | "development";

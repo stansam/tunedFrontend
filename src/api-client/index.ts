@@ -11,7 +11,7 @@ const BASE_HEADERS = {
 function getBaseUrl(): string {
   const isServer = typeof window === "undefined";
   return isServer
-    ? process.env.BACKEND_API_URL!
+    ? process.env.EXTERNAL_API_URL!
     : process.env.NEXT_PUBLIC_API_BASE_URL!;
 }
 
