@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-
+  allowedDevOrigins: ['195.35.37.113'],
   typedRoutes: true,
 
   async rewrites() {
@@ -50,6 +50,10 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         destination: `${process.env.BACKEND_API_URL|| 'http://localhost:5000'}/api/:path*`, 
       },
+      {
+        source: "/socket.io/:path*",
+        destination: `${process.env.BACKEND_API_URL || 'http://localhost:5000'}/socket.io/:path*`, 
+    }
     ];
   },
 };
