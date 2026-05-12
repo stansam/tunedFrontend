@@ -1,4 +1,4 @@
-import { apiGet, apiRequest } from "@/api-client";
+import { apiGet, apiPatch } from "@/api-client";
 import { SettingsResponseSchema } from "../_schemas/settings.schema";
 import type { UserSettings, SettingsUpdatePayload } from "../_types/settings.type";
 import { FALLBACK_SETTINGS } from "../_fallback/settings.fallback";
@@ -28,10 +28,7 @@ export async function updateUserSettingsCategory<K extends keyof SettingsUpdateP
   category: K,
   payload: SettingsUpdatePayload[K]
 ): Promise<boolean> {
-  const result = await apiRequest(`/client/settings/${category}`, {
-    method: "PATCH",
-    body: payload,
-  });
+  const result = await apiPatch(`/client/settings/${category}`, payload);
 
   if (!result.ok) {
     if (process.env.NODE_ENV !== "production") {
