@@ -29,6 +29,12 @@ const nextConfig: NextConfig = {
         pathname: "/static/**",
       },
       {
+        protocol: "http",
+        hostname: "195.35.37.113",
+        port: "5000",
+        pathname: "/static/**",
+      },
+      {
         protocol: "https",
         hostname: "tunedessays.com",
         pathname: "/static/**",
