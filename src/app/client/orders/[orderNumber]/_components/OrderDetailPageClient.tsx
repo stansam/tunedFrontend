@@ -13,9 +13,21 @@ import { OrderDetailSidebar } from "./OrderDetailSidebar";
 import { OrderDetailSkeleton } from "./OrderDetailSkeleton";
 import type { OrderTab } from "../_types";
 import type { OrderDetailPageClientProps } from "../_props";
+import OrderDetailError from "../error";
 
 function DetailContent({ orderNumber }: { orderNumber: string }) {
-  const { data: order } = useOrderDetail(orderNumber);
+  const { data: order, error, isLoading, isError, refetch } = useOrderDetail(orderNumber);
+  if (isLoading) {
+    return <OrderDetailSkeleton />;
+  }
+  if (isError) {
+    return <OrderDetailError error={error} reset={refetch} />;
+  }
+
+  if (!order) {
+    return null;
+  }
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -48,7 +60,7 @@ function DetailContent({ orderNumber }: { orderNumber: string }) {
           {activeTab === "delivery" && <DeliveryTabContent />}
         </div>
 
-        <aside className="w-full lg:w-72 lg:flex-shrink-0">
+        <aside className="w-full lg:w-72 lg:shrink-0">
           <OrderDetailSidebar order={order} />
         </aside>
       </div>

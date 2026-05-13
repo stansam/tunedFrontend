@@ -18,7 +18,7 @@ export interface OrderDetailResponseDTO {
   client_id: string;
   status: OrderStatus;
   paid: boolean;
-  total_price: number;
+  total_price: string;
   service_id: string;
   service_name?: string | null;
   academic_level_id: string;
@@ -27,13 +27,13 @@ export interface OrderDetailResponseDTO {
   title: string;
   instructions: string;
   word_count: number;
-  page_count: number;
+  page_count: string;
   format_style: string;
   sources: number;
   line_spacing: string;
   due_date: string | null;
   report_type: string | null;
-  discount_amount: number | null;
+  discount_amount: string | null;
   created_at: string;
   client_username?: string | null;
   attachments?: OrderAttachmentDTO[];
