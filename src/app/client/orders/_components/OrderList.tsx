@@ -4,22 +4,29 @@ import { useOrders } from "../_hooks/useOrders";
 import { OrderCard } from "./OrderCard";
 import { EmptyOrders } from "./EmptyOrders";
 import { OrdersPagination } from "./OrdersPagination";
-import OrdersError from "../error";
 import type { OrderListProps } from "../_props";
+import OrdersLoading from "../loading";
+import OrdersError from "../error";
 
 export function OrderList({ filters, onPageChange, onClearFilters }: OrderListProps) {
-  const { data } = useOrders(filters);
+  const { data, error, isLoading, isError, refetch } = useOrders(filters);
 
-  if (data === undefined) {
-    return <OrdersError
-      error={Error("Failed to fetch orders", { cause: "Failed to fetch orders" })}
-      reset={() => { }}
-    />;
+  if (isLoading) {
+    return <OrdersLoading />;
   }
 
+  if (isError) {
+    return <OrdersError error={error} reset={refetch} />;
+  }
+
+  
+  if (!data) {
+    return null;
+  }
+  
   const orders = data.orders;
   const hasFilters = !!filters.q || filters.status !== "all";
-
+  
   if (!orders.length) {
     return (
       <EmptyOrders
@@ -31,11 +38,10 @@ export function OrderList({ filters, onPageChange, onClearFilters }: OrderListPr
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Order cards */}
       <div
         className="flex flex-col gap-3"
         role="list"
-        aria-label={`Orders list — ${data?.total ?? 0} total`}
+        aria-label={`Orders list — ${data.total} total`}
       >
         {orders.map((order) => (
           <div key={order.id} role="listitem">
