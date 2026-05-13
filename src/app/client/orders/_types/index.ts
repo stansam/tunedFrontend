@@ -18,7 +18,7 @@ export interface OrderResponseDTO {
   client_id: string;
   status: OrderStatus;
   paid: boolean;
-  total_price: number;
+  total_price: string;
   service_id: string;
   academic_level_id: string;
   deadline_id: string;
