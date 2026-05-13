@@ -12,28 +12,21 @@ import { ActivityTabContent } from "./ActivityTabContent";
 import { DeliveryTabContent } from "./DeliveryTabContent";
 import { OrderDetailSidebar } from "./OrderDetailSidebar";
 import { OrderDetailSkeleton } from "./OrderDetailSkeleton";
-// import { OrderDetailSkeleton } from "./OrderDetailSkeleton";
 import type { OrderTab } from "../_types";
 import type { OrderDetailPageClientProps } from "../_props";
-// import OrderDetailError from "../error";
 
 function DetailContent({ orderNumber }: { orderNumber: string }) {
   const { data: order } = useOrderDetail(orderNumber);
-  // if (isLoading) {
-  //   return <OrderDetailSkeleton />;
-  // }
-  // if (isError) {
-  //   return <OrderDetailError error={error} reset={refetch} />;
-  // }
-
-  if (!order) {
-    return null;
-  }
 
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
+
+  if (!order) {
+    return null;
+  }
+
   const tabParam = searchParams.get("tab") as OrderTab | null;
   const activeTab: OrderTab = tabParam === "activity" || tabParam === "delivery" ? tabParam : "details";
 

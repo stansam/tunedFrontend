@@ -65,7 +65,7 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
           label="Total Price"
           value={
             <span className="font-semibold">
-              ${(order.total_price as unknown as number).toFixed(2)}
+              ${Number(order.total_price).toFixed(2)}
             </span>
           }
         />
