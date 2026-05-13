@@ -62,7 +62,6 @@ export function OrderRequirements({ order }: OrderRequirementsProps) {
             </div>
           )}
 
-          {/* Affirmation */}
           <div className="px-5 py-4">
             <div className="flex items-start gap-2 rounded-lg bg-slate-50 p-3">
               <span className="mt-0.5 text-xs font-bold text-emerald-500">✓</span>

@@ -39,7 +39,7 @@ export interface OrderDetailResponseDTO {
   attachments?: OrderAttachmentDTO[];
 }
 
-export interface OrderMessageDTO {
+export interface OrderCommentDTO {
   id: string;
   order_id: string;
   sender_id: string;
@@ -50,7 +50,7 @@ export interface OrderMessageDTO {
   is_read?: boolean;
 }
 
-export interface SendMessageDTO {
+export interface SendCommentDTO {
   order_id: string;
   content: string;
 }

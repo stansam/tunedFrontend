@@ -54,7 +54,6 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
 
       <div className="my-3 border-t border-slate-100" />
 
-      {/* Metadata */}
       <div className="flex flex-col gap-2.5">
         <Row
           label="Date Ordered"

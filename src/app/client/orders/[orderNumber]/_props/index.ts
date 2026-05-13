@@ -1,6 +1,6 @@
 import type {
   OrderDetailResponseDTO,
-  OrderMessageDTO,
+  OrderCommentDTO,
   OrderTab,
   OrderStatus,
 } from "../_types";
@@ -27,18 +27,18 @@ export interface OrderRequirementsProps {
   order: OrderDetailResponseDTO;
 }
 
-export interface MessageItemProps {
-  message: OrderMessageDTO;
+export interface CommentItemProps {
+  comment: OrderCommentDTO;
   currentUserId: string;
   dayLabel?: string;
 }
 
-export interface MessageComposerProps {
+export interface CommentComposerProps {
   onSend: (content: string) => Promise<void>;
   isSending?: boolean;
 }
 
-export interface OrderMessagesProps {
+export interface OrderCommentsProps {
   orderId: string;
 }
 

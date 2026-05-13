@@ -59,7 +59,7 @@ export function formatDateTime(isoDate: string): string {
   }
 }
 
-export function formatMessageDay(isoDate: string): string {
+export function formatCommentDay(isoDate: string): string {
   try {
     const d = new Date(isoDate);
     const now = new Date();

@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "../_utils";
-import type { MessageItemProps } from "../_props";
+import type { CommentItemProps } from "../_props";
 
-export function MessageItem({ message, currentUserId, dayLabel }: MessageItemProps) {
-  const isOwn = message.sender_id === currentUserId;
+export function CommentItem({ comment, currentUserId, dayLabel }: CommentItemProps) {
+  const isOwn = comment.sender_id === currentUserId;
   const initial = isOwn
     ? "Y"
-    : (message.sender_name?.charAt(0)?.toUpperCase() ?? "S");
+    : (comment.sender_name?.charAt(0)?.toUpperCase() ?? "S");
 
   return (
     <div className="flex items-start gap-3">
@@ -34,16 +34,16 @@ export function MessageItem({ message, currentUserId, dayLabel }: MessageItemPro
         <div className="mb-1.5 flex items-start justify-between gap-2">
           <span className="text-sm font-semibold leading-tight text-slate-700">
             {isOwn
-              ? "You sent a message"
-              : `${message.sender_name} Sent you a message`}
+              ? "You sent a comment"
+              : `${comment.sender_name} Sent you a comment`}
           </span>
           <span className="shrink-0 pt-0.5 text-xs text-slate-400">
-            {formatDateTime(message.created_at)}
+            {formatDateTime(comment.created_at)}
           </span>
         </div>
 
         <div className="rounded-xl bg-slate-50 p-3 text-sm leading-relaxed text-slate-600">
-          {message.content}
+          {comment.content}
         </div>
       </div>
     </div>

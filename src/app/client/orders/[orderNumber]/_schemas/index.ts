@@ -44,7 +44,7 @@ export const OrderDetailResponseSchema = z.object({
   attachments: z.array(OrderAttachmentSchema).optional(),
 });
 
-export const OrderMessageSchema = z.object({
+export const OrderCommentSchema = z.object({
   id: z.string(),
   order_id: z.string(),
   sender_id: z.string(),

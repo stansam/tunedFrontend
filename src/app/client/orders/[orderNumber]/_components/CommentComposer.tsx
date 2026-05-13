@@ -6,8 +6,8 @@ import { Mic, Paperclip, Smile, Send, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { MESSAGE_MAX_CHARS } from "../_fallback";
-import type { MessageComposerProps } from "../_props";
+import { COMMENT_MAX_CHARS } from "../_fallback";
+import type { CommentComposerProps } from "../_props";
 
 function IconBtn({ Icon, label }: { Icon: LucideIcon; label: string }) {
   return (
@@ -18,10 +18,10 @@ function IconBtn({ Icon, label }: { Icon: LucideIcon; label: string }) {
   );
 }
 
-export function MessageComposer({ onSend, isSending }: MessageComposerProps) {
+export function CommentComposer({ onSend, isSending }: CommentComposerProps) {
   const [content, setContent] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
-  const isOverLimit = content.length > MESSAGE_MAX_CHARS;
+  const isOverLimit = content.length > COMMENT_MAX_CHARS;
 
   const handleSend = async () => {
     const trimmed = content.trim();
@@ -47,7 +47,7 @@ export function MessageComposer({ onSend, isSending }: MessageComposerProps) {
       <Textarea
         ref={ref}
         value={content}
-        onChange={(e) => setContent(e.target.value.slice(0, MESSAGE_MAX_CHARS + 50))}
+        onChange={(e) => setContent(e.target.value.slice(0, COMMENT_MAX_CHARS + 50))}
         onKeyDown={handleKeyDown}
         placeholder="Type your message here..."
         className="min-h-[100px] resize-none border-0 text-sm shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -59,7 +59,7 @@ export function MessageComposer({ onSend, isSending }: MessageComposerProps) {
         <IconBtn Icon={Mic} label="Voice message (coming soon)" />
         <div className="flex items-center gap-3">
           <span className={cn("text-xs", isOverLimit ? "text-red-500" : "text-slate-400")}>
-            up to {MESSAGE_MAX_CHARS.toLocaleString()} Characters
+            up to {COMMENT_MAX_CHARS.toLocaleString()} Characters
           </span>
           <IconBtn Icon={Paperclip} label="Attach file (coming soon)" />
           <IconBtn Icon={Smile} label="Add emoji (coming soon)" />
