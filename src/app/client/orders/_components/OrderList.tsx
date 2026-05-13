@@ -8,13 +8,16 @@ import OrdersError from "../error";
 import type { OrderListProps } from "../_props";
 
 export function OrderList({ filters, onPageChange, onClearFilters }: OrderListProps) {
-  const { data } = useOrders(filters);
+  const { data, error } = useOrders(filters);
 
-  if (data === undefined) {
-    return OrdersError;
+  if (error) {
+    return <OrdersError
+      error={error}
+      reset={() => { }}
+    />;
   }
 
-  const orders = data.orders;
+  const orders = data?.orders || [];
   const hasFilters = !!filters.q || filters.status !== "all";
 
   if (!orders.length) {
@@ -42,9 +45,9 @@ export function OrderList({ filters, onPageChange, onClearFilters }: OrderListPr
       </div>
 
       <OrdersPagination
-        page={data.page}
-        total={data.total}
-        perPage={data.per_page}
+        page={data?.page ?? 1}
+        total={data?.total ?? 0}
+        perPage={data?.per_page ?? 10}
         onPageChange={onPageChange}
       />
     </div>
