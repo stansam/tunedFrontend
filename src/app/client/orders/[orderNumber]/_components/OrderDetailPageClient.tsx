@@ -17,13 +17,13 @@ import type { OrderDetailPageClientProps } from "../_props";
 import OrderDetailError from "../error";
 
 function DetailContent({ orderNumber }: { orderNumber: string }) {
-  const { data: order, error, isLoading, isError, refetch } = useOrderDetail(orderNumber);
-  if (isLoading) {
-    return <OrderDetailSkeleton />;
-  }
-  if (isError) {
-    return <OrderDetailError error={error} reset={refetch} />;
-  }
+  const { data: order } = useOrderDetail(orderNumber);
+  // if (isLoading) {
+  //   return <OrderDetailSkeleton />;
+  // }
+  // if (isError) {
+  //   return <OrderDetailError error={error} reset={refetch} />;
+  // }
 
   if (!order) {
     return null;

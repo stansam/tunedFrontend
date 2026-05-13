@@ -19,18 +19,16 @@ export function OrderRequirements({ order }: OrderRequirementsProps) {
         className="flex w-full items-center justify-between px-5 py-4 text-left"
         aria-expanded={open} aria-controls="req-body">
         <h3 className="font-semibold text-slate-800">Requirements</h3>
-        <Chevron className="h-5 w-5 flex-shrink-0 text-slate-400" />
+        <Chevron className="h-5 w-5 shrink-0 text-slate-400" />
       </button>
 
       {open && (
         <div id="req-body" className="divide-y divide-slate-100 border-t border-slate-100">
-          {/* Topic */}
           <div className="px-5 py-3 text-sm">
             <span className="font-semibold text-slate-800">Topic: </span>
             <span className="text-slate-600">{order.title}</span>
           </div>
 
-          {/* Description */}
           <div className="px-5 py-4">
             <div className="mb-3 flex items-start justify-between gap-2">
               <h4 className="font-semibold text-slate-800">Description</h4>
@@ -45,7 +43,6 @@ export function OrderRequirements({ order }: OrderRequirementsProps) {
             </p>
           </div>
 
-          {/* Attachments */}
           {!!order.attachments?.length && (
             <div className="px-5 py-3">
               <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-slate-500">
@@ -56,7 +53,7 @@ export function OrderRequirements({ order }: OrderRequirementsProps) {
                   <li key={att.id}>
                     <a href={att.url} target="_blank" rel="noopener noreferrer"
                       className="flex items-center gap-2 text-sm text-emerald-600 hover:underline">
-                      <Paperclip className="h-3.5 w-3.5 flex-shrink-0" />
+                      <Paperclip className="h-3.5 w-3.5 shrink-0" />
                       {att.name}
                     </a>
                   </li>

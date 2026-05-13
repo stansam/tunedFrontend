@@ -7,13 +7,12 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
   return (
     <div className="rounded-xl bg-white p-4 shadow-sm md:p-5">
       <div className="flex items-start gap-4">
-        {/* Left: title + meta */}
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex items-center gap-2">
             <span
               aria-hidden
               className={cn(
-                "h-2.5 w-2.5 flex-shrink-0 rounded-full",
+                "h-2.5 w-2.5 shrink-0 rounded-full",
                 STATUS_DOT_CLASSES[order.status] ?? "bg-slate-300",
               )}
             />
@@ -33,7 +32,7 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
             </span>
             <span className="text-xs text-slate-300">|</span>
             <span className="text-xs text-slate-500">
-              {Math.ceil(order.page_count)} Pages
+              {Math.round(order.page_count as unknown as number)} Pages
             </span>
             <span className="text-xs text-slate-300">|</span>
             <span className="text-xs text-slate-500">
@@ -44,8 +43,7 @@ export function OrderSummaryCard({ order }: OrderSummaryCardProps) {
           </div>
         </div>
 
-        {/* Right: countdown timer */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <OrderCountdownTimer dueDate={order.due_date} />
         </div>
       </div>

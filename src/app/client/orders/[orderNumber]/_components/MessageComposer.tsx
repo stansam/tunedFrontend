@@ -38,7 +38,7 @@ export function MessageComposer({ onSend, isSending }: MessageComposerProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
-        <User className="h-4 w-4 flex-shrink-0 text-slate-400" />
+        <User className="h-4 w-4 shrink-0 text-slate-400" />
         <span className="text-sm font-semibold text-slate-700">
           Need update or Clarification?
         </span>

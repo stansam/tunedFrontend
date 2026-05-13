@@ -19,7 +19,6 @@ export function OrderMessages({ orderId }: OrderMessagesProps) {
   const queryClient = useQueryClient();
   const [isSending, setIsSending] = useState(false);
 
-  // Subscribe to real-time WebSocket messages
   useMessageSocket(orderId);
 
   const handleSend = async (content: string) => {

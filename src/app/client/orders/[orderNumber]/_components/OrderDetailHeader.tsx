@@ -20,7 +20,7 @@ export function OrderDetailHeader({ orderNumber }: OrderDetailHeaderProps) {
       <Button
         variant="outline"
         size="icon"
-        className="h-8 w-8 flex-shrink-0 rounded-full"
+        className="h-8 w-8 shrink-0 rounded-full"
         onClick={() => router.back()}
         aria-label="Go back to orders list"
       >

@@ -54,7 +54,7 @@ export function OrderTrackingStepper({ status }: OrderTrackingStepperProps) {
                 <span
                   aria-hidden
                   className={cn(
-                    "mt-0.5 h-4 w-4 flex-shrink-0 rounded-full border-2",
+                    "mt-0.5 h-4 w-4 shrink-0 rounded-full border-2",
                     DOT_CLASSES[step.status],
                   )}
                 />

@@ -23,11 +23,10 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
     <div className="rounded-xl bg-white p-5 shadow-sm">
       {/* Header */}
       <div className="mb-4 flex items-center justify-center gap-2">
-        <Info className="h-4 w-4 flex-shrink-0 text-slate-400" />
+        <Info className="h-4 w-4 shrink-0 text-slate-400" />
         <h3 className="font-semibold text-slate-800">Order Details</h3>
       </div>
 
-      {/* Service + Status */}
       <div className="flex flex-col gap-2.5">
         <Row
           label="Service:"
@@ -66,7 +65,7 @@ export function OrderInfoCard({ order }: OrderInfoCardProps) {
           label="Total Price"
           value={
             <span className="font-semibold">
-              ${order.total_price.toFixed(2)}
+              ${(order.total_price as unknown as number).toFixed(2)}
             </span>
           }
         />
