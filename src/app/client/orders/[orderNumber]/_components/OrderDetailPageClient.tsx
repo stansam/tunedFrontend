@@ -1,7 +1,7 @@
 "use client";
 
 import { Route } from "next";
-import { useTransition } from "react";
+import { useTransition, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useOrderDetail } from "../_hooks/useOrderDetail";
 import { OrderDetailHeader } from "./OrderDetailHeader";
@@ -12,9 +12,10 @@ import { ActivityTabContent } from "./ActivityTabContent";
 import { DeliveryTabContent } from "./DeliveryTabContent";
 import { OrderDetailSidebar } from "./OrderDetailSidebar";
 import { OrderDetailSkeleton } from "./OrderDetailSkeleton";
+// import { OrderDetailSkeleton } from "./OrderDetailSkeleton";
 import type { OrderTab } from "../_types";
 import type { OrderDetailPageClientProps } from "../_props";
-import OrderDetailError from "../error";
+// import OrderDetailError from "../error";
 
 function DetailContent({ orderNumber }: { orderNumber: string }) {
   const { data: order } = useOrderDetail(orderNumber);
@@ -33,8 +34,8 @@ function DetailContent({ orderNumber }: { orderNumber: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
-  const tab = searchParams.get("tab")
-  const activeTab: OrderTab = tab === "activity" || tab === "delivery" ? tab : "details";
+  const tabParam = searchParams.get("tab") as OrderTab | null;
+  const activeTab: OrderTab = tabParam === "activity" || tabParam === "delivery" ? tabParam : "details";
 
   const handleTabChange = (tab: OrderTab) => {
     const p = new URLSearchParams(searchParams.toString());
@@ -70,5 +71,9 @@ function DetailContent({ orderNumber }: { orderNumber: string }) {
 }
 
 export function OrderDetailPageClient({ orderNumber }: OrderDetailPageClientProps) {
-  return <DetailContent orderNumber={orderNumber} />;
+  return (
+    <Suspense fallback={<OrderDetailSkeleton />}>
+    <DetailContent orderNumber={orderNumber} />
+    </Suspense>
+  );
 }
