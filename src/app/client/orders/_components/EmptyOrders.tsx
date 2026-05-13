@@ -1,5 +1,6 @@
 "use client";
 
+import { Route } from "next";
 import { PackageSearch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -33,7 +34,7 @@ export function EmptyOrders({ hasFilters, onClearFilters }: EmptyOrdersProps) {
         <Button
           size="sm"
           className="bg-emerald-600 text-white hover:bg-emerald-700"
-          onClick={() => router.push("/client/orders/new" as never)}
+          onClick={() => router.push("/client/orders/new" as Route)}
         >
           + New Order
         </Button>

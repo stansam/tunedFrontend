@@ -1,5 +1,6 @@
 "use client";
 
+import { Route } from "next";
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,7 @@ export default function OrderDetailError({ error, reset }: Props) {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => router.push("/client/orders")}
+          onClick={() => router.push("/client/orders" as Route)}
         >
           Back to Orders
         </Button>

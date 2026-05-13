@@ -4,7 +4,7 @@ function MessageRowSkeleton() {
   return (
     <div className="flex items-start gap-3">
       <div className="w-10 shrink-0" />
-      <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+      <Skeleton className="h-8 w-8 rounded-full shrink-0" />
       <div className="flex-1 space-y-2">
         <Skeleton className="h-4 w-44 rounded" />
         <Skeleton className="h-16 w-full rounded-xl" />

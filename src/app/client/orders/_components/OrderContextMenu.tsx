@@ -1,5 +1,6 @@
 "use client";
 
+import { Route } from "next";
 import { MoreVertical, Eye, FileText, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +31,7 @@ export function OrderContextMenu({ order }: OrderContextMenuProps) {
       <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuItem
           className="cursor-pointer gap-2"
-          onClick={() => router.push(`/client/orders/${order.order_number}` as never)}
+          onClick={() => router.push(`/client/orders/${order.order_number}` as Route)}
         >
           <Eye className="h-4 w-4" />
           View Details
@@ -38,7 +39,7 @@ export function OrderContextMenu({ order }: OrderContextMenuProps) {
 
         <DropdownMenuItem
           className="cursor-pointer gap-2"
-          onClick={() => router.push(`/client/orders/${order.order_number}/files` as never)}
+          onClick={() => router.push(`/client/orders/${order.order_number}/files` as Route)}
         >
           <FileText className="h-4 w-4" />
           View Files
@@ -46,7 +47,7 @@ export function OrderContextMenu({ order }: OrderContextMenuProps) {
 
         <DropdownMenuItem
           className="cursor-pointer gap-2"
-          onClick={() => router.push(`/client/orders/${order.order_number}/revision` as never)}
+          onClick={() => router.push(`/client/orders/${order.order_number}/revision` as Route)}
         >
           <RefreshCcw className="h-4 w-4" />
           Request Revision

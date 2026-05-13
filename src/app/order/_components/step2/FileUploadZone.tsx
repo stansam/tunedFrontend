@@ -44,7 +44,7 @@ export function FileUploadZone({ files, submitLater, onFilesChange, onSubmitLate
           {files.map((file, i) => (
             <div key={i} className="flex items-center justify-between rounded-xl bg-white p-3 shadow-sm">
               <div className="flex items-center gap-3 overflow-hidden">
-                <FileIcon size={18} className="text-emerald-500 flex-shrink-0" />
+                <FileIcon size={18} className="text-emerald-500 shrink-0" />
                 <span className="text-xs font-medium truncate text-slate-700">{file.name}</span>
               </div>
               <button onClick={() => removeFile(i)} className="text-slate-400 hover:text-red-500"><X size={16} /></button>
