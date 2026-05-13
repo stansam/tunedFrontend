@@ -12,14 +12,47 @@ import { PriceSubtotalBar } from "@/app/order/_components/price/PriceSubtotalBar
 import { Step1ServiceDetails } from "@/app/order/_components/step1/Step1ServiceDetails";
 import { Step2PaperDetails } from "@/app/order/_components/step2/Step2PaperDetails";
 import { Step3ReviewCheckout } from "@/app/order/_components/step3/Step3ReviewCheckout";
+import { toast } from "sonner";
 import type { OrderWizardProps } from "@/app/order/_props/order.props";
 
 export function OrderWizard({ initialParams }: OrderWizardProps) {
   useOrderSocket();
-  const { options } = useOrderOptions();
+  const { options, isError: optionsError } = useOrderOptions();
   const { 
-    state, priceState, setPriceState, updateStep1, updateStep2, updateStep3, nextStep, prevStep 
+    state, setState, priceState, setPriceState, updateStep1, updateStep2, updateStep3, 
+    nextStep, prevStep, validateStep1, validateStep2 
   } = useOrderForm(initialParams);
+
+  if (optionsError) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#e8e6e1] p-8 text-center">
+        <h2 className="text-xl font-bold text-slate-900">Unable to load order options</h2>
+        <p className="text-slate-500 mt-2">Please check your connection and refresh the page.</p>
+        <button onClick={() => window.location.reload()} className="mt-6 rounded-xl bg-slate-900 px-6 py-3 font-bold text-white">
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  const handleNext = () => {
+    if (state.step === 1) {
+      const err = validateStep1();
+      if (err) return toast.error(err);
+    } else if (state.step === 2) {
+      const err = validateStep2();
+      if (err) return toast.error(err);
+    } else if (state.step === 3) {
+      return;
+    }
+    nextStep();
+  };
+
+  const handleStepClick = (step: 1 | 2 | 3) => {
+    if (step < state.step) {
+      setState(p => ({ ...p, step }));
+    }
+  };
 
   const renderStep = () => {
     switch (state.step) {
@@ -36,14 +69,12 @@ export function OrderWizard({ initialParams }: OrderWizardProps) {
       
       <div className="container mx-auto flex flex-1 flex-col gap-6 p-4 lg:flex-row lg:p-8">
         <aside className="hidden w-72 lg:block">
-          {/* <DesktopStepper currentStep={state.step} onStepClick={(_s: 1 | 2 | 3) => handle click} /> */}
-          <DesktopStepper currentStep={state.step} onStepClick={() => {/* handle click */}} />
+          <DesktopStepper currentStep={state.step} onStepClick={handleStepClick} />
         </aside>
 
         <section className="flex-1 space-y-6">
           <div className="lg:hidden">
-            {/* <MobileStepper currentStep={state.step} onStepClick={(_s: 1 | 2 | 3) => handle click} /> */}
-            <MobileStepper currentStep={state.step} onStepClick={() => {/* handle click */}} />
+            <MobileStepper currentStep={state.step} onStepClick={handleStepClick} />
           </div>
           {renderStep()}
         </section>
@@ -52,10 +83,10 @@ export function OrderWizard({ initialParams }: OrderWizardProps) {
       <PriceSubtotalBar 
         subtotal={priceState.subtotal} 
         isLoading={priceState.isPriceLoading} 
-        onNext={nextStep} 
+        onNext={handleNext} 
         onBack={prevStep} 
         showBack={state.step > 1}
-        nextLabel={state.step === 3 ? "Place Order" : "Proceed"}
+        nextLabel={state.step === 3 ? undefined : "Proceed"}
       />
       <OrderFooter />
     </div>

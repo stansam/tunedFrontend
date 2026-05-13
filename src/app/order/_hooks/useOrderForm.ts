@@ -26,7 +26,7 @@ export function useOrderForm(initialParams: Partial<OrderFormStep1>) {
   const deferredStep1 = useDeferredValue(state.step1);
   const deferredWordCount = useDeferredValue(state.step2.wordCount);
 
-  const fetchPrice = useCallback(async () => {
+  const fetchPrice = useCallback(async (signal?: AbortSignal) => {
     const { serviceId, levelId, deadlineDate, deadlineTime, reportType } = deferredStep1;
     if (!serviceId || !levelId || !deadlineDate) return;
 
@@ -35,29 +35,55 @@ export function useOrderForm(initialParams: Partial<OrderFormStep1>) {
 
     const res = await calculateOrderPrice({
       service_id: serviceId, level_id: levelId, deadline,
-      word_count: deferredWordCount, page_count: deferredWordCount / 275,
+      word_count: deferredWordCount, page_count: Math.ceil(deferredWordCount / 275),
       report_type: reportType || undefined
-    });
+    }, signal);
 
     if (res.ok) {
       setPriceState(prev => ({
         ...prev, isPriceLoading: false, priceDetails: res.data,
         subtotal: res.data.total_price, total: res.data.total_price - prev.discountAmount - prev.pointsDiscount
       }));
-    } else {
+    } else if (res.error.message !== "AbortError") {
       setPriceState(prev => ({ ...prev, isPriceLoading: false, priceError: res.error.message }));
     }
   }, [deferredStep1, deferredWordCount]);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { fetchPrice(); }, [fetchPrice]);
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => fetchPrice(controller.signal), 500);
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [fetchPrice]);
 
   const updateStep1 = (data: Partial<OrderFormStep1>) => setState(p => ({ ...p, step1: { ...p.step1, ...data } }));
   const updateStep2 = (data: Partial<OrderFormStep2>) => setState(p => ({ ...p, step2: { ...p.step2, ...data } }));
   const updateStep3 = (data: Partial<OrderFormStep3>) => setState(p => ({ ...p, step3: { ...p.step3, ...data } }));
 
+  const validateStep1 = () => {
+    const { serviceId, levelId, deadlineDate } = state.step1;
+    if (!serviceId) return "Please select a service type";
+    if (!levelId) return "Please select a project level";
+    if (!deadlineDate) return "Please select a deadline date";
+    return null;
+  };
+
+  const validateStep2 = () => {
+    const { title, wordCount, instructions } = state.step2;
+    if (!title || title.length < 5) return "Project title is too short";
+    if (wordCount < 275) return "Minimum word count is 275";
+    if (!instructions || instructions.length < 10) return "Please provide more detailed instructions";
+    return null;
+  };
+
   const nextStep = () => setState(p => ({ ...p, step: Math.min(p.step + 1, 3) as 1 | 2 | 3 }));
   const prevStep = () => setState(p => ({ ...p, step: Math.max(p.step - 1, 1) as 1 | 2 | 3 }));
 
-  return { state, priceState, setPriceState, updateStep1, updateStep2, updateStep3, nextStep, prevStep };
+  return { 
+    state, setState, priceState, setPriceState, 
+    updateStep1, updateStep2, updateStep3, 
+    nextStep, prevStep, validateStep1, validateStep2 
+  };
 }

@@ -6,9 +6,9 @@ import { formatCurrency } from "../../_utils/order.utils";
 
 export function CheckoutLedger({ priceState, isSubmitting, onPlaceOrder }: { priceState: OrderPriceState, isSubmitting: boolean, onPlaceOrder: () => void }) {
   const rows = [
-    { label: "Project Subtotal", value: priceState.subtotal },
-    { label: "Discount Code", value: -priceState.discountAmount, highlight: "text-emerald-600" },
-    { label: "Reward Points", value: -priceState.pointsDiscount, highlight: "text-emerald-600" },
+    { label: "Project Subtotal", value: priceState.subtotal, display: formatCurrency(priceState.subtotal) },
+    { label: "Discount Code", value: priceState.discountAmount, display: `- ${formatCurrency(priceState.discountAmount)}`, highlight: "text-emerald-600" },
+    { label: "Reward Points", value: priceState.pointsDiscount, display: `- ${formatCurrency(priceState.pointsDiscount)}`, highlight: "text-emerald-600" },
   ];
 
   return (
@@ -17,7 +17,7 @@ export function CheckoutLedger({ priceState, isSubmitting, onPlaceOrder }: { pri
         {rows.filter(r => r.value !== 0).map((row, i) => (
           <div key={i} className="flex justify-between text-sm">
             <span className="text-slate-400 font-medium">{row.label}</span>
-            <span className={row.highlight || "font-bold"}>{formatCurrency(row.value)}</span>
+            <span className={row.highlight || "font-bold"}>{row.display}</span>
           </div>
         ))}
         <div className="pt-4 border-t border-white/10 flex justify-between items-baseline">

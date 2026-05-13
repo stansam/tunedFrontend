@@ -29,7 +29,7 @@ export function OrderCard({ order }: OrderCardProps) {
           </span>
           <span className="text-xs text-slate-300" aria-hidden>|</span>
           <span className="text-xs text-slate-500">
-            {formatPageCount(order.page_count)}
+            {formatPageCount(Number(order.page_count))}
           </span>
           <span className="text-xs text-slate-300" aria-hidden>|</span>
           <span className="text-xs text-slate-500 uppercase">

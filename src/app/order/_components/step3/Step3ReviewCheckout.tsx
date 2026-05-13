@@ -13,7 +13,7 @@ export function Step3ReviewCheckout(props: StepProps) {
   const { submit, isLoading: isSubmitting } = useOrderSubmit();
 
   const handlePlaceOrder = () => {
-    submit({ state, priceState });
+    submit({ state });
   };
 
   return (

@@ -10,6 +10,7 @@ export function RewardPointsRedeemer({ value, onChange, onApplied }: { value: nu
 
   const handleApply = () => {
     const amt = Math.min(value, balance);
+    onChange(amt);
     onApplied(amt);
   };
 

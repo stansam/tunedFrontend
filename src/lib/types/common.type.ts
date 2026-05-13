@@ -22,6 +22,7 @@ export interface RequestOptions {
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
   credentials?: RequestCredentials;
+  signal?: AbortSignal;
 }
 
 export type NavLink = {

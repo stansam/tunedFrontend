@@ -10,8 +10,8 @@ import type {
   DiscountValidationResult 
 } from "../_types/order.types";
 
-export async function calculateOrderPrice(payload: CalculatePriceRequest) {
-  const res = await apiPost<unknown>("/calculate-price", payload);
+export async function calculateOrderPrice(payload: CalculatePriceRequest, signal?: AbortSignal) {
+  const res = await apiPost<unknown>("/calculate-price", payload, { signal });
   if (!res.ok) return res;
   const parsed = CalculatePriceResponseSchema.safeParse(res.data);
   if (!parsed.success) {
@@ -43,7 +43,5 @@ export async function submitOrder(payload: Record<string, unknown>): Promise<Api
 export async function uploadOrderFiles(orderId: string, files: File[]) {
   const formData = new FormData();
   files.forEach(file => formData.append("files", file));
-  return apiPost(`/orders/${orderId}/upload-files`, formData, {
-    headers: { "Content-Type": "multipart/form-data" }
-  });
+  return apiPost(`/orders/${orderId}/upload-files`, formData);
 }

@@ -37,12 +37,14 @@ export function PriceSubtotalBar({ subtotal, isLoading, onNext, onBack, showBack
               <ArrowLeft size={18} className="mr-2" /> Back
             </button>
           )}
-          <button 
-            onClick={onNext}
-            className="flex h-14 items-center justify-center rounded-2xl bg-emerald-600 px-8 text-sm font-black text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-emerald-600/40 active:scale-95"
-          >
-            {nextLabel} <ArrowRight size={18} className="ml-2" />
-          </button>
+          {nextLabel && (
+            <button 
+              onClick={onNext}
+              className="flex h-14 items-center justify-center rounded-2xl bg-emerald-600 px-8 text-sm font-black text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-emerald-600/40 active:scale-95"
+            >
+              {nextLabel} <ArrowRight size={18} className="ml-2" />
+            </button>
+          )}
         </div>
       </div>
     </div>

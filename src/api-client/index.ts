@@ -54,6 +54,30 @@ async function parseErrorBody(res: Response): Promise<ApiResult<never>> {
   }
 }
 
+function mergeAbortSignals(signals: AbortSignal[]): AbortSignal {
+  const controller = new AbortController();
+
+  const onAbort = () => {
+    controller.abort();
+    cleanup();
+  };
+
+  const cleanup = () => {
+    signals.forEach((s) => s.removeEventListener("abort", onAbort));
+  };
+
+  for (const signal of signals) {
+    if (signal.aborted) {
+      controller.abort();
+      return controller.signal;
+    }
+
+    signal.addEventListener("abort", onAbort);
+  }
+
+  return controller.signal;
+}
+
 export async function apiRequest<T>(
   path: string,
   options: RequestOptions = {}
@@ -66,6 +90,7 @@ export async function apiRequest<T>(
     cache,
     next,
     credentials = "include",
+    signal,
   } = options;
 
   const isFormData = body instanceof FormData;
@@ -75,13 +100,16 @@ export async function apiRequest<T>(
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  const combinedSignal = signal
+  ? mergeAbortSignals([signal, controller.signal])
+  : controller.signal;
 
   try {
     const res = await fetch(buildUrl(path), {
       method,
       headers: buildHeaders(isFormData, headers),
       body: serializedBody,
-      signal: controller.signal,
+      signal: combinedSignal,
       credentials,
       ...(cache ? { cache } : {}),
       ...(next ? { next } : {}),
