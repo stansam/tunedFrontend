@@ -22,13 +22,13 @@ export const OrderResponseSchema = z.object({
   title: z.string(),
   instructions: z.string(),
   word_count: z.number(),
-  page_count: z.number(),
+  page_count: z.string(),
   format_style: z.string(),
   sources: z.number(),
   line_spacing: z.string(),
   due_date: z.string().nullable().optional(),
   report_type: z.string().nullable().optional(),
-  discount_amount: z.number().nullable().optional(),
+  discount_amount: z.string().nullable().optional(),
 });
 
 export const OrderListResponseSchema = z.object({

@@ -25,13 +25,13 @@ export interface OrderResponseDTO {
   title: string;
   instructions: string;
   word_count: number;
-  page_count: number;
+  page_count: string;
   format_style: string;
   sources: number;
   line_spacing: string;
   due_date: string | null;
   report_type: string | null;
-  discount_amount: number | null;
+  discount_amount: string | null;
 }
 
 export interface OrderListResponseDTO {
