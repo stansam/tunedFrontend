@@ -15,7 +15,7 @@ export const OrderResponseSchema = z.object({
   client_id: z.string(),
   status: OrderStatusSchema,
   paid: z.boolean(),
-  total_price: z.number(),
+  total_price: z.string(),
   service_id: z.string(),
   academic_level_id: z.string(),
   deadline_id: z.string(),
