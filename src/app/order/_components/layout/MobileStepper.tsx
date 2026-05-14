@@ -1,10 +1,10 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, Save, Loader2 } from "lucide-react";
 import { cn } from "../../_utils/order.utils";
 import type { StepperProps } from "../../_props/order.props";
 
-export function MobileStepper({ currentStep, onStepClick }: StepperProps) {
+export function MobileStepper({ currentStep, onStepClick, onSaveDraft, isSavingDraft }: StepperProps) {
   return (
     <div className="flex items-center justify-between px-2 py-4">
       {[1, 2, 3].map((step) => {
@@ -27,6 +27,16 @@ export function MobileStepper({ currentStep, onStepClick }: StepperProps) {
           </div>
         );
       })}
+      <button
+        onClick={onSaveDraft}
+        disabled={isSavingDraft}
+        aria-label="Save draft"
+        className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-slate-500 shadow-sm transition-all hover:text-emerald-600 active:scale-95 disabled:opacity-50"
+      >
+        {isSavingDraft
+          ? <Loader2 size={15} className="animate-spin" />
+          : <Save size={15} />}
+      </button>
     </div>
   );
 }

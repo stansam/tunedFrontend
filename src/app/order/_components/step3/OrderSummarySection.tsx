@@ -5,7 +5,7 @@ import type { OrderFormState } from "../../_types/order.types";
 import { formatDeadlineDisplay } from "../../_utils/deadline.utils";
 import { computeDeadlineISO } from "../../_utils/order.utils";
 
-export function OrderSummarySection({ state }: { state: OrderFormState }) {
+export function OrderSummarySection({ state, goToStep }: { state: OrderFormState, goToStep: (step: 1 | 2 | 3) => void }) {
   const deadline = state.step1.deadlineDate 
     ? formatDeadlineDisplay(computeDeadlineISO(state.step1.deadlineDate, state.step1.deadlineTime))
     : "Not set";
@@ -15,7 +15,7 @@ export function OrderSummarySection({ state }: { state: OrderFormState }) {
       <div className="rounded-2xl bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-900">Project Overview</h3>
-          <button className="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
+          <button onClick={() => goToStep(1)} className="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
             <Edit3 size={12} /> Edit
           </button>
         </div>
@@ -42,7 +42,7 @@ export function OrderSummarySection({ state }: { state: OrderFormState }) {
       <div className="rounded-2xl bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-slate-900">Academic Requirements</h3>
-          <button className="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
+          <button onClick={() => goToStep(2)} className="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
             <Edit3 size={12} /> Edit
           </button>
         </div>

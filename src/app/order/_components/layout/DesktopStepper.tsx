@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, LayoutGrid, FileText, CreditCard, Save } from "lucide-react";
+import { Check, LayoutGrid, FileText, CreditCard, Save, Loader2 } from "lucide-react";
 import { cn } from "../../_utils/order.utils";
 import type { StepperProps } from "../../_props/order.props";
 
@@ -10,7 +10,7 @@ const STEPS = [
   { id: 3, title: "Review & Checkout", sub: "Final Step", icon: CreditCard },
 ];
 
-export function DesktopStepper({ currentStep, onStepClick }: StepperProps) {
+export function DesktopStepper({ currentStep, onStepClick, onSaveDraft, isSavingDraft }: StepperProps) {
   return (
     <div className="sticky top-24 flex flex-col gap-6">
       <div className="rounded-3xl border border-white/40 bg-white/20 p-6 backdrop-blur-xl shadow-xl shadow-black/5">
@@ -40,9 +40,13 @@ export function DesktopStepper({ currentStep, onStepClick }: StepperProps) {
           })}
         </div>
       </div>
-      <button className="flex items-center justify-center gap-2 rounded-2xl border border-white bg-white/60 p-4 text-sm font-bold text-slate-700 shadow-sm transition-all hover:bg-white hover:shadow-md active:scale-95">
-        <Save size={18} />
-        Save Draft
+      <button 
+        onClick={onSaveDraft}
+        disabled={isSavingDraft}
+        className="flex items-center justify-center gap-2 rounded-2xl border border-white bg-white/60 p-4 text-sm font-bold text-slate-700 shadow-sm transition-all hover:bg-white hover:shadow-md active:scale-95 disabled:opacity-60"
+      >
+        {isSavingDraft ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+        {isSavingDraft ? "Saving..." : "Save Draft"}
       </button>
     </div>
   );

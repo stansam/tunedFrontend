@@ -6,10 +6,10 @@ export type TrackingStepStatus = "completed" | "active" | "pending";
 
 export interface OrderAttachmentDTO {
   id: string;
-  name: string;
+  filename: string;
   url: string;
   size?: number;
-  mime_type?: string;
+  type?: string;
 }
 
 export interface OrderDetailResponseDTO {

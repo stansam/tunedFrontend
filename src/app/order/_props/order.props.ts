@@ -20,6 +20,7 @@ export interface StepProps {
   readonly updateStep3: (data: Partial<OrderFormStep3>) => void;
   readonly nextStep: () => void;
   readonly prevStep: () => void;
+  readonly goToStep: (step: 1 | 2 | 3) => void;
 }
 
 export interface ServiceSelectProps {
@@ -43,6 +44,8 @@ export interface ReportTypeProps {
 export interface StepperProps {
   readonly currentStep: 1 | 2 | 3;
   readonly onStepClick: (step: 1 | 2 | 3) => void;
+  readonly onSaveDraft: () => void;
+  readonly isSavingDraft?: boolean;
 }
 
 export interface SubtotalBarProps {

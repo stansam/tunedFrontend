@@ -3,6 +3,7 @@
 import { useOrderForm } from "@/app/order/_hooks/useOrderForm";
 import { useOrderOptions } from "@/app/order/_hooks/useOrderOptions";
 import { useOrderSocket } from "@/app/order/_services/order.socket";
+import { useOrderDraft } from "@/app/order/_hooks/useOrderDraft";
 import { OrderNavbar } from "@/app/order/_components/layout/OrderNavbar";
 import { OrderFooter } from "@/app/order/_components/layout/OrderFooter";
 import { DesktopStepper } from "@/app/order/_components/layout/DesktopStepper";
@@ -20,8 +21,11 @@ export function OrderWizard({ initialParams }: OrderWizardProps) {
   const { options, isError: optionsError } = useOrderOptions();
   const { 
     state, setState, priceState, setPriceState, updateStep1, updateStep2, updateStep3, 
-    nextStep, prevStep, validateStep1, validateStep2 
+    nextStep, prevStep, goToStep, validateStep1, validateStep2 
   } = useOrderForm(initialParams);
+
+  const { saveDraft: saveCurrentDraft, isSaving: isSavingDraft } = useOrderDraft();
+  const handleSaveDraft = () => saveCurrentDraft(state);
 
   if (optionsError) {
     return (
@@ -56,9 +60,9 @@ export function OrderWizard({ initialParams }: OrderWizardProps) {
 
   const renderStep = () => {
     switch (state.step) {
-      case 1: return <Step1ServiceDetails state={state} priceState={priceState} setPriceState={setPriceState} options={options} updateStep1={updateStep1} updateStep2={updateStep2} updateStep3={updateStep3} nextStep={nextStep} prevStep={prevStep} />;
-      case 2: return <Step2PaperDetails state={state} priceState={priceState} setPriceState={setPriceState} options={options} updateStep1={updateStep1} updateStep2={updateStep2} updateStep3={updateStep3} nextStep={nextStep} prevStep={prevStep} />;
-      case 3: return <Step3ReviewCheckout state={state} priceState={priceState} setPriceState={setPriceState} options={options} updateStep1={updateStep1} updateStep2={updateStep2} updateStep3={updateStep3} nextStep={nextStep} prevStep={prevStep} />;
+      case 1: return <Step1ServiceDetails state={state} priceState={priceState} setPriceState={setPriceState} options={options} updateStep1={updateStep1} updateStep2={updateStep2} updateStep3={updateStep3} nextStep={nextStep} prevStep={prevStep} goToStep={goToStep} />;
+      case 2: return <Step2PaperDetails state={state} priceState={priceState} setPriceState={setPriceState} options={options} updateStep1={updateStep1} updateStep2={updateStep2} updateStep3={updateStep3} nextStep={nextStep} prevStep={prevStep} goToStep={goToStep} />;
+      case 3: return <Step3ReviewCheckout state={state} priceState={priceState} setPriceState={setPriceState} options={options} updateStep1={updateStep1} updateStep2={updateStep2} updateStep3={updateStep3} nextStep={nextStep} prevStep={prevStep} goToStep={goToStep} />;
     }
   };
 
@@ -69,12 +73,12 @@ export function OrderWizard({ initialParams }: OrderWizardProps) {
       
       <div className="container mx-auto flex flex-1 flex-col gap-6 p-4 lg:flex-row lg:p-8">
         <aside className="hidden w-72 lg:block">
-          <DesktopStepper currentStep={state.step} onStepClick={handleStepClick} />
+          <DesktopStepper currentStep={state.step} onStepClick={handleStepClick} onSaveDraft={handleSaveDraft} isSavingDraft={isSavingDraft} />
         </aside>
 
         <section className="flex-1 space-y-6">
           <div className="lg:hidden">
-            <MobileStepper currentStep={state.step} onStepClick={handleStepClick} />
+            <MobileStepper currentStep={state.step} onStepClick={handleStepClick} onSaveDraft={handleSaveDraft} isSavingDraft={isSavingDraft} />
           </div>
           {renderStep()}
         </section>

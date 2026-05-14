@@ -36,14 +36,32 @@ export function useOrderSubmit() {
       const res = await submitOrder(payload);
       if (!res.ok) throw new Error(res.error.message);
 
+      let uploadError: string | null = null;
       if (state.step2.files.length > 0 && !state.step2.submitLater) {
-        await uploadOrderFiles(res.data.order_id, state.step2.files);
+        const uploadRes = await uploadOrderFiles(res.data.order_id, state.step2.files);
+        if (!uploadRes.ok) {
+          uploadError = uploadRes.error.message || "Failed to upload files.";
+        }
       }
 
-      return res.data;
+      return { ...res.data, uploadError };
     },
     onSuccess: (data) => {
-      toast.success(`Order #${data.order_number} placed successfully!`);
+      if (data.uploadError) {
+        sessionStorage.setItem(
+          "pendingUpload",
+          JSON.stringify({ orderId: data.order_id, orderNumber: data.order_number })
+        );
+        toast.warning("Order placed! File upload failed — you can retry from your order page.", {
+          duration: 8000,
+          action: {
+            label: "Go to Order",
+            onClick: () => router.push(`/client/orders/${data.order_number}` as Route),
+          },
+        });
+      } else {
+        toast.success(`Order #${data.order_number} placed successfully!`);
+      }
       router.push(`/client/orders` as Route);
     },
     onError: (err: Error) => {

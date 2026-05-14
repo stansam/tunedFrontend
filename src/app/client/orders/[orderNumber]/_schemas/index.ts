@@ -11,10 +11,10 @@ const OrderStatusSchema = z.enum([
 
 const OrderAttachmentSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  filename: z.string(),
   url: z.string(),
   size: z.number().optional(),
-  mime_type: z.string().optional(),
+  type: z.string().optional(),
 });
 
 export const OrderDetailResponseSchema = z.object({

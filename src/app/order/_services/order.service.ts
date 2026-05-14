@@ -7,7 +7,8 @@ import {
 } from "../_schemas/order.schema";
 import type { 
   CreateOrderResponse, 
-  DiscountValidationResult 
+  DiscountValidationResult, 
+  OrderFormState
 } from "../_types/order.types";
 
 export async function calculateOrderPrice(payload: CalculatePriceRequest, signal?: AbortSignal) {
@@ -44,4 +45,35 @@ export async function uploadOrderFiles(orderId: string, files: File[]) {
   const formData = new FormData();
   files.forEach(file => formData.append("files", file));
   return apiPost(`/orders/${orderId}/upload-files`, formData);
+}
+
+export async function saveDraft(state: OrderFormState): Promise<ApiResult<{ id: string; updated_at: string }>> {
+  const { computeDeadlineISO } = await import("../_utils/order.utils");
+  const payload: Record<string, unknown> = {
+    service_id: state.step1.serviceId,
+    level_id: state.step1.levelId,
+    deadline: state.step1.deadlineDate
+      ? computeDeadlineISO(state.step1.deadlineDate, state.step1.deadlineTime)
+      : undefined,
+    report_type: state.step1.reportType,
+    title: state.step2.title || undefined,
+    word_count: state.step2.wordCount || undefined,
+    page_count: state.step2.wordCount
+      ? Math.ceil(state.step2.wordCount / 275)
+      : undefined,
+    line_spacing: state.step2.lineSpacing,
+    format_style: state.step2.formatStyle,
+    sources: state.step2.sources,
+    instructions: state.step2.instructions || undefined,
+    discount_code: state.step3.discountCode || undefined,
+    points_to_redeem: state.step3.pointsToRedeem || undefined,
+  };
+  const res = await apiPost<unknown>("/orders/draft", payload);
+  if (!res.ok) return res;
+  const { OrderDraftSchema } = await import("../_schemas/order.schema");
+  const parsed = OrderDraftSchema.safeParse(res.data);
+  if (!parsed.success) {
+    return { ok: false, error: { message: "Invalid draft response", status: 422, errors: {} } } as ApiResult<never>;
+  }
+  return { ...res, data: parsed.data };
 }

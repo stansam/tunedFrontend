@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useOrderSubmit } from "@/app/order/_hooks/useOrderSubmit";
 
 export function Step3ReviewCheckout(props: StepProps) {
-  const { state, priceState, setPriceState, updateStep3 } = props;
+  const { state, priceState, setPriceState, updateStep3, goToStep } = props;
   const { submit, isLoading: isSubmitting } = useOrderSubmit();
 
   const handlePlaceOrder = () => {
@@ -25,7 +25,7 @@ export function Step3ReviewCheckout(props: StepProps) {
             <p className="text-sm text-slate-500 mt-1">Almost there! Review your order and apply any discounts.</p>
           </header>
 
-          <OrderSummarySection state={state} />
+          <OrderSummarySection state={state} goToStep={goToStep} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-black/5">
             <RewardPointsRedeemer 

@@ -80,10 +80,11 @@ export function useOrderForm(initialParams: Partial<OrderFormStep1>) {
 
   const nextStep = () => setState(p => ({ ...p, step: Math.min(p.step + 1, 3) as 1 | 2 | 3 }));
   const prevStep = () => setState(p => ({ ...p, step: Math.max(p.step - 1, 1) as 1 | 2 | 3 }));
+  const goToStep = (step: 1 | 2 | 3) => setState(p => ({ ...p, step }));
 
   return { 
     state, setState, priceState, setPriceState, 
     updateStep1, updateStep2, updateStep3, 
-    nextStep, prevStep, validateStep1, validateStep2 
+    nextStep, prevStep, goToStep, validateStep1, validateStep2 
   };
 }
