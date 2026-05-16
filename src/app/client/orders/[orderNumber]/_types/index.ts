@@ -48,11 +48,13 @@ export interface OrderCommentDTO {
   content: string;
   created_at: string;
   is_read?: boolean;
+  attachments?: OrderAttachmentDTO[];
 }
 
 export interface SendCommentDTO {
   order_id: string;
   content: string;
+  attachment_ids?: string[];
 }
 
 export interface TimeRemaining {

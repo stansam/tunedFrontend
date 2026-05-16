@@ -25,6 +25,7 @@ function buildUrl(path: string): string {
 
 function buildHeaders(isFormData: boolean, extra?: HeadersInit): HeadersInit {
   if (isFormData) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { "Content-Type": _omit, ...rest } = BASE_HEADERS;
     return extra ? { ...rest, ...extra } : rest;
   }

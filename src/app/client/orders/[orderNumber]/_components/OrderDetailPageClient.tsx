@@ -51,7 +51,7 @@ function DetailContent({ orderNumber }: { orderNumber: string }) {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
         <div className="min-w-0 flex-1 flex flex-col gap-4">
           {activeTab === "details" && <DetailsTabContent order={order} />}
-          {activeTab === "activity" && <ActivityTabContent />}
+          {activeTab === "activity" && <ActivityTabContent orderId={order.id} />}
           {activeTab === "delivery" && <DeliveryTabContent />}
         </div>
 
