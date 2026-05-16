@@ -75,3 +75,27 @@ export function formatCommentDay(isoDate: string): string {
     return "";
   }
 }
+
+export function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+export function isImageFile(filename: string): boolean {
+  return /\.(jpg|jpeg|png|gif|webp)$/i.test(filename);
+}
+
+export function isAudioFile(filename: string): boolean {
+  return /\.(webm|ogg|mp3|wav)$/i.test(filename);
+}
+
+export function getFileExtension(filename: string): string {
+  return filename.split(".").pop()?.toLowerCase() ?? "";
+}
+
+export function formatVoiceDuration(ms: number): string {
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60);
+  return `${m}:${String(s % 60).padStart(2, "0")}`;
+}

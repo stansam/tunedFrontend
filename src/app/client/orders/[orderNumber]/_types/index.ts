@@ -39,6 +39,14 @@ export interface OrderDetailResponseDTO {
   attachments?: OrderAttachmentDTO[];
 }
 
+export interface CommentAttachmentDTO {
+  id: string;
+  filename: string;
+  url: string;
+  size?: number;
+  type?: string;
+}
+
 export interface OrderCommentDTO {
   id: string;
   order_id: string;
@@ -48,7 +56,7 @@ export interface OrderCommentDTO {
   content: string;
   created_at: string;
   is_read?: boolean;
-  attachments?: OrderAttachmentDTO[];
+  attachments?: CommentAttachmentDTO[];
 }
 
 export interface SendCommentDTO {
@@ -69,3 +77,17 @@ export interface TrackingStep {
   label: string;
   status: TrackingStepStatus;
 }
+
+export interface PendingAttachment {
+  localId: string;
+  file: File;
+  previewUrl?: string;
+  uploadedId?: string;
+  status: "pending" | "uploading" | "done" | "error";
+  errorMsg?: string;
+}
+
+export type CommentEditState = {
+  commentId: string;
+  content: string;
+} | null;

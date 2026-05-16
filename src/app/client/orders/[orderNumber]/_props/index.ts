@@ -3,6 +3,9 @@ import type {
   OrderCommentDTO,
   OrderTab,
   OrderStatus,
+  PendingAttachment,
+  CommentAttachmentDTO,
+  CommentEditState,
 } from "../_types";
 
 export interface OrderDetailHeaderProps {
@@ -61,3 +64,53 @@ export interface OrderDetailSidebarProps {
 export interface OrderDetailPageClientProps {
   orderNumber: string;
 }
+
+export interface ActivityTabContentProps {
+  orderId: string;
+}
+
+export interface ActivityFeedProps {
+  orderId: string;
+}
+
+export interface CommentThreadProps {
+  comments: OrderCommentDTO[];
+  currentUserId: string;
+  onEdit: (commentId: string, content: string) => void;
+  onDelete: (commentId: string) => void;
+  isEditing: CommentEditState;
+  onCancelEdit: () => void;
+  onConfirmEdit: (commentId: string, content: string) => Promise<void>;
+}
+
+export interface CommentBubbleProps {
+  comment: OrderCommentDTO;
+  currentUserId: string;
+  dayLabel?: string;
+  onEdit: (commentId: string, content: string) => void;
+  onDelete: (commentId: string) => void;
+}
+
+export interface ActivityComposerProps {
+  onSend: (content: string, attachmentIds?: string[]) => Promise<void>;
+  isSending: boolean;
+  orderId: string;
+  orderNumber: string;
+}
+
+export interface CommentAttachmentPreviewProps {
+  attachments: PendingAttachment[];
+  onRemove: (localId: string) => void;
+}
+
+export interface CommentAttachmentBadgeProps {
+  attachment: CommentAttachmentDTO;
+}
+
+export interface VoiceRecorderProps {
+  onRecordingComplete: (blob: Blob, durationMs: number) => void;
+  onCancel: () => void;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ActivityTabSkeletonProps {}
