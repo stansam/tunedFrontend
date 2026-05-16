@@ -23,12 +23,14 @@ export function OrdersToolbar({
   isPending,
 }: OrdersToolbarProps) {
   const [localSearch, setLocalSearch] = useState(searchValue);
+  const [prevSearchValue, setPrevSearchValue] = useState(searchValue);
   const isMountedRef = useRef(false);
 
-  // Sync external → local (e.g., when filters are cleared)
-  useEffect(() => {
+  // Sync external → local during render
+  if (searchValue !== prevSearchValue) {
+    setPrevSearchValue(searchValue);
     setLocalSearch(searchValue);
-  }, [searchValue]);
+  }
 
   // Debounce local → parent (skip on initial mount)
   useEffect(() => {

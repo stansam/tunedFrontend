@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Mic, Square, Loader2 } from "lucide-react";
+import { Mic, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useVoiceRecorder } from "../_hooks/useVoiceRecorder";
 import { formatVoiceDuration } from "../_utils";

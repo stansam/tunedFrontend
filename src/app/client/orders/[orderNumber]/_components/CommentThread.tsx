@@ -7,7 +7,6 @@ import type { CommentThreadProps } from "../_props";
 
 export function CommentThread({
   comments, currentUserId, onEdit, onDelete,
-  isEditing, onCancelEdit, onConfirmEdit,
 }: CommentThreadProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 

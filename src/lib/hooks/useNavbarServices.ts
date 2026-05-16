@@ -60,16 +60,27 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     }
   }, [fetchedServices]);
 
-  useEffect(() => {
-    if (isOpen && activeCategoryId) {
-      fetchServicesForCategory(activeCategoryId);
+  const handleSetIsOpen = useCallback((open: boolean | ((prev: boolean) => boolean)) => {
+    setIsOpen(prev => {
+      const next = typeof open === 'function' ? open(prev) : open;
+      if (next && activeCategoryId) {
+        fetchServicesForCategory(activeCategoryId);
+      }
+      return next;
+    });
+  }, [activeCategoryId, fetchServicesForCategory]);
+
+  const handleSetActiveCategoryId = useCallback((id: string | null) => {
+    setActiveCategoryId(id);
+    if (isOpen && id) {
+      fetchServicesForCategory(id);
     }
-  }, [isOpen, activeCategoryId, fetchServicesForCategory]);
+  }, [isOpen, fetchServicesForCategory]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        handleSetIsOpen(false);
       }
     };
 
@@ -79,15 +90,15 @@ export function useNavbarServices(): UseNavbarServicesReturn {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, handleSetIsOpen]);
 
   const toggleDropdown = useCallback(() => {
-    setIsOpen((prev) => !prev);
-  }, []);
+    handleSetIsOpen((prev) => !prev);
+  }, [handleSetIsOpen]);
 
   const closeDropdown = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+    handleSetIsOpen(false);
+  }, [handleSetIsOpen]);
 
   const activeServices = useMemo(() => 
     activeCategoryId ? (fetchedServices[activeCategoryId] || []) : [], 
@@ -95,13 +106,13 @@ export function useNavbarServices(): UseNavbarServicesReturn {
 
   return {
     isOpen,
-    setIsOpen,
+    setIsOpen: handleSetIsOpen,
     toggleDropdown,
     closeDropdown,
     categories,
     isLoading,
     activeCategoryId,
-    setActiveCategoryId,
+    setActiveCategoryId: handleSetActiveCategoryId,
     activeServices,
     isServicesLoading,
     dropdownRef,

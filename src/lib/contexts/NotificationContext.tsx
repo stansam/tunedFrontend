@@ -14,12 +14,23 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const { isAuthenticated } = useAuthContext();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(isAuthenticated);
   const [error] = useState<string | null>(null);
+  const [prevIsAuthenticated, setPrevIsAuthenticated] = useState(isAuthenticated);
+
+  if (isAuthenticated !== prevIsAuthenticated) {
+    setPrevIsAuthenticated(isAuthenticated);
+    if (!isAuthenticated) {
+      setNotifications([]);
+      setUnreadCount(0);
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }
 
   const fetchNotifications = useCallback(async () => {
     if (!isAuthenticated) return;
-    setIsLoading(true);
     try {
       const res = await apiGet<NotificationItem[]>("/notifications");
       if (res.ok && res.data) {
@@ -32,11 +43,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     }
   }, [isAuthenticated]);
 
+  const refreshNotifications = useCallback(async () => {
+    setIsLoading(true);
+    await fetchNotifications();
+  }, [fetchNotifications]);
+
   useEffect(() => {
     if (!isAuthenticated) {
       webSocketService.disconnect();
-      setNotifications([]);
-      setUnreadCount(0);
       return;
     }
 
@@ -71,7 +85,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       setUnreadCount(0);
     });
 
-    fetchNotifications();
+    Promise.resolve().then(() => {
+      void fetchNotifications();
+    });
 
     return () => {
       socket.off("notification:count");
@@ -113,9 +129,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       error,
       markAsRead,
       markAllAsRead,
-      fetchNotifications,
+      fetchNotifications: refreshNotifications,
     }),
-    [unreadCount, notifications, isLoading, error, markAsRead, markAllAsRead, fetchNotifications]
+    [unreadCount, notifications, isLoading, error, markAsRead, markAllAsRead, refreshNotifications]
   );
 
   return (

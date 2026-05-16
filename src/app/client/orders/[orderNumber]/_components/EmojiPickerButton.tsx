@@ -2,9 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Smile } from "lucide-react";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
 import { Button } from "@/components/ui/button";
+import {
+  EmojiPicker,
+  EmojiPickerSearch,
+  EmojiPickerContent,
+  EmojiPickerFooter,
+} from "@/components/ui/emoji-picker";
 
 interface Props {
   onSelect: (emoji: { native: string }) => void;
@@ -39,17 +43,19 @@ export function EmojiPickerButton({ onSelect, disabled }: Props) {
       </Button>
 
       {show && (
-        <div className="absolute bottom-full left-0 mb-2 z-50 shadow-xl border border-slate-100 rounded-xl overflow-hidden">
-          <Picker
-            data={data}
-            onEmojiSelect={(e: { native: string }) => {
-              onSelect(e);
-              setShow(false);
+        <div className="absolute bottom-full left-0 mb-2 z-50 shadow-xl border border-slate-100 rounded-xl overflow-hidden bg-white w-[280px] h-[320px]">
+          <EmojiPicker
+            onEmojiSelect={(emoji) => {
+              if (emoji && emoji.emoji) {
+                onSelect({ native: emoji.emoji });
+                setShow(false);
+              }
             }}
-            theme="light"
-            previewPosition="none"
-            skinTonePosition="none"
-          />
+          >
+            <EmojiPickerSearch />
+            <EmojiPickerContent />
+            <EmojiPickerFooter />
+          </EmojiPicker>
         </div>
       )}
     </div>
