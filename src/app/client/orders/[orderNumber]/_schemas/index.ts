@@ -54,3 +54,23 @@ export const OrderCommentSchema = z.object({
   created_at: z.string(),
   is_read: z.boolean().optional(),
 });
+
+const DeliveryAttachmentSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  url: z.string(),
+  size: z.number().optional(),
+  mime_type: z.string().optional(),
+});
+
+export const OrderDeliverySchema = z.object({
+  id: z.string(),
+  order_id: z.string(),
+  delivery_number: z.number(),
+  status: z.enum(["pending", "ready_for_review", "approved", "revision_requested"]),
+  message: z.string(),
+  sender_name: z.string(),
+  sender_avatar_url: z.string().nullable().optional(),
+  created_at: z.string(),
+  attachments: z.array(DeliveryAttachmentSchema),
+});

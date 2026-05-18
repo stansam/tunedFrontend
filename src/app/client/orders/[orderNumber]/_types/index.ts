@@ -91,3 +91,33 @@ export type CommentEditState = {
   commentId: string;
   content: string;
 } | null;
+
+export type DeliveryStatus = "delivered" | "revised" | "redelivered";
+
+export interface OrderDeliveryFileResponseDTO {
+  id: string;
+  delivery_id: string;
+  filename: string;
+  original_filename: string;
+  file_path: string;
+  file_type: string;
+  file_format: string;
+  description: string | null;
+  file_size: number;
+  is_plagiarism_report: boolean;
+  file_icon: string;
+  created_at: string;
+}
+
+export interface OrderDeliveryResponseDTO {
+  id: string;
+  order_id: string;
+  delivery_status: DeliveryStatus;
+  status_color: string;
+  client_notified: boolean;
+  client_notified_at: string | null;
+  has_plagiarism_report: boolean;
+  delivery_files_count: number;
+  files: OrderDeliveryFileResponseDTO[];
+  created_at: string;
+}

@@ -6,6 +6,9 @@ import type {
   PendingAttachment,
   CommentAttachmentDTO,
   CommentEditState,
+  OrderDeliveryResponseDTO,
+  OrderDeliveryFileResponseDTO,
+  DeliveryStatus,
 } from "../_types";
 
 export interface OrderDetailHeaderProps {
@@ -112,5 +115,13 @@ export interface VoiceRecorderProps {
   onCancel: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ActivityTabSkeletonProps {}
+export interface DeliveryTabContentProps { order: OrderDetailResponseDTO }
+export interface DeliveryCardProps { delivery: OrderDeliveryResponseDTO; orderId: string; orderStatus: OrderStatus }
+export interface DeliveryActionsProps { delivery: OrderDeliveryResponseDTO; orderId: string; orderStatus: OrderStatus }
+export interface DeliveryMessageProps { delivery: OrderDeliveryResponseDTO }
+export interface CreateSimilarOrderCardProps { orderNumber: string }
+export interface DeliveryStatusBadgeProps { status: DeliveryStatus; statusColor: string }
+export interface DeliveryAttachmentItemProps { attachment: OrderDeliveryFileResponseDTO }
+export interface DeliveryAttachmentGridProps {
+  attachments: OrderDeliveryFileResponseDTO[];
+}

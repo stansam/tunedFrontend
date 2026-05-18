@@ -52,7 +52,7 @@ function DetailContent({ orderNumber }: { orderNumber: string }) {
         <div className="min-w-0 flex-1 flex flex-col gap-4">
           {activeTab === "details" && <DetailsTabContent order={order} />}
           {activeTab === "activity" && <ActivityTabContent orderId={order.id} />}
-          {activeTab === "delivery" && <DeliveryTabContent />}
+          {activeTab === "delivery" && <DeliveryTabContent order={order} />}
         </div>
 
         <aside className="w-full lg:w-72 lg:shrink-0">

@@ -59,6 +59,15 @@ export function formatDateTime(isoDate: string): string {
   }
 }
 
+export function formatDate(isoDate: string): string {
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      month: "long", day: "numeric", year: "numeric",
+    }).format(new Date(isoDate));
+  } catch { return isoDate; }
+}
+
+
 export function formatCommentDay(isoDate: string): string {
   try {
     const d = new Date(isoDate);
