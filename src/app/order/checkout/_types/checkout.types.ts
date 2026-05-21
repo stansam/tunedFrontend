@@ -52,10 +52,3 @@ export interface CheckoutFormState {
   cardholderName: string;
   saveCard: boolean;
 }
-
-export interface DirectTransferState {
-  proofReference: string;
-  paymentId: string | null;
-  bankDetails: string | null;
-  submitted: boolean;
-}
