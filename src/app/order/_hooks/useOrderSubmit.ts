@@ -62,7 +62,7 @@ export function useOrderSubmit() {
       } else {
         toast.success(`Order #${data.order_number} placed successfully!`);
       }
-      router.push(`/client/orders` as Route);
+      router.push(`/order/checkout?orderNumber=${data.order_number}` as Route);
     },
     onError: (err: Error) => {
       toast.error(err.message || "Failed to place order");

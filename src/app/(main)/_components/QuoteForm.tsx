@@ -1,5 +1,6 @@
 "use client";
 
+import { Route } from "next";
 import Link from "next/link";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useQuoteForm } from "@/lib/hooks/quote.hook";
@@ -25,7 +26,7 @@ export function QuoteForm({ options }: QuoteFormProps) {
     setPageCount,
   } = useQuoteForm();
 
-  const continueHref = "#"
+  const continueHref = `/order?service=${formState.serviceId}&level=${formState.levelId ?? ""}&pages=${formState.pageCount}&deadline=${formState.deadline}` as Route
   // formState.serviceId
   //   ? `/order?service=${formState.serviceId}&level=${formState.levelId ?? ""}&pages=${formState.pageCount}`
   //   : "/order";
