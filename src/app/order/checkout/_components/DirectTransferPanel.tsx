@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2, Tag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { BankDetailsDisplay } from "./BankDetailsDisplay";
 import { DirectTransferSuccess } from "./DirectTransferSuccess";
 import { DirectTransferSchema, type DirectTransferFormValues } from "../_schemas/checkout.schema";
@@ -14,7 +13,6 @@ import type { DirectTransferPanelProps } from "../_props/payment.props";
 export function DirectTransferPanel({
   method,
   onSubmit,
-  isSubmitting,
   isSuccess,
   paymentId,
 }: DirectTransferPanelProps) {
@@ -69,13 +67,6 @@ export function DirectTransferPanel({
         )}
       </div>
 
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold sm:hidden"
-      >
-        {isSubmitting ? "Submitting…" : "Submit Proof of Payment"}
-      </Button>
     </form>
   );
 }

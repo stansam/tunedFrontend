@@ -17,6 +17,7 @@ function CheckoutContent({ orderNumber, pesapalTrackingId }: CheckoutPageClientP
     isSubmitting,
     directSuccess, successPaymentId,
     handleCompletePayment,
+    handleInstantSubmit,
     handleDirectSubmit,
   } = useCheckoutPage(orderNumber, pesapalTrackingId);
 
@@ -34,7 +35,7 @@ function CheckoutContent({ orderNumber, pesapalTrackingId }: CheckoutPageClientP
             directMethod={directMethod}
             cardholderName={cardholderName}
             onCardholderNameChange={setCardholderName}
-            onInstantSubmit={handleCompletePayment}
+            onInstantSubmit={handleInstantSubmit}
             onDirectSubmit={handleDirectSubmit}
             onMobileSubmit={handleCompletePayment}
             isSubmitting={isSubmitting}

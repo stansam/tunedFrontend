@@ -35,7 +35,6 @@ export function useCheckoutPage(orderNumber: string, pesapalTrackingId?: string)
   }, [pesapalTrackingId, orderNumber, queryClient]);
 
   const { submit, isSubmitting } = useCheckout({
-    onPesapalRedirect: () => {},
     onManualSuccess: (pid) => {
       setDirectSuccess(true);
       setSuccessPaymentId(pid);
@@ -48,13 +47,23 @@ export function useCheckoutPage(orderNumber: string, pesapalTrackingId?: string)
     const methodId = getMethodIdForTab(activeTab, instantMethod, directMethod);
     if (!methodId) return;
     if (activeTab === "instant") {
-      submit({ order_id: order.id, payment_method_id: methodId });
+      document
+        .getElementById("instant-payment-form")
+        ?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
       return;
     }
     document
       .getElementById("direct-transfer-form")
       ?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-  }, [order, activeTab, instantMethod, directMethod, submit]);
+  }, [order, activeTab, instantMethod, directMethod]);
+
+  const handleInstantSubmit = useCallback(() => {
+    if (!order || !instantMethod?.id) return;
+    submit({
+      order_id: order.id,
+      payment_method_id: instantMethod.id,
+    });
+  }, [order, instantMethod, submit]);
 
   const handleDirectSubmit = useCallback((proofReference: string) => {
     if (!order || !directMethod?.id) return;
@@ -73,6 +82,7 @@ export function useCheckoutPage(orderNumber: string, pesapalTrackingId?: string)
     isSubmitting,
     directSuccess, successPaymentId,
     handleCompletePayment,
+    handleInstantSubmit,
     handleDirectSubmit,
   };
 }

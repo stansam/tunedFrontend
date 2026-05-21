@@ -41,6 +41,41 @@ export async function fetchOrderDetails(orderNumber: string): Promise<ApiResult<
   };
 }
 
+export async function fetchOrderDetailsById(orderId: string): Promise<ApiResult<OrderDetails>> {
+  const result = await apiGet<unknown>(`/orders/${orderId}`);
+
+  if (!result.ok) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error(`${LOG_PREFIX} Failed to fetch order by ID ${orderId}:`, result.error);
+    }
+    return result as ApiResult<never>;
+  }
+
+  const parsed = OrderDetailsSchema.safeParse(result.data);
+
+  if (!parsed.success) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error(`${LOG_PREFIX} Order schema violation for ID ${orderId}:`, parsed.error.format());
+      console.error(`${LOG_PREFIX} Raw data:`, result.data);
+    }
+    return {
+      ok: false,
+      error: {
+        message: "Invalid order response",
+        errors: { "": ["Schema validation failed"] },
+        status: "PARSE_ERROR",
+      },
+    };
+  }
+
+  return {
+    ok: true,
+    data: parsed.data,
+    message: result.message,
+    status: result.status,
+  };
+}
+
 export async function submitCheckout(
   payload: CheckoutRequestPayload
 ): Promise<ApiResult<CheckoutResult>> {

@@ -9,7 +9,6 @@ import type { CheckoutResult } from "../_types/payment.types";
 const LOG_PREFIX = "[useCheckout]";
 
 interface UseCheckoutOptions {
-  onPesapalRedirect: (redirectUrl: string) => void;
   onManualSuccess: (paymentId: string) => void;
 }
 
@@ -19,7 +18,7 @@ interface UseCheckoutReturn {
 }
 
 export function useCheckout(options: UseCheckoutOptions): UseCheckoutReturn {
-  const { onPesapalRedirect, onManualSuccess } = options;
+  const { onManualSuccess } = options;
 
   const { mutate, isPending } = useMutation<
     CheckoutResult,
@@ -40,7 +39,6 @@ export function useCheckout(options: UseCheckoutOptions): UseCheckoutReturn {
           console.info(`${LOG_PREFIX} Redirecting to Pesapal:`, data.redirect_url);
         }
         window.location.href = data.redirect_url;
-        onPesapalRedirect(data.redirect_url);
       } else if (data.action === "manual" && data.status === "pending_verification") {
         toast.success("Payment proof submitted! Awaiting verification.");
         onManualSuccess(data.payment_id ?? "");

@@ -19,25 +19,3 @@ export interface ManualCheckoutResult {
 }
 
 export type CheckoutResult = PesapalCheckoutResult | ManualCheckoutResult;
-
-export interface PaymentMethodsApiResponse {
-  id: string;
-  name: string;
-  category: string;
-  details: string | null;
-  is_active: boolean;
-}
-
-export interface OrderApiResponse {
-  id: string;
-  order_number: string;
-  total_price: string | number;
-  subtotal: string | number;
-  discount_amount: string | number;
-  tax?: string | number;
-  status: string;
-  paid: boolean;
-  service_type?: string;
-  pages?: number;
-  academic_level?: string;
-}
