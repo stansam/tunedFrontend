@@ -17,14 +17,14 @@ interface CheckoutLayoutProps {
 export default async function CheckoutLayout({ children }: CheckoutLayoutProps) {
   const authResult = await getServerAuthUser();
 
-  if (!authResult.ok) {
-    redirect("/auth/login?callbackUrl=/order/checkout");
-  }
+  // if (!authResult.ok) {
+  //   redirect("/auth/login?callbackUrl=/order/checkout");
+  // }
 
-  const initialUser: AuthUser = authResult.user;
+  const initialUser: AuthUser | null = authResult.ok ? authResult.user: null;
 
   return (
-    <AuthProvider initialUser={initialUser} skipInitialFetch>
+    <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
       <div className="flex min-h-screen flex-col">
         {children}
         <CheckoutFooter />
