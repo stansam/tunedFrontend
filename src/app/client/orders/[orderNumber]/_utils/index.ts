@@ -3,7 +3,7 @@ import type { OrderStatus, TimeRemaining } from "../_types";
 export const STATUS_LABELS: Record<OrderStatus, string> = {
   draft: "Draft",
   pending: "Pending",
-  in_progress: "In Progress",
+  active: "In Progress",
   completed: "Completed",
   overdue: "Overdue",
   cancelled: "Cancelled",
@@ -12,7 +12,7 @@ export const STATUS_LABELS: Record<OrderStatus, string> = {
 export const STATUS_BADGE_CLASSES: Record<OrderStatus, string> = {
   draft: "bg-slate-100 text-slate-700 border border-slate-300",
   pending: "bg-slate-800 text-white",
-  in_progress: "bg-emerald-500 text-white",
+  active: "bg-emerald-500 text-white",
   completed: "bg-blue-600 text-white",
   overdue: "bg-red-500 text-white",
   cancelled: "bg-zinc-400 text-white",
@@ -21,7 +21,7 @@ export const STATUS_BADGE_CLASSES: Record<OrderStatus, string> = {
 export const STATUS_DOT_CLASSES: Record<OrderStatus, string> = {
   draft: "bg-slate-400",
   pending: "bg-amber-400",
-  in_progress: "bg-emerald-500",
+  active: "bg-emerald-500",
   completed: "bg-blue-500",
   overdue: "bg-red-500",
   cancelled: "bg-zinc-400",

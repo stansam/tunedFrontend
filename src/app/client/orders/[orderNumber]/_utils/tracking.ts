@@ -11,7 +11,7 @@ const TRACKING_STEPS = [
 const STATUS_ACTIVE_COUNT: Record<OrderStatus, number> = {
   draft: 1,
   pending: 2,
-  in_progress: 3,
+  active: 3,
   completed: 5,
   overdue: 3,
   cancelled: 1,

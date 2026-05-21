@@ -1,7 +1,7 @@
 export type OrderStatus =
   | "draft"
   | "pending"
-  | "in_progress"
+  | "active"
   | "completed"
   | "overdue"
   | "cancelled";
