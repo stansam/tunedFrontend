@@ -7,6 +7,7 @@ import { NavUser } from "@/components/nav-user";
 import {
   Sidebar, SidebarContent, SidebarFooter,
   SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
+  SidebarSeparator
 } from "@/components/ui/sidebar";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -26,13 +27,25 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
   const { activeOrdersCount, balance } = useNavStats();
 
   const navItems = [
-    { title: "Dashboard", url: "/client/dashboard", icon: DashboardSquare01Icon, badge: undefined, label: undefined },
-    { title: "My Orders", url: "/client/orders", icon: Folder01Icon, badge: activeOrdersCount > 0 ? activeOrdersCount : undefined, label: undefined },
-    { title: "My Balance", url: "/client/balance", icon: Wallet01Icon, badge: undefined, label: `$${balance.toFixed(2)}` },
-    { title: "Planner", url: "/client/planner", icon: Calendar01Icon, badge: undefined, label: undefined },
-    { title: "Profile", url: "/client/profile", icon: UserIcon, badge: undefined, label: undefined },
-    { title: "Referrals", url: "/client/referrals", icon: GiftIcon, badge: undefined, label: undefined },
-    { title: "Settings", url: "/client/settings", icon: Settings05Icon, badge: undefined, label: undefined },
+    { label: "Workspace",
+      items: [
+        { title: "Dashboard", url: "/client/dashboard", icon: DashboardSquare01Icon, badge: undefined, label: undefined },
+        { title: "My Orders", url: "/client/orders", icon: Folder01Icon, badge: activeOrdersCount > 0 ? activeOrdersCount : undefined, label: undefined },
+        { title: "Planner", url: "/client/planner", icon: Calendar01Icon, badge: undefined, label: undefined },
+      ]
+    },
+    { label: "Finance",
+      items: [
+        { title: "My Balance", url: "/client/balance", icon: Wallet01Icon, badge: undefined, label: `$${balance.toFixed(2)}` },
+        { title: "Referrals", url: "/client/referrals", icon: GiftIcon, badge: undefined, label: undefined }
+      ],
+    },
+    { label: "Account",
+      items: [
+        { title: "Profile", url: "/client/profile", icon: UserIcon, badge: undefined, label: undefined },
+        { title: "Settings", url: "/client/settings", icon: Settings05Icon, badge: undefined, label: undefined },
+      ]
+    }
   ];
 
   return (
@@ -49,9 +62,19 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarSeparator />
+      <SidebarContent className="px-2">
+        {navItems.map((group, groupIndex) => (
+          <React.Fragment key={group.label}>
+            <div className="px-2 pt-4 pb-2">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                {group.label}
+              </p>
+            </div>
+
         <SidebarMenu className="mt-4 px-2">
-          {navItems.map((item) => (
+          {/* {navItems.map((item) => ( */}
+          {group.items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title}>
                 <Link href={{pathname: item.url}} className="flex items-center justify-between w-full">
@@ -66,6 +89,11 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
+        {groupIndex < navItems.length - 1 && (
+              <SidebarSeparator className="my-3" />
+            )}
+          </React.Fragment>
+        ))}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user ? { name: user.name, email: user.email, avatar: user.avatar_url ?? "" } : { name: "Guest", email: "", avatar: "" }} />
