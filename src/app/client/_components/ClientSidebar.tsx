@@ -49,11 +49,11 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
   ];
 
   return (
-    <Sidebar className="bg-[#0c111d]" collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5! ">
               <Link href={{pathname: "/client/dashboard"}}>
                 <HugeiconsIcon icon={CommandIcon} strokeWidth={2} className="size-5!" />
                 <span className="text-base font-semibold">TunedEssays</span>
@@ -62,12 +62,12 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarSeparator />
+      <SidebarSeparator className="bg-white/10" />
       <SidebarContent className="px-2">
         {navItems.map((group, groupIndex) => (
           <React.Fragment key={group.label}>
             <div className="px-2 pt-4 pb-2">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
                 {group.label}
               </p>
             </div>
@@ -76,7 +76,7 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
           {/* {navItems.map((item) => ( */}
           {group.items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title}>
+              <SidebarMenuButton asChild isActive={pathname === item.url} tooltip={item.title} className="text-slate-300 hover:bg-white/5 hover:text-white data-[active=true]:bg-white/10 data-[active=true]:text-white transition-colors">
                 <Link href={{pathname: item.url}} className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2">
                     <HugeiconsIcon icon={item.icon} strokeWidth={2} />
@@ -90,7 +90,7 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
           ))}
         </SidebarMenu>
         {groupIndex < navItems.length - 1 && (
-              <SidebarSeparator className="my-3" />
+              <SidebarSeparator className="my-3 bg-white/10" />
             )}
           </React.Fragment>
         ))}
