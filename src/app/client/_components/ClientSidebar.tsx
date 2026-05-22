@@ -53,10 +53,15 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5! ">
-              <Link href={{pathname: "/client/dashboard"}}>
-                <HugeiconsIcon icon={CommandIcon} strokeWidth={2} className="size-5!" />
-                <span className="text-base font-semibold">TunedEssays</span>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-2 hover:bg-white/5 transition-colors rounded-xl ">
+              <Link href={{pathname: "/client/dashboard"}} className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <HugeiconsIcon icon={CommandIcon} strokeWidth={2} className="size-5 text-emerald-400" />
+                </div>
+                <div className="flex flex-col leading-none">
+                  <span className="text-sm font-semibold text-white">TunedEssays</span>
+                  <span className="text-xs text-emerald-400">Client Portal</span>
+                </div>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -95,8 +100,10 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
           </React.Fragment>
         ))}
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={user ? { name: user.name, email: user.email, avatar: user.avatar_url ?? "" } : { name: "Guest", email: "", avatar: "" }} />
+      <SidebarFooter className="border-t border-white/10">
+        <div className="rounded-xl bg-white/3 hover:bg-white/5 transition-colors p-2">
+          <NavUser user={user ? { name: user.name, email: user.email, avatar: user.avatar_url ?? "" } : { name: "Guest", email: "", avatar: "" }} />
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
