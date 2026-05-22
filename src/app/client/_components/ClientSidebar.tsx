@@ -49,7 +49,7 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
   ];
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar className="bg-[#0c111d]" collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
