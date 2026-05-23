@@ -22,7 +22,8 @@ export function useSamples(
   const [,         setPageNum]  = useState(initialResponse.pagination.page);
   const [isPending, startTransition] = useTransition();
   
-  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // const services = useMemo(() => {
   //   const map = new Map<string, SampleService>();
@@ -85,8 +86,12 @@ export function useSamples(
     setPageNum(num);
     fetchAndUpdate(filters, num);
     // Scroll to grid top
+    // const grid = document.getElementById("samples-grid-top");
+    // if (grid) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (typeof document !== "undefined") {
     const grid = document.getElementById("samples-grid-top");
-    if (grid) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    grid?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
   }, [filters, fetchAndUpdate]);
 
   const clearFilters = useCallback(() => {

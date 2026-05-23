@@ -12,7 +12,7 @@ import { Footer } from "./_components/Footer";
 import { ServiceCategory, Sample, BlogPostResponse } from "./_types";
 import type { QuoteFormOptions } from "@/lib/types";
 
-import { 
+import {
   FALLBACK_FEATURED_SERVICES, FALLBACK_SAMPLES, FALLBACK_BLOGS
 } from "./_fallback/featured.fallback";
 import { FALLBACK_SERVICES, FALLBACK_LEVELS } from "./_fallback/quote.fallback";
