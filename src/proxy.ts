@@ -57,24 +57,18 @@ export function proxy(request: NextRequest): NextResponse {
   const host = request.headers.get("host");
   const subdomain = getSubdomain(host);
 
-  if (subdomain === "app") {
-    url.pathname = `/client${originalPath}`;
-    // return NextResponse.rewrite(url);
-  }
+  const enableSubdomains = process.env.ENABLE_SUBDOMAIN_ROUTING === "true";
 
-  if (subdomain === "admin") {
-    url.pathname = `/admin${originalPath}`;
-    // return NextResponse.rewrite(url);
-  }
-
-  if (subdomain === "auth") {
-    url.pathname = `/auth${originalPath}`;
-    // return NextResponse.rewrite(url);
-  }
-
-  if (subdomain === "order") {
-    url.pathname = `/order${originalPath}`;
-    // return NextResponse.rewrite(url);
+  if (enableSubdomains && subdomain) {
+    if (subdomain === "app" && !originalPath.startsWith("/client")) {
+      url.pathname = `/client${originalPath}`;
+    } else if (subdomain === "admin" && !originalPath.startsWith("/admin")) {
+      url.pathname = `/admin${originalPath}`;
+    } else if (subdomain === "auth" && !originalPath.startsWith("/auth")) {
+      url.pathname = `/auth${originalPath}`;
+    } else if (subdomain === "order" && !originalPath.startsWith("/order")) {
+      url.pathname = `/order${originalPath}`;
+    }
   }
 
   const pathname = url.pathname; //const {pathname} = request.nextUrl

@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ['195.35.37.113'],
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS?.split(",") ?? [],
   typedRoutes: true,
 
   async rewrites() {

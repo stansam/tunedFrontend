@@ -1,16 +1,11 @@
 "use client";
 
-import { CheckCircle2, Circle, Clock } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, Circle, Clock, ShoppingCart } from "lucide-react";
+import { MILESTONE_STEPS } from "../_utils/dashboard.utils";
 import type { OrderMilestoneTrackerProps } from "../_props/dashboard.props";
 
-const MILESTONES = [
-  { label: "Pending",   threshold: 0,   completedAt: 25  },
-  { label: "Active",    threshold: 25,  completedAt: 75  },
-  { label: "Review",    threshold: 75,  completedAt: 90  },
-  { label: "Completed", threshold: 90,  completedAt: 100 },
-] as const;
-
-function MilestoneStep({ label, active, completed }: { label: string; active: boolean; completed: boolean }) {
+function MilestoneStep({ label, active, completed }: { readonly label: string; readonly active: boolean; readonly completed: boolean; }) {
   return (
     <div className="flex flex-col items-center">
       <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2 bg-white ${completed ? "border-emerald-600" : active ? "border-amber-500" : "border-slate-300"}`}>
@@ -18,7 +13,9 @@ function MilestoneStep({ label, active, completed }: { label: string; active: bo
           active ? <Clock className="w-3 h-3 text-amber-500 animate-pulse" /> :
             <Circle className="w-3 h-3 text-slate-300" />}
       </div>
-      <span className={`mt-2 text-xs font-medium ${active ? "text-slate-800" : "text-slate-400"}`}>{label}</span>
+      <span className={`mt-2 text-[10px] sm:text-xs font-medium ${active ? "text-slate-800" : "text-slate-400"}`}>
+        {label}
+      </span>
     </div>
   );
 }
@@ -26,8 +23,12 @@ function MilestoneStep({ label, active, completed }: { label: string; active: bo
 export function OrderMilestoneTracker({ order }: OrderMilestoneTrackerProps) {
   if (!order) {
     return (
-      <div className="rounded-xl border bg-white shadow-sm p-6 flex flex-col items-center justify-center min-h-[160px] text-slate-500 text-sm">
-        No active orders to track.
+      <div className="rounded-xl border bg-white shadow-sm p-6 flex flex-col items-center justify-center min-h-[160px] text-slate-500 text-sm gap-3">
+        <ShoppingCart className="h-8 w-8 text-slate-300" />
+        <p>No active orders to track.</p>
+        <Link href="/client/orders/new" className="text-xs text-emerald-600 hover:underline font-medium">
+          Place your first order →
+        </Link>
       </div>
     );
   }
@@ -44,7 +45,7 @@ export function OrderMilestoneTracker({ order }: OrderMilestoneTrackerProps) {
             <div className="bg-emerald-600 h-2 rounded-full transition-all duration-1000 ease-in-out" style={{ width: `${order.progress}%` }} />
           </div>
           <div className="relative z-10 flex justify-between">
-            {MILESTONES.map((m) => (
+            {MILESTONE_STEPS.map((m) => (
               <MilestoneStep
                 key={m.label}
                 label={m.label}
@@ -58,3 +59,4 @@ export function OrderMilestoneTracker({ order }: OrderMilestoneTrackerProps) {
     </div>
   );
 }
+

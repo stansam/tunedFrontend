@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { KPIData, DashboardAnalytics, DashboardTracking, DashboardAlerts } from "../_types/dashboard.types";
 
 export interface KPICardsProps {
@@ -10,7 +11,7 @@ export interface KPICardProps {
   readonly description: string;
   readonly badgeLabel: string;
   readonly badgeClass: string;
-  readonly icon: React.ReactNode;
+  readonly icon: ReactNode;
 }
 
 export interface SpendingVelocityChartProps {

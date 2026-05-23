@@ -47,3 +47,7 @@ export async function fetchClientOrders(
 
   return { ...result, data: parsed.data as OrderListResponseDTO };
 }
+
+export async function requestReorder(orderId: string): Promise<ApiResult<{ redirect_url: string }>> {
+  return apiPost<{ redirect_url: string }>(`/orders/${orderId}/reorder`, {});
+}
