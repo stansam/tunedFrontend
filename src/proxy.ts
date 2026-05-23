@@ -35,7 +35,9 @@ function isAuthRoute(pathname: string): boolean {
 function getSubdomain(host: string | null): string | null {
   if (!host) return null;
 
-  const parts = host.split(".");
+  // const parts = host.split(".");
+  const cleanHost = host?.split(":")[0];
+  const parts = cleanHost?.split(".") ?? [];
   
   if (!parts || parts.length <= 2) return null;
   
@@ -57,7 +59,7 @@ export function proxy(request: NextRequest): NextResponse {
   const host = request.headers.get("host");
   const subdomain = getSubdomain(host);
 
-  const enableSubdomains = process.env.ENABLE_SUBDOMAIN_ROUTING === "true";
+  const enableSubdomains = process.env.ENABLE_SUBDOMAIN_ROUTING === "false";
 
   if (enableSubdomains && subdomain) {
     if (subdomain === "app" && !originalPath.startsWith("/client")) {
