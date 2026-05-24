@@ -9,6 +9,7 @@ declare namespace NodeJS {
     EXTERNAL_API_URL: string;
     ALLOWED_DEV_ORIGINS: string;
     ENABLE_SUBDOMAIN_ROUTING: string;
+    NEXT_PUBLIC_ROOT_DOMAIN: string;
 
     NODE_ENV: "development" | "production" | "test";
     NEXT_PUBLIC_VERCEL_ENV?: "production" | "preview" | "development";
