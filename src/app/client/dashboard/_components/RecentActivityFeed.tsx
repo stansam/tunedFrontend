@@ -9,7 +9,7 @@ import type { RecentActivityFeedProps } from "../_props/dashboard.props";
 export function RecentActivityFeed({ feed }: RecentActivityFeedProps) {
   if (feed.length === 0) {
     return (
-      <div className="rounded-xl border bg-white shadow-sm p-6 text-center text-slate-500 text-sm h-full flex flex-col items-center justify-center gap-3 min-h-[160px]">
+      <div className="rounded-xl border bg-white shadow-sm p-6 text-center text-slate-500 text-sm h-fit flex flex-col items-center justify-center gap-3 min-h-[160px]">
         <History className="h-8 w-8 text-slate-300" />
         <p>No recent activity.</p>
         <Link href="/client/orders/new" className="text-xs text-emerald-600 hover:underline font-medium flex items-center gap-1">
@@ -20,7 +20,7 @@ export function RecentActivityFeed({ feed }: RecentActivityFeedProps) {
   }
 
   return (
-    <div className="rounded-xl border bg-white shadow-sm h-full flex flex-col">
+    <div className="rounded-xl border bg-white shadow-sm h-fit flex flex-col">
       <div className="p-6 pb-2 border-b">
         <h3 className="tracking-tight text-sm font-semibold">Recent Activity</h3>
       </div>
