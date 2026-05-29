@@ -14,9 +14,12 @@ export function useFeaturedContent(
     () =>
       toBlogPostViewModels(seed.blogs).sort((a, b) => {
         if (a.isFeatured !== b.isFeatured) return a.isFeatured ? -1 : 1;
-        return (
-          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-        );
+        if (a.publishedAt && b.publishedAt) {
+          return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+        }
+        if (a.publishedAt) return -1;
+        if (b.publishedAt) return 1;
+        return 0;
       }),
     [seed.blogs]
   );

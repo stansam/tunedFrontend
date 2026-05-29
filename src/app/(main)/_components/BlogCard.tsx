@@ -87,9 +87,11 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
               <Clock size={11} aria-hidden="true" />
               {post.readTimeMinutes} min read
             </span>
-            <span className="text-xs text-white opacity-50">
-              {formatPublishedDate(post.publishedAt)}
-            </span>
+            {post.publishedAt && (
+              <span className="text-xs text-white opacity-50">
+                {formatPublishedDate(post.publishedAt)}
+              </span>
+            )}
           </div>
         </div>
 

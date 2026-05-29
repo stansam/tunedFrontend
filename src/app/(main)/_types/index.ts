@@ -59,7 +59,7 @@ export interface BlogPostResponse {
   readonly meta_description: string;
   readonly is_published:     boolean;
   readonly is_featured:      boolean;
-  readonly published_at:     ISODateString;
+  readonly published_at:     ISODateString | null;
   readonly tags:             readonly Tag[];
 }
 
@@ -79,7 +79,7 @@ export interface BlogPostViewModel {
   readonly featuredImage:  string;
   readonly categoryId:     CategoryId;
   readonly tags:           readonly Tag[];
-  readonly publishedAt:    ISODateString;
+  readonly publishedAt:    ISODateString | null;
   readonly isFeatured:     boolean;
   readonly readTimeMinutes: number;
 }

@@ -23,7 +23,7 @@ export function toBlogPostViewModel(post: BlogPostResponse): BlogPostViewModel {
     featuredImage:   post.featured_image,
     categoryId:      post.category_id,
     tags:            post.tags,
-    publishedAt:     post.published_at,
+    publishedAt:     post.published_at ?? null,
     isFeatured:      post.is_featured,
     readTimeMinutes: estimateReadTime(post.content),
   };
