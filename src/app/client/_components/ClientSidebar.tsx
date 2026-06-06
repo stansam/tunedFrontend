@@ -9,10 +9,11 @@ import {
   SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
   SidebarSeparator
 } from "@/components/ui/sidebar";
+import Logo from "@/components/shared/logo";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   DashboardSquare01Icon, Folder01Icon, Wallet01Icon,
-  Calendar01Icon, UserIcon, Settings05Icon, CommandIcon, GiftIcon,
+  Calendar01Icon, UserIcon, Settings05Icon, GiftIcon,
 } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import type { AuthUser } from "@/lib/types/auth.type";
@@ -56,7 +57,7 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-2 hover:bg-white/5 transition-colors rounded-xl ">
               <Link href={{pathname: "/client/dashboard"}} className="flex items-center gap-3">
                 <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                  <HugeiconsIcon icon={CommandIcon} strokeWidth={2} className="size-5 text-emerald-400" />
+                  <Logo />
                 </div>
                 <div className="flex flex-col leading-none">
                   <span className="text-sm font-semibold text-white">TunedEssays</span>

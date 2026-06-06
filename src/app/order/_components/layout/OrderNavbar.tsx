@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { Bell, HelpCircle, ShieldCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Logo from "@/components/shared/logo";
 
 export function OrderNavbar() {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ export function OrderNavbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
-            <ShieldCheck size={20} />
+            <Logo />
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-900">TunedEssays</span>
         </Link>

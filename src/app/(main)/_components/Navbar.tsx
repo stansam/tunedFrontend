@@ -2,7 +2,7 @@
 
 import Link, { type LinkProps } from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
-import Logo from "./logo";
+import Logo from "../../../components/shared/logo";
 import { cn } from "@/lib/utils";
 import { ServicesDropdown } from "./ServicesDropdown";
 import { MobileServicesMenu } from "./MobileServicesMenu";
