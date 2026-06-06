@@ -20,7 +20,7 @@ export function HeroLeftBlock({
       {/* <div className="relative hidden md:block h-[50px] w-[50px] sm:h-[130px] sm:w-[220px]">
         <QuestionIllustration />
       </div> */}
-      <div className="relative -top-20 -left-[5%] sm:left-0 h-[180px] w-[290px]">
+      <div className="relative -top-20 left-[-5%] sm:left-0 h-[180px] w-[290px]">
         <BookIllustration />
       </div>
 

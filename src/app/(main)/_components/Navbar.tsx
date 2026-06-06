@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
 import Link, { type LinkProps } from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
-// import { Button } from "@/components/ui/button";
+import Logo from "./logo";
 import { cn } from "@/lib/utils";
 import { ServicesDropdown } from "./ServicesDropdown";
 import { MobileServicesMenu } from "./MobileServicesMenu";
@@ -60,10 +59,7 @@ export function Navbar({ activeRoute = "/" }: NavbarProps) {
           aria-label="TunedEssays home"
         >
           <div className="relative flex items-center justify-center h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 group-hover:scale-105 transition-transform duration-300">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 21C7 14 13 7 21 3C19 11 14 18 4 21Z" fill="currentColor" opacity="0.9" />
-              <path d="M4 21C6 17 9 13 13 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+            <Logo />
           </div>
           <span className="flex items-center gap-0.5">
             Tuned<span className="text-emerald-500">Essays</span>
