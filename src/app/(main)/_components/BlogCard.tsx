@@ -35,7 +35,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
         src={backgroundImage}
         alt="blog image"
         fill
-        className="object-cover object-center absolute inset-0 -z-10"
+        className="object-cover object-center absolute inset-0 z-0"
         onError={() => setImgError(true)}
         sizes={isPrimary ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
         priority={isPrimary}
