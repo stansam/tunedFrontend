@@ -72,7 +72,7 @@ export function MobileNavbarAuthSection(): React.ReactElement {
           className="w-full h-14 border-slate-200 text-slate-700 font-bold rounded-2xl text-base justify-start gap-3 pl-5"
           asChild
         >
-          <Link href={{pathname: "/client"}}>
+          <Link href={{pathname: "/client/dashboard"}}>
             <LayoutDashboard size={18} aria-hidden="true" />
             Dashboard
           </Link>
@@ -83,7 +83,7 @@ export function MobileNavbarAuthSection(): React.ReactElement {
           className="w-full h-14 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl text-base shadow-xl shadow-emerald-500/10"
           asChild
         >
-          <Link href="#">Order Now</Link>
+          <Link href="/order">Order Now</Link>
         </Button>
 
         <button
@@ -120,7 +120,7 @@ export function MobileNavbarAuthSection(): React.ReactElement {
         className="w-full h-14 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl text-base shadow-xl shadow-emerald-500/10"
         asChild
       >
-        <Link href="#">Order Now</Link>
+        <Link href="/order">Order Now</Link>
       </Button>
     </div>
   );

@@ -4,6 +4,7 @@ import { HeroSection } from "./_components/HeroSection";
 import { HeroSkeleton } from "./_components/skeleton";
 import { fetchOptions } from "@/lib/services/quote.service";
 import { fetchFeaturedContent } from "@/lib/services/content.service";
+import { FeaturedServices } from "./_components/FeaturedServices";
 import { FeaturedBlogs } from "./_components/FeaturedBlogs";
 import { FeaturedSamples } from "./_components/FeaturedSamples";
 import { HowItWorks } from "./_components/HowItWorks";
@@ -55,9 +56,10 @@ export default async function HomePage() {
         <Suspense fallback={<HeroSkeleton />}>
           <HeroSection
             options={options}
-            featuredServices={featuredServices}
           />
         </Suspense>
+
+        <FeaturedServices featuredServices={featuredServices} />
 
         <FeaturedBlogs blogs={blogs} />
         

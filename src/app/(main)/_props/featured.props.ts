@@ -9,14 +9,19 @@ import type { ResolvedServiceIcon } from "@/lib/utils/resolveServiceIcon";
 
 export type ServiceIconRecord = Readonly<Record<string, ResolvedServiceIcon>>;
 
-export interface ServicesMarqueeProps {
+// export interface ServicesMarqueeProps {
+//   readonly featuredServices: readonly ServiceCategory[];
+//   readonly iconRecord:       ServiceIconRecord;
+// }
+export interface FeaturedServicesProps {
   readonly featuredServices: readonly ServiceCategory[];
-  readonly iconRecord:       ServiceIconRecord;
+  readonly className?: string;
 }
 
 export interface ServiceCardProps {
   readonly service:    ServiceCategory;
   readonly icon:       ResolvedServiceIcon;
+  readonly className?: string;
 }
 
 export interface FeaturedBlogsProps {
