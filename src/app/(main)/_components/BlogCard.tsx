@@ -44,7 +44,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
       <div
         aria-hidden="true"
         className={cn(
-          "absolute inset-0 bg-slate-900 transition-opacity duration-500",
+          "absolute inset-0 z-10 bg-slate-900 transition-opacity duration-500",
           isPrimary
             ? "opacity-30 group-hover:opacity-40"
             : "opacity-35 group-hover:opacity-45"
