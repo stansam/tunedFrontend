@@ -1,3 +1,5 @@
+import { RefObject } from "react";
+
 import type {
   ServiceCategory,
   Sample,
@@ -6,6 +8,7 @@ import type {
   SampleViewModel,
 } from "../_types";
 import type { ResolvedServiceIcon } from "@/lib/utils/resolveServiceIcon";
+import { TabId } from "../_types/featured.types";
 
 export type ServiceIconRecord = Readonly<Record<string, ResolvedServiceIcon>>;
 
@@ -24,6 +27,30 @@ export interface ServiceCardProps {
   readonly className?: string;
 }
 
+export interface FeaturedServicesDesktopGridProps {
+  readonly activeTab: string;
+  readonly filteredServices: readonly ServiceCategory[];
+  readonly iconRecord: ServiceIconRecord;
+}
+
+export interface FeaturedServicesIndicatorsProps {
+  readonly count: number;
+  readonly activeIndex: number;
+  readonly onDotClick: (index: number) => void;
+}
+
+export interface FeaturedServicesMobileCarouselProps {
+  readonly scrollContainerRef: RefObject<HTMLDivElement | null>;
+  readonly onScroll: () => void;
+  readonly filteredServices: readonly ServiceCategory[];
+  readonly iconRecord: ServiceIconRecord;
+}
+
+export interface FeaturedServicesTabsProps {
+  readonly activeTab: TabId;
+  readonly onTabChange: (tabId: TabId) => void;
+}
+
 export interface FeaturedBlogsProps {
   readonly blogs:             readonly BlogPostResponse[];
   readonly title?:            string;
@@ -31,6 +58,10 @@ export interface FeaturedBlogsProps {
   readonly backgroundLabel?:  string;
   readonly backgroundPosition?: "left" | "right";
   readonly className?:        string;
+}
+
+export interface UseFeaturedServicesParams {
+  readonly featuredServices: readonly ServiceCategory[];
 }
 
 export interface BlogCardProps {
