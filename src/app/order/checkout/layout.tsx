@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { AuthProvider } from "@/lib/auth/Context";
@@ -16,14 +17,14 @@ interface CheckoutLayoutProps {
 export default async function CheckoutLayout({ children }: CheckoutLayoutProps) {
   const authResult = await getServerAuthUser();
 
-  // if (!authResult.ok) {
-  //   redirect("/auth/login?callbackUrl=/order/checkout");
-  // }
+  if (!authResult.ok) {
+    redirect("/auth/login?callbackUrl=/order/checkout");
+  }
 
-  const initialUser: AuthUser | null = authResult.ok ? authResult.user: null;
+  const initialUser: AuthUser = authResult.user;
 
   return (
-    <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
+    <AuthProvider initialUser={initialUser} skipInitialFetch={true}>
       <div className="flex min-h-screen flex-col">
         {children}
         <CheckoutFooter />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "@/app/globals.css";
+import { redirect } from "next/navigation";
 import { AuthProvider } from "@/lib/auth/Context";
 import type { AuthUser } from "@/lib/types/auth.type";
 import { getServerAuthUser } from "@/lib/services/auth.server.service";
@@ -32,6 +33,11 @@ export default async function AuthRootLayout({
 }>) {
   const authResult = await getServerAuthUser();
   const initialUser: AuthUser | null = authResult.ok ? authResult.user : null;
+
+  if(initialUser){
+    redirect("/client/dashboard");
+  }
+    
 
   return (
     <html lang="en" className={dmSans.variable} data-scroll-behavior="smooth">
