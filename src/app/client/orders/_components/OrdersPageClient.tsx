@@ -20,7 +20,7 @@ function OrdersContent() {
   } = useOrderFilters();
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-5">
+    <div className="flex w-full flex-col gap-5 px-4 lg:px-6">
       <OrdersHeader filters={filters} />
 
       <OrderStatusTabs

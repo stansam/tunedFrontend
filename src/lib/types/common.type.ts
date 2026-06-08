@@ -23,6 +23,7 @@ export interface RequestOptions {
   next?: NextFetchRequestConfig;
   credentials?: RequestCredentials;
   signal?: AbortSignal;
+  responseType?: "json" | "blob";
 }
 
 export type NavLink = {

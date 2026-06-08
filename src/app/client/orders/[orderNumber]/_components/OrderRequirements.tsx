@@ -5,6 +5,7 @@ import { ChevronUp, ChevronDown, Paperclip } from "lucide-react";
 import { useUploadOrderAttachment } from "../_hooks/useUploadOrderAttachment";
 import { formatDateTime } from "../_utils";
 import type { OrderRequirementsProps } from "../_props";
+import { AttachmentItem, DownloadAllButton } from "./OrderAttachment";
 
 const AFFIRMATION =
   "I affirm that the information I've provided is accurate and complete. " +
@@ -101,19 +102,27 @@ export function OrderRequirements({ order }: OrderRequirementsProps) {
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Attachments
               </p>
-              <button
-                type="button"
-                disabled={upload.isPending}
-                onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-all hover:bg-emerald-100 active:scale-95 disabled:opacity-50"
-              >
-                <Paperclip className="h-3 w-3" />
-                {upload.isPending
-                  ? "Uploading..."
-                  : !order.attachments?.length
-                  ? "Upload Materials"
-                  : "Add More Files"}
-              </button>
+              <div className="flex items-center gap-2">
+                {!!order.attachments?.length && (
+                  <DownloadAllButton
+                    orderId={order.id}
+                    orderNumber={order.order_number}
+                  />
+                )}
+                <button
+                  type="button"
+                  disabled={upload.isPending}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-all hover:bg-emerald-100 active:scale-95 disabled:opacity-50"
+                >
+                  <Paperclip className="h-3 w-3" />
+                  {upload.isPending
+                    ? "Uploading..."
+                    : !order.attachments?.length
+                    ? "Upload Materials"
+                    : "Add More Files"}
+                </button>
+              </div>
             </div>
             <input
               ref={fileInputRef}
@@ -131,15 +140,7 @@ export function OrderRequirements({ order }: OrderRequirementsProps) {
               <ul className="mt-2 flex flex-col gap-1.5">
                 {order.attachments.map((att) => (
                   <li key={att.id}>
-                    <a
-                      href={att.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-emerald-600 hover:underline"
-                    >
-                      <Paperclip className="h-3.5 w-3.5 shrink-0" />
-                      {att.filename}
-                    </a>
+                    <AttachmentItem attachment={att} orderId={order.id} />
                   </li>
                 ))}
               </ul>

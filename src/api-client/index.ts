@@ -92,6 +92,7 @@ export async function apiRequest<T>(
     next,
     credentials = "include",
     signal,
+    responseType = "json",
   } = options;
 
   const isFormData = body instanceof FormData;
@@ -118,6 +119,16 @@ export async function apiRequest<T>(
 
     if (!res.ok) {
       return await parseErrorBody(res);
+    }
+
+    if (responseType === "blob") {
+      const blob = await res.blob();
+      return {
+        ok: true,
+        data: blob as unknown as T,
+        message: res.statusText,
+        status: res.status,
+      };
     }
 
     const contentType = res.headers.get("content-type");

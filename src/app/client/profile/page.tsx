@@ -20,49 +20,51 @@ export default function ProfilePage() {
   const [passwordOpen, setPasswordOpen] = useState(false);
 
   return (
-    <div className="@container/profile flex flex-col gap-4 max-w-3xl mx-auto w-full">
+    <div className="@container/profile flex flex-col gap-4 px-4 lg:px-6 w-full">
+      <div className="max-w-3xl">
 
-      {!isLoading && !profile.email_verified && <VerifyEmailBanner />}
+        {!isLoading && !profile.email_verified && <VerifyEmailBanner />}
 
-      {!isLoading && <AdminIndicator isAdmin={profile.is_admin} />}
+        {!isLoading && <AdminIndicator isAdmin={profile.is_admin} />}
 
-      <div className="md:col-span-2">
-        {isLoading ? (
-          <ProfileIdentitySkeleton />
-        ) : (
-          <ProfileIdentityCard
-            data={profile}
-            onEdit={() => setEditOpen(true)}
-            onAvatarEdit={() => setAvatarOpen(true)}
-          />
-        )}
+        <div className="md:col-span-2">
+          {isLoading ? (
+            <ProfileIdentitySkeleton />
+          ) : (
+            <ProfileIdentityCard
+              data={profile}
+              onEdit={() => setEditOpen(true)}
+              onAvatarEdit={() => setAvatarOpen(true)}
+            />
+          )}
+        </div>
+
+        <div>
+          {isLoading ? (
+            <TrustPanelSkeleton />
+          ) : (
+            <TrustSecurityPanel
+              data={profile}
+              onChangePassword={() => setPasswordOpen(true)}
+            />
+          )}
+        </div>
+
+        <EditProfileSheet
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          profile={profile}
+        />
+        <AvatarUploadSheet
+          open={avatarOpen}
+          onClose={() => setAvatarOpen(false)}
+          currentUrl={profile.profile_pic_url}
+        />
+        <ChangePasswordModal
+          open={passwordOpen}
+          onClose={() => setPasswordOpen(false)}
+        />
       </div>
-
-      <div>
-        {isLoading ? (
-          <TrustPanelSkeleton />
-        ) : (
-          <TrustSecurityPanel
-            data={profile}
-            onChangePassword={() => setPasswordOpen(true)}
-          />
-        )}
-      </div>
-
-      <EditProfileSheet
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
-        profile={profile}
-      />
-      <AvatarUploadSheet
-        open={avatarOpen}
-        onClose={() => setAvatarOpen(false)}
-        currentUrl={profile.profile_pic_url}
-      />
-      <ChangePasswordModal
-        open={passwordOpen}
-        onClose={() => setPasswordOpen(false)}
-      />
     </div>
   );
 }
