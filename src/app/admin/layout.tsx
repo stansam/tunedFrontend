@@ -8,9 +8,9 @@ import { NotificationProvider } from "@/lib/contexts/NotificationContext";
 import { QueryProvider } from "@/lib/providers/QueryProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
-import { ClientSidebar } from "./_components/ClientSidebar";
+import { AdminSidebar } from "./_components/AdminSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { DashboardHeader } from "./_components/DashboardHeader";
+import { AdminDashboardHeader } from "./_components/AdminDashboardHeader";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -22,22 +22,22 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
-  title: "Client Portal | TunedEssays",
-  description: "Manage your orders and dashboard.",
+  title: "Admin Portal | TunedEssays",
+  description: "Admin Portal for TunedEssays",
   robots: {
     index: false,
     follow: false,
   },
 };
 
-export default async function ClientRootLayout({
+export default async function AdminRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const authResult = await getServerAuthUser();
   if (!authResult.ok) {
-    redirect("/auth/login?callbackUrl=/client/dashboard");
+    redirect("/auth/login?callbackUrl=/admin/dashboard");
   }
 
   const initialUser: AuthUser = authResult.user;
@@ -57,9 +57,9 @@ export default async function ClientRootLayout({
                   } as React.CSSProperties
                 }
               >
-                <ClientSidebar user={initialUser} />
+                <AdminSidebar user={initialUser} />
                 <SidebarInset>
-                  <DashboardHeader />
+                  <AdminDashboardHeader />
                   <div className="flex flex-1 flex-col p-4 md:p-8">
                     {children}
                   </div>
