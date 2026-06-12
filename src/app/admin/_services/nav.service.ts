@@ -29,3 +29,5 @@ export async function fetchNavStats(): Promise<ApiResult<AdminNavStats>> {
 
   return { ok: true, data: parsed.data, message: res.message, status: res.status };
 }
+
+export const fetchAdminNavStats = fetchNavStats;

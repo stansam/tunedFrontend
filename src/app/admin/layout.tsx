@@ -11,13 +11,16 @@ import { Toaster } from "sonner";
 import { AdminSidebar } from "./_components/AdminSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AdminDashboardHeader } from "./_components/AdminDashboardHeader";
+import { cookies, headers } from "next/headers";
+import { apiGet } from "@/api-client";
+import type { ReactNode } from "react";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-dm-sans",
   display: "swap",
-  preload: false,
+  preload: true,
   adjustFontFallback: false,
 });
 
@@ -33,18 +36,38 @@ export const metadata = {
 export default async function AdminRootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   const authResult = await getServerAuthUser();
   if (!authResult.ok) {
     redirect("/auth/login?callbackUrl=/admin/dashboard");
   }
 
+  // Forward cookies + headers for SSR auth
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+  const headerStore = await headers();
+  const extraHeaders: Record<string, string> = {};
+  if (cookieHeader) extraHeaders["Cookie"] = cookieHeader;
+  const userAgent = headerStore.get("user-agent");
+  if (userAgent) extraHeaders["User-Agent"] = userAgent;
+  const forwardedFor = headerStore.get("x-forwarded-for");
+  if (forwardedFor) extraHeaders["X-Forwarded-For"] = forwardedFor;
+
+  const profileResult = await apiGet<{ is_admin: boolean }>("/client/profile", {
+    cache: "no-store",
+    headers: extraHeaders,
+  });
+
+  if (!profileResult.ok || !profileResult.data?.is_admin) {
+    redirect("/auth/login?callbackUrl=/admin/dashboard");
+  }
+
   const initialUser: AuthUser = authResult.user;
 
   return (
-    <html lang="en" className={dmSans.variable} data-scroll-behavior="smooth">
-      <body className={`${dmSans.className} antialiased bg-[#e8e6e1]`}>
+    <html lang="en" className={dmSans.variable}>
+      <body className={`${dmSans.className} antialiased bg-(--admin-bg)`} style={{ scrollBehavior: "smooth" }}>
          <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
           <QueryProvider>
           <NotificationProvider>

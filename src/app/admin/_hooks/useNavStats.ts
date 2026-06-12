@@ -1,47 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { fetchNavStats } from "../_services/nav.service";
-import type { AdminNavStatsState } from "../_types/nav.type";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAdminNavStats } from "../_services/nav.service";
+import type { AdminNavStats } from "../_types/nav.type";
 
-const FALLBACK_STATE: AdminNavStatsState = {
-  activeOrdersCount: 0,
-  paymentsCount: 0,
-  chatCount: 0,
-  testimonialsCount: 0,
-  isLoading: true,
+const FALLBACK: AdminNavStats = {
+  active_orders_count: 0,
+  payments_count: 0,
+  chat_count: 0,
+  testimonials_count: 0,
 };
 
-export function useNavStats(): AdminNavStatsState {
-  const [state, setState] = useState<AdminNavStatsState>(FALLBACK_STATE);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      const res = await fetchNavStats();
-
-      if (cancelled) return;
-
-      if (res.ok) {
-        setState({
-          activeOrdersCount: res.data.active_orders,
-          paymentsCount: res.data.payments,
-          chatCount: res.data.chats,
-          testimonialsCount: res.data.testimonials,
-          isLoading: false,
-        });
-      } else {
-        if (process.env.NODE_ENV !== "production") {
-          console.warn("[useNavStats] Failed to fetch nav stats:", res.error.message);
-        }
-        setState({ activeOrdersCount: 0, paymentsCount: 0, chatCount: 0, testimonialsCount: 0, isLoading: false });
-      }
-    }
-
-    void load();
-    return () => { cancelled = true; };
-  }, []);
-
-  return state;
+export function useNavStats(): AdminNavStats {
+  const { data } = useQuery<AdminNavStats>({
+    queryKey: ["admin-nav-stats"],
+    queryFn: async () => {
+      const res = await fetchAdminNavStats();
+      if (!res.ok) return FALLBACK;
+      return res.data ?? FALLBACK;
+    },
+    staleTime: 30_000,
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
+  });
+  return data ?? FALLBACK;
 }
