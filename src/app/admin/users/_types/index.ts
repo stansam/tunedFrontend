@@ -1,13 +1,14 @@
 export type CLVStatus = "high" | "medium" | "low" | "normal";
 export type UserStatus = "active" | "dormant";
-export type SortField = "name" | "orders_count" | "total_spent" | "last_order_at";
+export type SortField = "name" | "orders_count" | "total_spent" | "last_order_at" | "created_at";
 export type SortOrder = "asc" | "desc";
 export type StatusFilter = "all" | "active" | "dormant";
 
 export interface AdminUserResponseDTO {
   readonly id: string;
   readonly name: string;
-  readonly avatar_url: string;
+  readonly email: string;
+  readonly avatar_url?: string | null;
   readonly orders_count: number;
   readonly total_spent: string;
   readonly clv_status: CLVStatus;

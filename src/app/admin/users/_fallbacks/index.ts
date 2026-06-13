@@ -18,6 +18,7 @@ export const FALLBACK_USERS: readonly AdminUserResponseDTO[] = [
   {
     id: "u1",
     name: "James Odhiambo",
+    email: "jamesodhiambo@example.com",
     avatar_url: "/uploads/profile_pics/manDefault.png",
     orders_count: 18,
     total_spent: "1240.00",
@@ -28,6 +29,7 @@ export const FALLBACK_USERS: readonly AdminUserResponseDTO[] = [
   {
     id: "u2",
     name: "Sarah Kimani",
+    email: "sarahkimani@example.com",
     avatar_url: "/uploads/profile_pics/ladyDefault.png",
     orders_count: 12,
     total_spent: "870.00",
@@ -38,6 +40,7 @@ export const FALLBACK_USERS: readonly AdminUserResponseDTO[] = [
   {
     id: "u3",
     name: "Michael Brown",
+    email: "michaelbrown@example.com",
     avatar_url: "/uploads/profile_pics/manDefault.png",
     orders_count: 7,
     total_spent: "560.00",
@@ -48,6 +51,7 @@ export const FALLBACK_USERS: readonly AdminUserResponseDTO[] = [
   {
     id: "u4",
     name: "Alice Wanjiru",
+    email: "alicewanjiru@example.com",
     avatar_url: "/uploads/profile_pics/ladyDefault.png",
     orders_count: 4,
     total_spent: "310.00",
@@ -58,6 +62,7 @@ export const FALLBACK_USERS: readonly AdminUserResponseDTO[] = [
   {
     id: "u5",
     name: "Lucy Mwangi",
+    email: "lucymwangi@example.com",
     avatar_url: "/uploads/profile_pics/ladyDefault.png",
     orders_count: 2,
     total_spent: "124.00",

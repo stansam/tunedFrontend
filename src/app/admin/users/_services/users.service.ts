@@ -22,7 +22,7 @@ const isDev = process.env.NODE_ENV === "development";
 export async function fetchAdminUsers(
   req: AdminUserListRequestDTO
 ): Promise<ApiResult<AdminUserListResponseDTO>> {
-  const res = await apiPost<AdminUserListResponseDTO>("/admin/users/list", req);
+  const res = await apiPost<unknown>("/admin/users/list", req);
   if (!res.ok) {
     if (isDev) {
       return { ok: true, data: { users: FALLBACK_USERS, total: FALLBACK_USERS.length, page: req.page ?? 1, per_page: req.per_page ?? 5 }, status: 200, message: "Dev mock data loaded" };
@@ -35,11 +35,11 @@ export async function fetchAdminUsers(
       ? { ok: true, data: { users: FALLBACK_USERS, total: FALLBACK_USERS.length, page: req.page ?? 1, per_page: req.per_page ?? 5 }, status: 200, message: "Dev fallback on validation failure" }
       : { ok: false, error: { message: "Validation error", errors: {}, status: 422 } };
   }
-  return { ...res, data: parsed.data };
+  return { ...res, ok: true, data: parsed.data };
 }
 
 export async function fetchAdminUsersStats(): Promise<ApiResult<AdminUserStatsResponseDTO>> {
-  const res = await apiGet<AdminUserStatsResponseDTO>("/admin/users/stats");
+  const res = await apiGet<unknown>("/admin/users/stats");
   if (!res.ok) {
     if (isDev) return { ok: true, data: FALLBACK_STATS, status: 200, message: "Dev mock data loaded" };
     return res;
@@ -50,11 +50,11 @@ export async function fetchAdminUsersStats(): Promise<ApiResult<AdminUserStatsRe
       ? { ok: true, data: FALLBACK_STATS, status: 200, message: "Dev fallback" }
       : { ok: false, error: { message: "Validation error", errors: {}, status: 422 } };
   }
-  return { ...res, data: parsed.data };
+  return { ...res, ok: true, data: parsed.data };
 }
 
 export async function fetchAdminUsersGeography(): Promise<ApiResult<readonly GeographicDistributionDTO[]>> {
-  const res = await apiGet<readonly GeographicDistributionDTO[]>("/admin/users/geography");
+  const res = await apiGet<unknown>("/admin/users/geography");
   if (!res.ok) {
     if (isDev) return { ok: true, data: FALLBACK_GEOGRAPHY, status: 200, message: "Dev mock data loaded" };
     return res;
@@ -65,7 +65,7 @@ export async function fetchAdminUsersGeography(): Promise<ApiResult<readonly Geo
       ? { ok: true, data: FALLBACK_GEOGRAPHY, status: 200, message: "Dev fallback" }
       : { ok: false, error: { message: "Validation error", errors: {}, status: 422 } };
   }
-  return { ...res, data: parsed.data };
+  return { ...res, ok: true, data: parsed.data };
 }
 export async function broadcastMessage(message: string): Promise<ApiResult<unknown>> {
   return apiPost<unknown>("/admin/users/broadcast", { message });

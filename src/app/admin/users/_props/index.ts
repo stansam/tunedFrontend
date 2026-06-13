@@ -28,11 +28,13 @@ export interface TopClientsCardProps {
   readonly onSortChange: (sort: SortField, order: SortOrder) => void;
   readonly onPageChange: (page: number) => void;
   readonly onMessageAll: () => void;
+  readonly onAction: (user: AdminUserResponseDTO) => void;
 }
 
 export interface UserRowProps {
   readonly user: AdminUserResponseDTO;
   readonly onAction: (user: AdminUserResponseDTO) => void;
+  readonly isMobile?: boolean;
 }
 
 export interface GeographicCardProps {

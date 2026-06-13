@@ -6,7 +6,8 @@ export const UserStatusSchema = z.enum(["active", "dormant"]);
 export const AdminUserResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
-  avatar_url: z.string(),
+  email: z.string(),
+  avatar_url: z.string().nullable().optional(),
   orders_count: z.number().int().nonnegative(),
   total_spent: z.string(),
   clv_status: CLVStatusSchema,
@@ -32,7 +33,7 @@ export const AdminUserStatsResponseSchema = z.object({
 });
 
 export const GeographicDistributionSchema = z.object({
-  country_code: z.string().length(2),
+  country_code: z.string().min(2).max(3),
   country_name: z.string(),
   percentage: z.number().min(0).max(100),
 });

@@ -3,6 +3,8 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { apiGet } from "@/api-client";
 import type { OrdersToolbarProps } from "../_props/orders.props";
 
 export function OrdersToolbar({
@@ -14,6 +16,15 @@ export function OrdersToolbar({
   sortOrder,
   onSortChange,
 }: OrdersToolbarProps) {
+  const { data: services } = useQuery({
+    queryKey: ["services"],
+    queryFn: async () => {
+      const res = await apiGet<Array<{ readonly id: string; readonly name: string }>>("/services");
+      return res.ok ? res.data ?? [] : [];
+    },
+    staleTime: 300_000,
+  });
+
   return (
     <div className="flex flex-col sm:flex-row gap-4 w-full items-center justify-between">
       <div className="relative w-full sm:max-w-xs">
@@ -33,9 +44,11 @@ export function OrdersToolbar({
           </SelectTrigger>
           <SelectContent className="rounded-xl">
             <SelectItem value="all">All Services</SelectItem>
-            <SelectItem value="s-1">Data Analysis</SelectItem>
-            <SelectItem value="s-2">Essay Writing</SelectItem>
-            <SelectItem value="s-3">Editing</SelectItem>
+            {(services ?? []).map((svc) => (
+              <SelectItem key={svc.id} value={svc.id}>
+                {svc.name}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
 
