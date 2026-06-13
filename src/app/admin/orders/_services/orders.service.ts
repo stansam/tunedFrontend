@@ -50,13 +50,10 @@ export async function fetchAdminOrdersStats(): Promise<ApiResult<AdminOrdersStat
   return { ...res, data: parsed.data };
 }
 
-export async function assignWriter(
-  orderId: string,
-  writerId: string
+export async function activateOrder(
+  orderId: string
 ): Promise<ApiResult<{ readonly success: boolean; readonly message: string }>> {
-  return apiPost<{ success: boolean; message: string }>(`/admin/orders/${orderId}/assign`, {
-    writer_id: writerId,
-  });
+  return apiPost<{ success: boolean; message: string }>(`/admin/orders/${orderId}/activate`, {});
 }
 
 export async function escalateOrder(

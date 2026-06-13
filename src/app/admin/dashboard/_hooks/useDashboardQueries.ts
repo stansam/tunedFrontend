@@ -2,7 +2,6 @@
 
 import { useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { useDashboardSocket } from "./useDashboardSocket";
 import {
   fetchAdminKPIs, fetchAdminAnalytics, fetchAdminTracking, fetchAdminAlerts
@@ -16,7 +15,6 @@ import type {
 
 export function useDashboardQueries() {
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuth();
 
   const wrap = <T>(fn: () => Promise<{ ok: boolean; data?: T; error?: unknown }>, fb: T) =>
     fn().then((r) => {
@@ -44,7 +42,7 @@ export function useDashboardQueries() {
     }));
   }, [queryClient]);
 
-  useDashboardSocket(isAuthenticated, handleOrderUpdate, handleAlertNew);
+  useDashboardSocket(handleOrderUpdate, handleAlertNew);
 
   const refresh = useCallback(() =>
     queryClient.invalidateQueries({ queryKey: ["admin"] }).then(() => {}),

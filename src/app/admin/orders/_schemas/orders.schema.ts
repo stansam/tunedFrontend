@@ -4,9 +4,10 @@ export const AdminOrderStatusSchema = z.enum([
   "draft",
   "pending",
   "active",
+  "completed pending review",
   "completed",
   "overdue",
-  "cancelled",
+  "canceled",
   "revision",
 ]);
 
@@ -21,8 +22,6 @@ export const AdminOrderSchema = z.object({
   service_id: z.string().uuid(),
   service_name: z.string(),
   due_date: z.string().nullable(),
-  writer_id: z.string().uuid().nullable(),
-  writer_name: z.string().nullable(),
   escalated: z.boolean(),
 });
 
@@ -36,15 +35,14 @@ export const AdminOrdersStatsSchema = z.object({
 });
 
 export const BottleneckStatsSchema = z.object({
-  pending_assignment: z.number().int().nonnegative(),
+  pending_activation: z.number().int().nonnegative(),
   under_review: z.number().int().nonnegative(),
   awaiting_payment: z.number().int().nonnegative(),
 });
 
-export const WriterLoadSchema = z.object({
+export const ServiceLoadSchema = z.object({
   id: z.string(),
   name: z.string(),
-  avatar: z.string().nullable(),
   orders_count: z.number().int().nonnegative(),
   status: z.enum(["Busy", "OK", "Free"]),
 });
@@ -52,7 +50,7 @@ export const WriterLoadSchema = z.object({
 export const AdminOrdersStatsResponseSchema = z.object({
   stats: AdminOrdersStatsSchema,
   bottlenecks: BottleneckStatsSchema,
-  writer_load: z.array(WriterLoadSchema),
+  service_load: z.array(ServiceLoadSchema),
 });
 
 export const AdminOrdersListResponseSchema = z.object({

@@ -4,11 +4,11 @@ import { Activity } from "lucide-react";
 import type { BottleneckSectionProps } from "../_props/orders.props";
 
 export function BottleneckSection({ bottlenecks }: BottleneckSectionProps) {
-  const { pending_assignment = 0, under_review = 0, awaiting_payment = 0 } = bottlenecks;
-  const total = Math.max(pending_assignment + under_review + awaiting_payment, 1);
+  const { pending_activation = 0, under_review = 0, awaiting_payment = 0 } = bottlenecks;
+  const total = Math.max(pending_activation + under_review + awaiting_payment, 1);
 
   const stages = [
-    { label: "Pending Assignment", value: pending_assignment, color: "bg-amber-500" },
+    { label: "Pending Activation", value: pending_activation, color: "bg-amber-500" },
     { label: "Under Review", value: under_review, color: "bg-purple-500" },
     { label: "Awaiting Payment", value: awaiting_payment, color: "bg-red-500" },
   ];

@@ -4,7 +4,7 @@ import type { OrdersTableProps } from "../_props/orders.props";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { OrderRow } from "./OrderRow";
 
-export function OrdersTable({ orders, onAssign, onEscalate }: OrdersTableProps) {
+export function OrdersTable({ orders, onActivate, onEscalate, isActivating }: OrdersTableProps) {
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-slate-500 rounded-xl border border-dashed border-slate-300 bg-white/20">
@@ -20,8 +20,9 @@ export function OrdersTable({ orders, onAssign, onEscalate }: OrdersTableProps) 
           <OrderRow
             key={order.id}
             order={order}
-            onAssign={onAssign}
+            onActivate={onActivate}
             onEscalate={onEscalate}
+            isActivating={isActivating}
             isMobile
           />
         ))}
@@ -35,7 +36,6 @@ export function OrdersTable({ orders, onAssign, onEscalate }: OrdersTableProps) 
               <TableHead className="w-[100px] text-slate-800 font-semibold">ORDER ID</TableHead>
               <TableHead className="text-slate-800 font-semibold">CLIENT</TableHead>
               <TableHead className="text-slate-800 font-semibold">SERVICE</TableHead>
-              <TableHead className="text-slate-800 font-semibold">WRITER</TableHead>
               <TableHead className="text-slate-800 font-semibold">DEADLINE</TableHead>
               <TableHead className="text-slate-800 font-semibold text-right">VALUE</TableHead>
               <TableHead className="text-slate-800 font-semibold text-center">STATUS</TableHead>
@@ -47,8 +47,9 @@ export function OrdersTable({ orders, onAssign, onEscalate }: OrdersTableProps) 
               <OrderRow
                 key={order.id}
                 order={order}
-                onAssign={onAssign}
+                onActivate={onActivate}
                 onEscalate={onEscalate}
+                isActivating={isActivating}
               />
             ))}
           </TableBody>

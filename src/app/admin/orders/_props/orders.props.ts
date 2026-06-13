@@ -3,7 +3,7 @@ import type {
   AdminOrdersStats,
   AdminOrderStatus,
   BottleneckStats,
-  WriterLoad,
+  ServiceLoad,
 } from "../_types/orders.types";
 
 export interface OrdersStatsProps {
@@ -16,8 +16,8 @@ export interface BottleneckSectionProps {
   readonly bottlenecks: BottleneckStats;
 }
 
-export interface WriterLoadSectionProps {
-  readonly writerLoad: readonly WriterLoad[];
+export interface ServiceLoadSectionProps {
+  readonly serviceLoad: readonly ServiceLoad[];
 }
 
 export interface OrdersToolbarProps {
@@ -33,14 +33,16 @@ export interface OrdersToolbarProps {
 
 export interface OrdersTableProps {
   readonly orders: readonly AdminOrder[];
-  readonly onAssign: (orderId: string) => void;
+  readonly onActivate: (orderId: string) => void;
   readonly onEscalate: (orderId: string) => void;
+  readonly isActivating?: boolean;
 }
 
 export interface OrderRowProps {
   readonly order: AdminOrder;
-  readonly onAssign: (orderId: string) => void;
+  readonly onActivate: (orderId: string) => void;
   readonly onEscalate: (orderId: string) => void;
+  readonly isActivating?: boolean;
 }
 
 export interface OrdersPaginationProps {
@@ -50,9 +52,8 @@ export interface OrdersPaginationProps {
   readonly onPageChange: (page: number) => void;
 }
 
-export interface AssignWriterModalProps {
+export interface ActivateOrderModalProps {
   readonly orderId: string | null;
-  readonly writers: readonly WriterLoad[];
   readonly onClose: () => void;
-  readonly onAssignConfirm: (writerId: string) => void;
+  readonly onActivateConfirm: () => void;
 }

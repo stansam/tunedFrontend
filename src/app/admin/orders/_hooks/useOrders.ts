@@ -5,19 +5,25 @@ import { fetchAdminOrders, fetchAdminOrdersStats } from "../_services/orders.ser
 import { FALLBACK_ORDERS, FALLBACK_STATS } from "../_fallbacks/orders.fallback";
 import type { AdminOrderFiltersState, AdminOrdersListResponse, AdminOrdersStatsResponse } from "../_types/orders.types";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export function useOrders(filters: AdminOrderFiltersState) {
   return useQuery<AdminOrdersListResponse, Error>({
     queryKey: ["admin-orders", filters],
     queryFn: async () => {
       const result = await fetchAdminOrders(filters);
       if (!result.ok) {
-        console.warn("[useOrders] Backend error, utilizing fallback data:", result.error?.message);
-        return FALLBACK_ORDERS;
+        if (isDev) {
+          console.warn("[useOrders] Backend error, utilizing fallback data:", result.error?.message);
+          return FALLBACK_ORDERS;
+        }
+        throw new Error(result.error?.message ?? "Failed to fetch orders");
       }
       return result.data;
     },
-    staleTime: 10_000,
+    staleTime: 30_000,
     gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -27,12 +33,16 @@ export function useOrdersStats() {
     queryFn: async () => {
       const result = await fetchAdminOrdersStats();
       if (!result.ok) {
-        console.warn("[useOrdersStats] Backend error, utilizing fallback data:", result.error?.message);
-        return FALLBACK_STATS;
+        if (isDev) {
+          console.warn("[useOrdersStats] Backend error, utilizing fallback data:", result.error?.message);
+          return FALLBACK_STATS;
+        }
+        throw new Error(result.error?.message ?? "Failed to fetch stats");
       }
       return result.data;
     },
-    staleTime: 15_000,
+    staleTime: 30_000,
     gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }

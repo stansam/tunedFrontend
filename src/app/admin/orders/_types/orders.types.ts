@@ -2,9 +2,10 @@ export type AdminOrderStatus =
   | "draft"
   | "pending"
   | "active"
+  | "completed pending review"
   | "completed"
   | "overdue"
-  | "cancelled"
+  | "canceled"
   | "revision";
 
 export interface AdminOrder {
@@ -18,8 +19,6 @@ export interface AdminOrder {
   readonly service_id: string;
   readonly service_name: string;
   readonly due_date: string | null;
-  readonly writer_id: string | null;
-  readonly writer_name: string | null;
   readonly escalated: boolean;
 }
 
@@ -33,15 +32,14 @@ export interface AdminOrdersStats {
 }
 
 export interface BottleneckStats {
-  readonly pending_assignment: number;
+  readonly pending_activation: number;
   readonly under_review: number;
   readonly awaiting_payment: number;
 }
 
-export interface WriterLoad {
+export interface ServiceLoad {
   readonly id: string;
   readonly name: string;
-  readonly avatar: string | null;
   readonly orders_count: number;
   readonly status: "Busy" | "OK" | "Free";
 }
@@ -49,7 +47,7 @@ export interface WriterLoad {
 export interface AdminOrdersStatsResponse {
   readonly stats: AdminOrdersStats;
   readonly bottlenecks: BottleneckStats;
-  readonly writer_load: readonly WriterLoad[];
+  readonly service_load: readonly ServiceLoad[];
 }
 
 export interface AdminOrdersListResponse {
