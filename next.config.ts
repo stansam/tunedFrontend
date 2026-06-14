@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "http",
-        hostname: "195.35.37.113",
+        hostname: "5.180.181.81",
         port: "5000",
         pathname: "/static/**",
       },
@@ -44,18 +44,18 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS?.split(",") ?? [],
   typedRoutes: true,
 
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/api/:path*",
-  //       destination: `${process.env.BACKEND_API_URL|| 'http://localhost:5000'}/api/:path*`, 
-  //     },
-  //     {
-  //       source: "/socket.io/:path*",
-  //       destination: `${process.env.BACKEND_API_URL || 'http://localhost:5000'}/socket.io/:path*`, 
-  //   }
-  //   ];
-  // },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${process.env.BACKEND_API_URL|| 'http://localhost:5000'}/api/:path*`, 
+      },
+      {
+        source: "/socket.io/:path*",
+        destination: `${process.env.BACKEND_API_URL || 'http://localhost:5000'}/socket.io/:path*`, 
+    }
+    ];
+  },
 };
 
 export default nextConfig;
