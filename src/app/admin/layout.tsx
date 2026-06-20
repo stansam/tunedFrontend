@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { DM_Sans } from "next/font/google";
 import "@/app/globals.css";
 import { AuthProvider } from "@/lib/auth/Context";
@@ -11,8 +11,8 @@ import { Toaster } from "sonner";
 import { AdminSidebar } from "./_components/AdminSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AdminDashboardHeader } from "./_components/AdminDashboardHeader";
-import { cookies, headers } from "next/headers";
-import { apiGet } from "@/api-client";
+// import { cookies, headers } from "next/headers";
+// import { apiGet } from "@/api-client";
 import type { ReactNode } from "react";
 
 const dmSans = DM_Sans({

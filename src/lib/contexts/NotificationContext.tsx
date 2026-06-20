@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useAuthContext } from "@/lib/auth/Context";
 import { webSocketService } from "@/lib/services/websocket.service";
 import { apiGet, apiPost } from "@/api-client";
+import { SOCKET_EMIT, SOCKET_ON } from "@/lib/constants/socket-events";
 import type { NotificationItem, NotificationContextValue } from "@/lib/types/notification.type";
 
 const NotificationContext = createContext<NotificationContextValue | null>(null);
@@ -16,6 +17,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(isAuthenticated);
   const [error] = useState<string | null>(null);
+
   const [prevIsAuthenticated, setPrevIsAuthenticated] = useState(isAuthenticated);
 
   if (isAuthenticated !== prevIsAuthenticated) {
@@ -56,11 +58,11 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
     const socket = webSocketService.connect();
 
-    socket.on("notification:count", (data: { unread_count: number }) => {
+    const handleCount = (data: { unread_count: number }) => {
       setUnreadCount(data.unread_count);
-    });
+    };
 
-    socket.on("notification:new", (notification: NotificationItem) => {
+    const handleNew = (notification: NotificationItem) => {
       setNotifications((prev) => [notification, ...prev]);
       setUnreadCount((prev) => prev + 1);
 
@@ -69,38 +71,49 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       else if (notification.type === 'warning') toast.warning(notification.title, { description: message });
       else if (notification.type === 'error') toast.error(notification.title, { description: message });
       else toast.info(notification.title, { description: message });
-    });
+    };
 
-    socket.on("notification:read", (data: { notification_id: string }) => {
+    const handleRead = (data: { notification_id: string }) => {
       setNotifications((prev) =>
         prev.map((n) =>
           n.id === data.notification_id ? { ...n, is_read: true } : n
         )
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
-    });
+    };
 
-    socket.on("notification:read_all", () => {
-      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-      setUnreadCount(0);
-    });
+    const handleError = (err: unknown) => {
+      const errorObj = err as { code?: number; message?: string } | null;
+      if (errorObj?.code === 429) {
+        toast.error("Too many notification requests. Please slow down.");
+      } else {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("[WebSocket error]", err);
+        }
+      }
+    };
+
+    socket.on(SOCKET_ON.NOTIFICATION_COUNT, handleCount);
+    socket.on(SOCKET_ON.NOTIFICATION_NEW, handleNew);
+    socket.on(SOCKET_ON.NOTIFICATION_READ, handleRead);
+    socket.on(SOCKET_ON.SOCKET_ERROR, handleError);
 
     Promise.resolve().then(() => {
       void fetchNotifications();
     });
 
     return () => {
-      socket.off("notification:count");
-      socket.off("notification:new");
-      socket.off("notification:read");
-      socket.off("notification:read_all");
+      socket.off(SOCKET_ON.NOTIFICATION_COUNT, handleCount);
+      socket.off(SOCKET_ON.NOTIFICATION_NEW, handleNew);
+      socket.off(SOCKET_ON.NOTIFICATION_READ, handleRead);
+      socket.off(SOCKET_ON.SOCKET_ERROR, handleError);
     };
   }, [isAuthenticated, fetchNotifications]);
 
   const markAsRead = useCallback(async (id: string) => {
     const socket = webSocketService.getSocket();
     if (socket?.connected) {
-      socket.emit("notification:mark_read", { notification_id: id });
+      socket.emit(SOCKET_EMIT.NOTIFICATION_MARK_READ, { notification_id: id });
     } else {
       await apiPost(`/notifications/${id}/read`, {});
       setNotifications((prev) =>
@@ -111,14 +124,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   }, []);
 
   const markAllAsRead = useCallback(async () => {
-    const socket = webSocketService.getSocket();
-    if (socket?.connected) {
-      socket.emit("notification:mark_all_read");
-    } else {
-      await apiPost(`/notifications/read-all`, {});
-      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-      setUnreadCount(0);
-    }
+    await apiPost(`/notifications/read-all`, {});
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+    setUnreadCount(0);
   }, []);
 
   const value = useMemo<NotificationContextValue>(

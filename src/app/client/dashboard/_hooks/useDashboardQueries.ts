@@ -2,7 +2,6 @@
 
 import { useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { useDashboardSocket } from "./useDashboardSocket";
 import {
   fetchDashboardKPIs,
@@ -19,7 +18,6 @@ import type {
 
 export function useDashboardQueries() {
   const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuth();
   const wrap = <T>(fn: () => Promise<{ ok: boolean; data?: T; error?: unknown }>) =>
     fn().then((r) => {
       if (!r.ok) throw new Error((r.error as { message?: string })?.message || "Error");
@@ -66,7 +64,7 @@ export function useDashboardQueries() {
     }));
   }, [queryClient]);
 
-  useDashboardSocket(isAuthenticated, handleOrderUpdate, handleAlertNew);
+  useDashboardSocket(handleOrderUpdate, handleAlertNew);
 
   const refresh = useCallback(() =>
     queryClient.invalidateQueries({ queryKey: ["dashboard"] }).then(() => {}),
