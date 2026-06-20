@@ -39,31 +39,31 @@ export default async function AdminRootLayout({
   children: ReactNode;
 }>) {
   const authResult = await getServerAuthUser();
-  if (!authResult.ok) {
-    redirect("/auth/login?callbackUrl=/admin/dashboard");
-  }
+  // if (!authResult.ok) {
+  //   redirect("/auth/login?callbackUrl=/admin/dashboard");
+  // }
 
-  // Forward cookies + headers for SSR auth
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
-  const headerStore = await headers();
-  const extraHeaders: Record<string, string> = {};
-  if (cookieHeader) extraHeaders["Cookie"] = cookieHeader;
-  const userAgent = headerStore.get("user-agent");
-  if (userAgent) extraHeaders["User-Agent"] = userAgent;
-  const forwardedFor = headerStore.get("x-forwarded-for");
-  if (forwardedFor) extraHeaders["X-Forwarded-For"] = forwardedFor;
+  // // Forward cookies + headers for SSR auth
+  // const cookieStore = await cookies();
+  // const cookieHeader = cookieStore.toString();
+  // const headerStore = await headers();
+  // const extraHeaders: Record<string, string> = {};
+  // if (cookieHeader) extraHeaders["Cookie"] = cookieHeader;
+  // const userAgent = headerStore.get("user-agent");
+  // if (userAgent) extraHeaders["User-Agent"] = userAgent;
+  // const forwardedFor = headerStore.get("x-forwarded-for");
+  // if (forwardedFor) extraHeaders["X-Forwarded-For"] = forwardedFor;
 
-  const profileResult = await apiGet<{ is_admin: boolean }>("/client/profile", {
-    cache: "no-store",
-    headers: extraHeaders,
-  });
+  // const profileResult = await apiGet<{ is_admin: boolean }>("/client/profile", {
+  //   cache: "no-store",
+  //   headers: extraHeaders,
+  // });
 
-  if (!profileResult.ok || !profileResult.data?.is_admin) {
-    redirect("/auth/login?callbackUrl=/admin/dashboard");
-  }
+  // if (!profileResult.ok || !profileResult.data?.is_admin) {
+  //   redirect("/auth/login?callbackUrl=/admin/dashboard");
+  // }
 
-  const initialUser: AuthUser = authResult.user;
+  const initialUser: AuthUser | null = authResult.ok ? authResult.user : null;
 
   return (
     <html lang="en" className={dmSans.variable}>

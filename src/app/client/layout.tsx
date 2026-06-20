@@ -36,11 +36,11 @@ export default async function ClientRootLayout({
   children: React.ReactNode;
 }>) {
   const authResult = await getServerAuthUser();
-  if (!authResult.ok) {
-    redirect("/auth/login?callbackUrl=/client/dashboard");
-  }
+  // if (!authResult.ok) {
+  //   redirect("/auth/login?callbackUrl=/client/dashboard");
+  // }
 
-  const initialUser: AuthUser = authResult.user;
+  const initialUser: AuthUser | null = authResult.ok ? authResult.user : null;
 
   return (
     <html lang="en" className={dmSans.variable} data-scroll-behavior="smooth">
