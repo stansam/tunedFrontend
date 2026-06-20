@@ -15,26 +15,26 @@ export function AdminDeliveryAttachmentItem({ attachment }: AdminDeliveryAttachm
   const isPlagiarism = attachment.is_plagiarism_report;
   
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 shadow-sm">
-      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
-        isPlagiarism ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+    <div className="flex items-center gap-3 rounded-xl border border-slate-200/50 bg-white/20 p-3 shadow-sm">
+      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${
+        isPlagiarism ? "bg-amber-100 text-amber-800 border-amber-200" : "bg-emerald-100 text-emerald-800 border-emerald-200"
       }`}>
         {isPlagiarism ? <FileText className="h-5 w-5" /> : <File className="h-5 w-5" />}
       </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 min-w-0">
-          <p className="truncate text-sm font-semibold text-white">
+          <p className="truncate text-sm font-semibold text-slate-800">
             {attachment.filename}
           </p>
           {isPlagiarism && (
-            <span className="shrink-0 text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="shrink-0 text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded border bg-amber-100 text-amber-800 border-amber-200">
               Plag
             </span>
           )}
         </div>
         {!!attachment.file_size && (
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             {formatFileSize(attachment.file_size)}
           </p>
         )}
@@ -45,7 +45,7 @@ export function AdminDeliveryAttachmentItem({ attachment }: AdminDeliveryAttachm
         download={attachment.filename}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition-colors hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:text-emerald-400"
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition-colors hover:border-emerald-500/30 hover:bg-emerald-50 hover:text-emerald-700"
       >
         <Download className="h-4 w-4" />
       </a>

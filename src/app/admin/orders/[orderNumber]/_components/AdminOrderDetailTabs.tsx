@@ -11,7 +11,7 @@ export function AdminOrderDetailTabs({ activeTab, onTabChange }: AdminOrderDetai
   ] as const;
 
   return (
-    <div className="border-b border-white/10 overflow-x-auto scrollbar-none flex">
+    <div className="border-b border-slate-200 overflow-x-auto scrollbar-none flex">
       <div className="flex space-x-8 min-w-full sm:min-w-0 px-1">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -19,13 +19,13 @@ export function AdminOrderDetailTabs({ activeTab, onTabChange }: AdminOrderDetai
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`pb-4 text-sm font-medium relative whitespace-nowrap transition-colors ${
-                isActive ? "text-emerald-400" : "text-slate-400 hover:text-slate-200"
+              className={`pb-4 text-sm font-medium relative whitespace-nowrap transition-colors cursor-pointer ${
+                isActive ? "text-emerald-700 font-semibold" : "text-slate-500 hover:text-slate-800"
               }`}
             >
               {tab.label}
               {isActive && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full" />
               )}
             </button>
           );

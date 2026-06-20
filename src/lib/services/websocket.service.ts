@@ -9,8 +9,7 @@ class WebSocketService {
 
   constructor() {
     this.backendUrl =
-      process.env.NEXT_PUBLIC_SOCKET_URL ??
-      (typeof window !== "undefined" ? window.location.origin : "");
+      process.env.NEXT_PUBLIC_SOCKET_URL;
   }
 
   public connect(): Socket {

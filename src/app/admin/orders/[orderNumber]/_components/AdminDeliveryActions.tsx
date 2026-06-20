@@ -1,11 +1,16 @@
 "use client";
 
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ConfirmActionModal } from "./ConfirmActionModal";
 import type { AdminDeliveryActionsProps } from "../_props";
 import { useAdminDeliveryActions } from "../_hooks/useAdminDeliveryActions";
 
 export function AdminDeliveryActions({ delivery, orderId }: AdminDeliveryActionsProps) {
   const { updateStatus, isUpdatingStatus, notifyClient, isNotifyingClient, deleteDelivery, isDeleting } =
     useAdminDeliveryActions(orderId);
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value;
@@ -25,35 +30,27 @@ export function AdminDeliveryActions({ delivery, orderId }: AdminDeliveryActions
     }
   };
 
-  const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this delivery? This cannot be undone.")) {
-      try {
-        await deleteDelivery(delivery.id);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
   return (
-    <div className="flex flex-wrap items-center gap-3 border-t border-white/10 pt-4 mt-4 text-xs">
+    <div className="flex flex-wrap items-center gap-3 border-t border-slate-200/50 pt-4 mt-4 text-xs">
       {!delivery.client_notified && (
-        <button
+        <Button
           onClick={handleNotify}
           disabled={isNotifyingClient}
-          className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 rounded-lg font-medium transition"
+          size="sm"
+          variant="outline"
+          className="h-7 text-xs font-semibold rounded-lg bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800"
         >
           {isNotifyingClient ? "Notifying..." : "Mark Client Notified"}
-        </button>
+        </Button>
       )}
 
       <div className="flex items-center space-x-2">
-        <span className="text-slate-400">Status:</span>
+        <span className="text-slate-500 font-medium">Status:</span>
         <select
           value={delivery.delivery_status}
           onChange={handleStatusChange}
           disabled={isUpdatingStatus}
-          className="bg-slate-900 border border-white/10 text-white rounded px-2 py-1 focus:outline-none focus:border-emerald-500 text-xs"
+          className="bg-white/50 border border-slate-200 text-slate-800 rounded px-2 py-1 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/30 text-xs cursor-pointer"
         >
           <option value="delivered">Delivered</option>
           <option value="revised">Revised</option>
@@ -61,13 +58,29 @@ export function AdminDeliveryActions({ delivery, orderId }: AdminDeliveryActions
         </select>
       </div>
 
-      <button
-        onClick={handleDelete}
+      <Button
+        onClick={() => setIsDeleteOpen(true)}
         disabled={isDeleting}
-        className="ml-auto px-3 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 rounded-lg font-medium transition"
+        size="sm"
+        variant="destructive"
+        className="ml-auto h-7 text-xs font-semibold rounded-lg"
       >
         {isDeleting ? "Deleting..." : "Delete"}
-      </button>
+      </Button>
+
+      <ConfirmActionModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={() => {
+          deleteDelivery(delivery.id);
+          setIsDeleteOpen(false);
+        }}
+        title="Delete Delivery Package"
+        description="Are you sure you want to delete this delivery package? This action cannot be undone."
+        confirmText="Delete"
+        isPending={isDeleting}
+        variant="destructive"
+      />
     </div>
   );
 }

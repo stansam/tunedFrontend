@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useAdminDeadlineExtension } from "../_hooks/useAdminDeadlineExtension";
 
 export function AdminDeadlineExtensionPanel({
@@ -33,29 +34,29 @@ export function AdminDeadlineExtensionPanel({
   };
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-5 shadow-lg space-y-6 text-xs">
+    <div className="bg-white/40 border border-white/50 rounded-xl p-5 shadow-xs space-y-6 text-xs text-slate-800">
       <div>
-        <h3 className="text-sm font-semibold text-white mb-4">Request Deadline Extension</h3>
+        <h3 className="text-sm font-semibold text-slate-800 mb-4">Request Deadline Extension</h3>
         <form onSubmit={handleSubmit} className="space-y-3">
-          {error && <div className="text-red-400 bg-red-500/10 border border-red-500/20 p-2.5 rounded">{error}</div>}
+          {error && <div className="text-red-800 bg-red-50 border border-red-200/50 p-2.5 rounded">{error}</div>}
           <div className="grid grid-cols-2 gap-4">
             <label className="space-y-1 block">
-              <span className="text-slate-400">Hours to Extend:</span>
+              <span className="text-slate-500 font-medium">Hours to Extend:</span>
               <input
                 type="number"
                 min={1}
                 max={720}
                 value={hours}
                 onChange={(e) => setHours(Number(e.target.value))}
-                className="w-full bg-slate-950 border border-white/10 text-white rounded p-2 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-white/50 border border-slate-200 text-slate-800 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-600/30 focus:border-emerald-600 text-xs"
               />
             </label>
             <label className="space-y-1 block">
-              <span className="text-slate-400">Priority:</span>
+              <span className="text-slate-500 font-medium">Priority:</span>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full bg-slate-950 border border-white/10 text-white rounded p-2 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-white/50 border border-slate-200 text-slate-800 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-600/30 focus:border-emerald-600 text-xs cursor-pointer"
               >
                 <option value="low">Low</option>
                 <option value="normal">Normal</option>
@@ -65,40 +66,40 @@ export function AdminDeadlineExtensionPanel({
             </label>
           </div>
           <label className="space-y-1 block">
-            <span className="text-slate-400">Reason (Client will see this):</span>
+            <span className="text-slate-500 font-medium">Reason (Client will see this):</span>
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Provide clear reasons for this extension request..."
-              className="w-full bg-slate-950 border border-white/10 text-white rounded p-2 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-white/50 border border-slate-200 text-slate-800 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-600/30 focus:border-emerald-600 text-xs"
               rows={2}
             />
           </label>
-          <button
+          <Button
             type="submit"
             disabled={isRequesting || reason.length < 10}
-            className="w-full py-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition"
+            className="w-full h-9 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition"
           >
             {isRequesting ? "Submitting..." : "Request Extension"}
-          </button>
+          </Button>
         </form>
       </div>
 
       {extensions.length > 0 && (
-        <div className="space-y-3 border-t border-white/10 pt-4">
-          <h4 className="font-semibold text-white">Extension Request History</h4>
+        <div className="space-y-3 border-t border-slate-200/50 pt-4">
+          <h4 className="font-semibold text-slate-800">Extension Request History</h4>
           <div className="space-y-3">
             {extensions.map((ext) => (
-              <div key={ext.id} className="border border-white/5 bg-slate-900/40 rounded p-3 space-y-1.5">
+              <div key={ext.id} className="border border-slate-200/50 bg-white/20 rounded p-3 space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-300 font-medium">+{ext.requested_hours} hours</span>
-                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider ${
-                    ext.status === "pending" ? "bg-amber-500/10 text-amber-400" :
-                    ext.status === "approved" ? "bg-emerald-500/10 text-emerald-400" :
-                    "bg-red-500/10 text-red-400"
+                  <span className="text-slate-700 font-semibold">+{ext.requested_hours} hours</span>
+                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider border ${
+                    ext.status === "pending" ? "bg-amber-100 text-amber-800 border-amber-200" :
+                    ext.status === "approved" ? "bg-emerald-100 text-emerald-800 border-emerald-200" :
+                    "bg-red-100 text-red-800 border-red-200"
                   }`}>{ext.status}</span>
                 </div>
-                <p className="text-slate-400">Reason: {ext.reason}</p>
+                <p className="text-slate-500">Reason: {ext.reason}</p>
               </div>
             ))}
           </div>

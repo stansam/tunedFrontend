@@ -20,40 +20,40 @@ export function AdminRevisionRequestPanel({ orderId }: { orderId: string }) {
     }
   };
 
-  if (isLoading) return <div className="text-xs text-slate-400">Loading revisions...</div>;
+  if (isLoading) return <div className="text-xs text-slate-500">Loading revisions...</div>;
   if (revisions.length === 0) return null;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-5 shadow-lg space-y-4 text-xs">
-      <h3 className="text-sm font-semibold text-white">Revision Requests</h3>
+    <div className="bg-white/40 border border-white/50 rounded-xl p-5 shadow-xs space-y-4 text-xs text-slate-800">
+      <h3 className="text-sm font-semibold text-slate-800">Revision Requests</h3>
       <div className="space-y-4">
         {revisions.map((req) => (
-          <div key={req.id} className="border border-white/5 bg-slate-900/40 rounded-lg p-4 space-y-3">
+          <div key={req.id} className="border border-slate-200/50 bg-white/20 rounded-lg p-4 space-y-3">
             <div className="flex justify-between items-center flex-wrap gap-2">
-              <span className="text-slate-300 font-medium">Req #{req.revision_count}</span>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                req.status === "pending" ? "bg-amber-500/10 text-amber-400" :
-                req.status === "in_progress" ? "bg-blue-500/10 text-blue-400" :
-                req.status === "completed" ? "bg-emerald-500/10 text-emerald-400" :
-                "bg-slate-500/10 text-slate-400"
+              <span className="text-slate-700 font-semibold">Req #{req.revision_count}</span>
+              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${
+                req.status === "pending" ? "bg-amber-100 text-amber-800 border-amber-200" :
+                req.status === "in_progress" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                req.status === "completed" ? "bg-emerald-100 text-emerald-800 border-emerald-200" :
+                "bg-red-100 text-red-800 border-red-200"
               }`}>{req.status}</span>
             </div>
-            <p className="text-slate-300 leading-relaxed"><strong className="text-white">Notes:</strong> {req.revision_notes}</p>
+            <p className="text-slate-600 leading-relaxed"><strong className="text-slate-800 font-semibold">Notes:</strong> {req.revision_notes}</p>
             {req.internal_notes && (
-              <p className="text-amber-400/90 leading-relaxed font-mono"><strong className="text-white">Admin Notes:</strong> {req.internal_notes}</p>
+              <p className="text-amber-800 bg-amber-50/50 border border-amber-200/40 p-2.5 rounded font-medium leading-relaxed font-mono"><strong className="text-slate-800 font-semibold">Admin Notes:</strong> {req.internal_notes}</p>
             )}
             
             {["pending", "in_progress"].includes(req.status) && (
               <div>
                 {selectedReq === req.id ? (
-                  <form onSubmit={(e) => handleSubmit(e, req.id)} className="space-y-2 pt-2 border-t border-white/5">
+                  <form onSubmit={(e) => handleSubmit(e, req.id)} className="space-y-2 pt-2 border-t border-slate-200/50">
                     <div className="flex gap-4 flex-wrap">
                       <label className="flex items-center space-x-1.5">
-                        <span className="text-slate-400">New Status:</span>
+                        <span className="text-slate-500 font-medium">New Status:</span>
                         <select
                           value={status}
                           onChange={(e) => setStatus(e.target.value)}
-                          className="bg-slate-950 border border-white/10 text-white rounded px-2 py-1"
+                          className="bg-white/50 border border-slate-200 text-slate-800 rounded px-2 py-1 text-xs focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/30 cursor-pointer"
                         >
                           <option value="in_progress">In Progress</option>
                           <option value="completed">Completed</option>
@@ -65,16 +65,16 @@ export function AdminRevisionRequestPanel({ orderId }: { orderId: string }) {
                       placeholder="Add internal notes (optional)..."
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="w-full bg-slate-950 border border-white/10 rounded p-2 text-white"
+                      className="w-full bg-white/50 border border-slate-200 rounded p-2 text-slate-800 text-xs focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/30"
                       rows={2}
                     />
                     <div className="flex justify-end gap-2">
-                      <button type="button" onClick={() => setSelectedReq(null)} className="text-slate-400">Cancel</button>
-                      <button type="submit" disabled={isUpdating} className="text-emerald-400 font-bold">Update</button>
+                      <button type="button" onClick={() => setSelectedReq(null)} className="text-slate-500 hover:text-slate-700 transition cursor-pointer">Cancel</button>
+                      <button type="submit" disabled={isUpdating} className="text-emerald-700 hover:text-emerald-800 font-bold transition cursor-pointer">Update</button>
                     </div>
                   </form>
                 ) : (
-                  <button onClick={() => { setSelectedReq(req.id); setStatus(req.status === "pending" ? "in_progress" : "completed"); }} className="text-emerald-400 hover:underline">
+                  <button onClick={() => { setSelectedReq(req.id); setStatus(req.status === "pending" ? "in_progress" : "completed"); }} className="text-emerald-700 hover:text-emerald-800 hover:underline font-semibold transition cursor-pointer">
                     Manage Revision
                   </button>
                 )}

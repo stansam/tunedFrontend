@@ -21,10 +21,10 @@ export function AdminOrderTrackingStepper({ status }: AdminOrderTrackingStepperP
   const currentIndex = getStatusIndex(status);
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-5 shadow-lg space-y-4">
-      <h3 className="text-sm font-semibold text-white">Project Pipeline</h3>
+    <div className="bg-white/40 border border-white/50 rounded-xl p-5 shadow-xs space-y-4">
+      <h3 className="text-sm font-semibold text-slate-800">Project Pipeline</h3>
       <div className="space-y-4 relative">
-        <div className="absolute left-[13px] top-2 bottom-2 w-0.5 bg-white/10" />
+        <div className="absolute left-[13px] top-2 bottom-2 w-0.5 bg-slate-200" />
 
         {steps.map((step, idx) => {
           const isCompleted = idx < currentIndex;
@@ -34,19 +34,19 @@ export function AdminOrderTrackingStepper({ status }: AdminOrderTrackingStepperP
             <div key={step.key} className="flex items-start gap-3 relative z-10">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center border text-xs font-semibold ${
                 isCompleted 
-                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400" 
+                  ? "bg-emerald-100 border-emerald-200 text-emerald-700" 
                   : isActive 
-                    ? "bg-emerald-500 text-white border-emerald-500" 
-                    : "bg-slate-900 border-white/10 text-slate-500"
+                    ? "bg-emerald-600 text-white border-emerald-600" 
+                    : "bg-white border-slate-200 text-slate-400"
               }`}>
                 {isCompleted ? "✓" : idx + 1}
               </div>
               <div className="pt-0.5">
-                <p className={`text-xs font-medium ${isActive ? "text-white" : "text-slate-400"}`}>
+                <p className={`text-xs font-medium ${isActive ? "text-slate-800 font-semibold" : "text-slate-500"}`}>
                   {step.label}
                 </p>
                 {isActive && (
-                  <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
+                  <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">
                     Current Stage
                   </span>
                 )}

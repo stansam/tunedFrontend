@@ -63,3 +63,15 @@ export interface AdminOrderActionsPanelProps {
   order: AdminOrderDetailDTO;
   onSuccess(): void;
 }
+
+export interface ConfirmActionModalProps {
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly onConfirm: () => void;
+  readonly title: string;
+  readonly description: string;
+  readonly confirmText?: string;
+  readonly cancelText?: string;
+  readonly isPending?: boolean;
+  readonly variant?: "default" | "destructive" | "emerald";
+}

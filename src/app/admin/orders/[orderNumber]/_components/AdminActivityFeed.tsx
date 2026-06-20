@@ -19,10 +19,10 @@ export function AdminActivityFeed({ orderId }: AdminActivityFeedProps) {
   if (isLoading) return <AdminActivityTabSkeleton />;
 
   return (
-    <div className="flex flex-col gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-xl backdrop-blur-md">
-      <div className="border-b border-white/10 px-5 py-3.5">
-        <p className="text-sm font-semibold text-white">Order Activity</p>
-        <p className="text-xs text-slate-400">
+    <div className="flex flex-col gap-3 overflow-hidden rounded-2xl border border-white/50 bg-white/40 shadow-xs backdrop-blur-md">
+      <div className="border-b border-slate-200/50 px-5 py-3.5">
+        <p className="text-sm font-semibold text-slate-800">Order Activity</p>
+        <p className="text-xs text-slate-500">
           {comments.length} message{comments.length !== 1 ? "s" : ""}
         </p>
       </div>

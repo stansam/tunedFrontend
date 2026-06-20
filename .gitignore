@@ -48,3 +48,9 @@ list.md
 options.json
 how-it-works.md
 report.md
+repomix-output.xml
+impl_plan*.md
+*_report.md
+admin_*.md
+*_plan.md
+**/checkout/README.md
