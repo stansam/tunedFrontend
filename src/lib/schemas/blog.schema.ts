@@ -13,7 +13,7 @@ export const BlogPostSchema = z.object({
   meta_description: z.string().min(1, "meta_description is required"),
   is_published:     z.boolean(),
   is_featured:      z.boolean(),
-  published_at:     z.string().min(1, "published_at is required"),
+  published_at:     z.string().nullable(),
   tags:             z.array(TagSchema),
 });
 

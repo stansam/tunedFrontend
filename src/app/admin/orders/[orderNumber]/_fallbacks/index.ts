@@ -1,0 +1,10 @@
+export const ADMIN_ORDER_DETAIL_STALE_MS  = 60_000;
+export const ADMIN_ORDER_DETAIL_GC_MS     = 5 * 60_000;
+export const ADMIN_COMMENTS_STALE_MS      = 30_000;
+export const ADMIN_DELIVERIES_STALE_MS    = 30_000;
+export const ADMIN_REVISIONS_STALE_MS     = 60_000;
+export const ADMIN_EXTENSIONS_STALE_MS    = 60_000;
+export const ADMIN_DELIVERY_MAX_MB        = 50;
+export const ADMIN_DELIVERY_ALLOWED_EXTS  = [".pdf", ".docx", ".doc", ".txt", ".zip", ".rar"] as const;
+export const ADMIN_PLAGIARISM_ALLOWED_EXTS = [".pdf"] as const;
+export const ADMIN_COMMENT_MAX_CHARS      = 2_500;

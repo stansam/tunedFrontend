@@ -4,6 +4,7 @@ import { HeroSection } from "./_components/HeroSection";
 import { HeroSkeleton } from "./_components/skeleton";
 import { fetchOptions } from "@/lib/services/quote.service";
 import { fetchFeaturedContent } from "@/lib/services/content.service";
+import { FeaturedServices } from "./_components/FeaturedServices";
 import { FeaturedBlogs } from "./_components/FeaturedBlogs";
 import { FeaturedSamples } from "./_components/FeaturedSamples";
 import { HowItWorks } from "./_components/HowItWorks";
@@ -12,7 +13,7 @@ import { Footer } from "./_components/Footer";
 import { ServiceCategory, Sample, BlogPostResponse } from "./_types";
 import type { QuoteFormOptions } from "@/lib/types";
 
-import { 
+import {
   FALLBACK_FEATURED_SERVICES, FALLBACK_SAMPLES, FALLBACK_BLOGS
 } from "./_fallback/featured.fallback";
 import { FALLBACK_SERVICES, FALLBACK_LEVELS } from "./_fallback/quote.fallback";
@@ -55,9 +56,10 @@ export default async function HomePage() {
         <Suspense fallback={<HeroSkeleton />}>
           <HeroSection
             options={options}
-            featuredServices={featuredServices}
           />
         </Suspense>
+
+        <FeaturedServices featuredServices={featuredServices} />
 
         <FeaturedBlogs blogs={blogs} />
         

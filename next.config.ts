@@ -29,13 +29,19 @@ const nextConfig: NextConfig = {
         pathname: "/static/**",
       },
       {
+        protocol: "http",
+        hostname: "5.180.181.81",
+        port: "5000",
+        pathname: "/static/**",
+      },
+      {
         protocol: "https",
         hostname: "tunedessays.com",
         pathname: "/static/**",
       },
     ],
   },
-
+  allowedDevOrigins: process.env.ALLOWED_DEV_ORIGINS?.split(",") ?? [],
   typedRoutes: true,
 
   async rewrites() {
@@ -44,6 +50,10 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         destination: `${process.env.BACKEND_API_URL|| 'http://localhost:5000'}/api/:path*`, 
       },
+      // {
+      //   source: "/socket.io/:path*",
+      //   destination: `${process.env.BACKEND_API_URL || 'http://localhost:5000'}/socket.io/:path*`, 
+      // },
     ];
   },
 };

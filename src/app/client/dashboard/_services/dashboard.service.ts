@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "@/api-client";
+import { apiGet } from "@/api-client";
 import type { ApiResult } from "@/lib/types";
 import {
   KPIDataSchema, DashboardAnalyticsSchema,
@@ -49,8 +49,4 @@ export async function fetchDashboardAlerts(): Promise<ApiResult<DashboardAlerts>
   const parsed = DashboardAlertsSchema.safeParse(res.data);
   if (!parsed.success) { logParseError("/client/dashboard/alerts", parsed.error.format()); return PARSE_ERROR; }
   return { ok: true, data: parsed.data, message: res.message, status: res.status };
-}
-
-export async function requestReorder(orderId: string): Promise<ApiResult<{ redirect_url: string }>> {
-  return apiPost<{ redirect_url: string }>(`/orders/${orderId}/reorder`, {});
 }

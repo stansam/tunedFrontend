@@ -13,7 +13,7 @@ export interface CalculatePriceRequest {
     deadline: string; ///** ISO 8601, timezone-aware. e.g. "2026-03-17T04:21:33.512894Z" */
     word_count: number;
     page_count: number;
-    report_type?: string;
+    report_type?: "turnitin" | "standard";
 }
 
 export interface CalculatePriceResponse {

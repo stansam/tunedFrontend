@@ -39,7 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-env.d.ts
+# env.d.ts
 
 # Dev
 TODO
@@ -47,3 +47,4 @@ TODO.md
 list.md
 options.json
 how-it-works.md
+report.md

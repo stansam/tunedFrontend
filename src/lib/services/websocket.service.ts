@@ -5,7 +5,9 @@ class WebSocketService {
   private backendUrl: string;
 
   constructor() {
-    this.backendUrl = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api', '') || "http://localhost:5000";
+    this.backendUrl =
+      process.env.NEXT_PUBLIC_SOCKET_URL ??
+      (typeof window !== "undefined" ? window.location.origin : "");
   }
 
   public connect(): Socket {
@@ -21,15 +23,21 @@ class WebSocketService {
     });
 
     this.socket.on("connect", () => {
-      console.log("[WebSocket] Connected successfully.");
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[WebSocket] Connected successfully.");
+      }
     });
 
     this.socket.on("connect_error", (err) => {
-      console.warn("[WebSocket] Connection error:", err.message);
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[WebSocket] Connection error:", err.message);
+      }
     });
 
     this.socket.on("disconnect", (reason) => {
-      console.log("[WebSocket] Disconnected:", reason);
+      if (process.env.NODE_ENV !== "production") {
+        console.log("[WebSocket] Disconnected:", reason);
+      }
     });
 
     return this.socket;
@@ -46,10 +54,10 @@ class WebSocketService {
     }
   }
 
-
   public getSocket(): Socket | null {
     return this.socket;
   }
 }
 
 export const webSocketService = new WebSocketService();
+

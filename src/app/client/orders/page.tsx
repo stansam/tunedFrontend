@@ -1,18 +1,19 @@
-import { ComingSoon } from "../_components/ComingSoon";
-import { Folder01Icon } from "@hugeicons/core-free-icons";
+import { Suspense } from "react";
+// import { redirect } from "next/navigation";
+// import { getServerAuthUser } from "@/lib/services/auth.server.service";
+import { OrdersPageClient } from "./_components/OrdersPageClient";
+import { OrdersPageSkeleton } from "./_components/OrdersPageSkeleton";
 
-export const metadata = {
-  title: "My Orders | TunedEssays",
-  description: "View and manage all your orders.",
-};
+export default async function OrdersPage() {
+  // const authResult = await getServerAuthUser();
 
-export default function OrdersPage() {
+  // if (!authResult.ok) {
+  //   redirect("/login?next=/client/orders" as never);
+  // }
+
   return (
-    <ComingSoon
-      title="My Orders"
-      description="Track, manage, and communicate on all your current and past orders — all in one place."
-      icon={Folder01Icon}
-      eta="Q3 2025"
-    />
+    <Suspense fallback={<OrdersPageSkeleton />}>
+      <OrdersPageClient />
+    </Suspense>
   );
 }

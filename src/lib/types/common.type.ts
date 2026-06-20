@@ -22,6 +22,8 @@ export interface RequestOptions {
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
   credentials?: RequestCredentials;
+  signal?: AbortSignal;
+  responseType?: "json" | "blob";
 }
 
 export type NavLink = {

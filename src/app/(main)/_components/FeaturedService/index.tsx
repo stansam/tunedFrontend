@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import type { ServiceCardProps } from "../../_props";
 import { resolveServiceIcon } from "@/lib/utils/resolveServiceIcon";
 
-export function FeaturedServiceCard({ service }: ServiceCardProps) {
+export function FeaturedServiceCard({ service, className }: ServiceCardProps) {
   const { emoji, ariaLabel } = resolveServiceIcon(service);
 
   return (
@@ -10,7 +10,8 @@ export function FeaturedServiceCard({ service }: ServiceCardProps) {
       className={cn(
         "flex shrink-0 items-start gap-3 rounded-2xl bg-white px-5 py-4",
         "shadow-sm ring-1 ring-slate-100 w-[260px] sm:w-[280px]",
-        "transition-shadow hover:shadow-md cursor-default select-none"
+        "transition-shadow hover:shadow-md cursor-default select-none",
+        className
       )}
       aria-label={service.name}
     >

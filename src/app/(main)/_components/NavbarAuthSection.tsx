@@ -56,7 +56,7 @@ export function NavbarAuthSection(): React.ReactElement {
           className="bg-slate-900 hover:bg-emerald-600 text-white font-bold px-7 rounded-full shadow-lg shadow-slate-900/10 hover:shadow-emerald-500/20 transition-all active:scale-95"
           asChild
         >
-          <Link href="#">Order Now</Link>
+          <Link href="/order">Order Now</Link>
         </Button>
 
         <NotificationBell />
@@ -99,7 +99,7 @@ export function NavbarAuthSection(): React.ReactElement {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild>
-              <Link href={{pathname: "/client"}} className="cursor-pointer">
+              <Link href={{pathname: "/client/dashboard"}} className="cursor-pointer">
                 <LayoutDashboard size={15} className="mr-2 text-slate-500" aria-hidden="true" />
                 Dashboard
               </Link>
@@ -142,7 +142,7 @@ export function NavbarAuthSection(): React.ReactElement {
         className="bg-slate-900 hover:bg-emerald-600 text-white font-bold px-7 rounded-full shadow-lg shadow-slate-900/10 hover:shadow-emerald-500/20 transition-all active:scale-95"
         asChild
       >
-        <Link href="#">Order Now</Link>
+        <Link href="/order">Order Now</Link>
       </Button>
     </div>
   );

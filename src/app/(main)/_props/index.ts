@@ -1,5 +1,5 @@
 import {
-    ServiceCardProps, ServicesMarqueeProps,
+    ServiceCardProps, FeaturedServicesProps,
     SectionHeaderProps,
     FeaturedBlogsProps, FeaturedSamplesProps,
     TagChipProps,
@@ -36,7 +36,7 @@ import {
 } from "./footer.props";
 
 export type {
-    ServiceCardProps, ServicesMarqueeProps,
+    ServiceCardProps, FeaturedServicesProps,
     SectionHeaderProps,
     FeaturedBlogsProps, FeaturedSamplesProps,
     TagChipProps,

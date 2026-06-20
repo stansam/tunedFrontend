@@ -4,6 +4,7 @@ export interface AuthUser {
   readonly email: string;
   readonly avatar_url: string | null;
   readonly session_created_at: string | null;
+  readonly reward_points: number;
 }
 
 export type AuthStatus =

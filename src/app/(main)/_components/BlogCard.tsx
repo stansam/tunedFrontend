@@ -35,7 +35,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
         src={backgroundImage}
         alt="blog image"
         fill
-        className="object-cover object-center absolute inset-0 -z-10"
+        className="object-cover object-center absolute inset-0 z-0"
         onError={() => setImgError(true)}
         sizes={isPrimary ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
         priority={isPrimary}
@@ -44,7 +44,7 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
       <div
         aria-hidden="true"
         className={cn(
-          "absolute inset-0 bg-slate-900 transition-opacity duration-500",
+          "absolute inset-0 z-10 bg-slate-900 transition-opacity duration-500",
           isPrimary
             ? "opacity-30 group-hover:opacity-40"
             : "opacity-35 group-hover:opacity-45"
@@ -87,9 +87,11 @@ export function BlogCard({ post, isPrimary }: BlogCardProps) {
               <Clock size={11} aria-hidden="true" />
               {post.readTimeMinutes} min read
             </span>
-            <span className="text-xs text-white opacity-50">
-              {formatPublishedDate(post.publishedAt)}
-            </span>
+            {post.publishedAt && (
+              <span className="text-xs text-white opacity-50">
+                {formatPublishedDate(post.publishedAt)}
+              </span>
+            )}
           </div>
         </div>
 

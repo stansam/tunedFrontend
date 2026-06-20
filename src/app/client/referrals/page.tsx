@@ -22,7 +22,7 @@ export default function ReferralsPage() {
 
   return (
     <div className="@container/main flex min-h-screen flex-col gap-6 overflow-x-hidden pb-24 md:pb-6 relative">
-      <div className="space-y-6 max-w-5xl mx-auto w-full px-4 lg:px-6 mt-4">
+      <div className="space-y-6 w-full px-4 lg:px-6 mt-4">
 
         <section id="hero-share-btn">
           {isLoading ? (

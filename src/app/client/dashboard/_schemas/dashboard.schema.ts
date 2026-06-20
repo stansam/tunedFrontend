@@ -43,7 +43,7 @@ export const MilestoneOrderSchema = z.object({
 export const UpcomingDeadlineSchema = z.object({
   id: z.string(),
   order_number: z.string(),
-  title: z.string(),
+  title: z.string().nullable(),
   due_date: z.string(),
   priority: PriorityZodSchema,
 });
@@ -67,9 +67,10 @@ export const ActionableAlertSchema = z.object({
   type: ActionableAlertTypeZodSchema,
   message: z.string(),
   metadata: z.record(z.string(), z.string()).optional(),
-  created_at: z.string(),
+  created_at: z.string().default(""),
 });
 
 export const DashboardAlertsSchema = z.object({
   alerts: z.array(ActionableAlertSchema),
 });
+
