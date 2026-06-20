@@ -1,19 +1,19 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { PaymentMethodTabs } from "./PaymentMethodTabs";
 import { InstantPaymentForm } from "./InstantPaymentForm";
 import { DirectTransferPanel } from "./DirectTransferPanel";
 import { MobileSubmitButton } from "./MobileSubmitButton";
 import { SecurityBadges } from "./SecurityBadges";
 import type { ActiveTab, PaymentMethod } from "../_types/checkout.types";
+import type { UsePesapalIframeReturn } from "../_hooks/usePesapalIframe";
 
 interface CheckoutLeftPanelProps {
   activeTab: ActiveTab;
   onTabChange: (tab: ActiveTab) => void;
   instantMethod: PaymentMethod | null;
   directMethod: PaymentMethod | null;
-  cardholderName: string;
-  onCardholderNameChange: (v: string) => void;
   onInstantSubmit: () => void;
   onDirectSubmit: (ref: string) => void;
   onMobileSubmit: () => void;
@@ -21,6 +21,7 @@ interface CheckoutLeftPanelProps {
   isDirectSuccess: boolean;
   directPaymentId: string | null;
   isPaid: boolean;
+  pesapalIframe: UsePesapalIframeReturn;
 }
 
 export function CheckoutLeftPanel({
@@ -28,8 +29,6 @@ export function CheckoutLeftPanel({
   onTabChange,
   instantMethod,
   directMethod,
-  cardholderName,
-  onCardholderNameChange,
   onInstantSubmit,
   onDirectSubmit,
   onMobileSubmit,
@@ -37,7 +36,8 @@ export function CheckoutLeftPanel({
   isDirectSuccess,
   directPaymentId,
   isPaid,
-}: CheckoutLeftPanelProps) {
+  pesapalIframe,
+}: CheckoutLeftPanelProps): ReactNode {
   if (!instantMethod && !directMethod) {
     return (
       <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-6 text-center space-y-2">
@@ -49,10 +49,15 @@ export function CheckoutLeftPanel({
     );
   }
 
+  const methods = [
+    ...(instantMethod ? [instantMethod] : []),
+    ...(directMethod ? [directMethod] : []),
+  ];
+
   return (
     <div className="space-y-5">
       <PaymentMethodTabs
-        methods={[...(instantMethod ? [instantMethod] : []), ...(directMethod ? [directMethod] : [])]}
+        methods={methods}
         activeTab={activeTab}
         onTabChange={onTabChange}
         instantMethod={instantMethod}
@@ -63,8 +68,7 @@ export function CheckoutLeftPanel({
         <InstantPaymentForm
           onSubmit={onInstantSubmit}
           isSubmitting={isSubmitting}
-          cardholderName={cardholderName}
-          onCardholderNameChange={onCardholderNameChange}
+          pesapalIframe={pesapalIframe}
         />
       ) : (
         <DirectTransferPanel
@@ -76,12 +80,14 @@ export function CheckoutLeftPanel({
         />
       )}
 
-      <MobileSubmitButton
-        onSubmit={onMobileSubmit}
-        isSubmitting={isSubmitting}
-        isDisabled={isPaid || isDirectSuccess}
-        activeTab={activeTab}
-      />
+      {pesapalIframe.checkoutState === "idle" && (
+        <MobileSubmitButton
+          onSubmit={onMobileSubmit}
+          isSubmitting={isSubmitting}
+          isDisabled={isPaid || isDirectSuccess}
+          activeTab={activeTab}
+        />
+      )}
       <SecurityBadges />
     </div>
   );

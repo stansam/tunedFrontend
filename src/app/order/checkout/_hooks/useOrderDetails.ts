@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import type { QueryObserverResult } from "@tanstack/react-query";
 import { fetchOrderDetails } from "../_services/checkout.service";
 import type { OrderDetails } from "../_types/checkout.types";
 import { FALLBACK_ORDER } from "../_fallback/order.fallback";
@@ -13,10 +14,11 @@ interface UseOrderDetailsReturn {
   isLoading: boolean;
   isError: boolean;
   error: string | null;
+  refetch: () => Promise<QueryObserverResult<OrderDetails, Error>>;
 }
 
 export function useOrderDetails(orderNumber: string): UseOrderDetailsReturn {
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ORDER_QUERY_KEY(orderNumber),
     queryFn: async () => {
       if (!orderNumber) throw new Error("Order number is required");
@@ -38,5 +40,6 @@ export function useOrderDetails(orderNumber: string): UseOrderDetailsReturn {
     isLoading,
     isError,
     error: error instanceof Error ? error.message : null,
+    refetch,
   };
 }
