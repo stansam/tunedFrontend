@@ -3,6 +3,7 @@ declare namespace NodeJS {
     NEXT_PUBLIC_API_BASE_URL: string;
     NEXT_PUBLIC_SOCKET_URL: string;
     NEXT_PUBLIC_APP_ORIGIN: string;
+    NEXT_PUBLIC_BACKEND_URL: string;
     NEXT_PUBLIC_SESSION_COOKIE_NAME: string;
     NEXT_PUBLIC_AUTH_REDIRECT_URL: string;
     NEXT_PUBLIC_WORDS_PER_PAGE: string;

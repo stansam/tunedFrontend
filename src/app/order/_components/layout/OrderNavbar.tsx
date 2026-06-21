@@ -34,7 +34,7 @@ export function OrderNavbar() {
             <Bell size={20} />
           </button>
           <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-            <AvatarImage src={user?.avatar_url || ""} />
+            <AvatarImage src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${user?.avatar_url}`} />
             <AvatarFallback className="bg-emerald-100 text-emerald-700 font-bold">
               {user?.name?.[0] || "U"}
             </AvatarFallback>
