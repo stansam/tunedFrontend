@@ -60,6 +60,8 @@ export const SOCKET_ON = {
   ADMIN_BLOG_COMMENT_UPDATED:    "admin:blog:comment:updated",
   // Chat
   CHAT_MESSAGE:                  "chat:message",
+  CHAT_MESSAGE_UPDATED:          "chat:message:updated",
+  CHAT_MESSAGE_DELETED:          "chat:message:deleted",
   CHAT_READ:                     "chat:read",
   ADMIN_CHAT_CREATED:            "admin:chat:created",
   CHAT_STATUS_CHANGED:           "chat:status_changed",

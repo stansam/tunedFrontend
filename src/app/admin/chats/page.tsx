@@ -6,7 +6,7 @@ import { ChatSkeleton } from "./_components/ChatSkeleton";
 
 export default function ChatsPage() {
   return (
-    <div className="py-6 flex flex-col gap-6 h-full">
+    <div className="py-4 flex flex-col gap-6 h-full">
       <Suspense fallback={<ChatSkeleton />}>
         <ChatContainer />
       </Suspense>

@@ -3,6 +3,7 @@
 import { placeholderImage, formatWordCount } from "@/lib/utils";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { BookOpen, ChevronRight, FileText, Tag as TagIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TagChip } from "./TagChip";
@@ -35,12 +36,13 @@ export function SampleCard({ sample }: SampleCardProps) {
       aria-label={`View sample: ${sample.title}`}
     >
       <div className="relative h-44 w-full overflow-hidden bg-slate-100 shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={imgSrc}
           alt={sample.title}
           onError={() => setImgError(true)}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          unoptimized
         />
 
         {sample.isFeatured && (

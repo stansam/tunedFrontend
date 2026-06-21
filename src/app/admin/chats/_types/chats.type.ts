@@ -1,11 +1,22 @@
+export interface ChatAttachment {
+  id: string;
+  original_filename: string;
+  storage_path: string;
+  asset_type: string;
+  file_size_bytes?: number | null;
+}
+
 export interface ChatMessage {
   id: string;
   chat_id: string;
   user_id: string | null;
-  content: string;
+  content: string | null;
   is_read: boolean;
   sender_name: string;
   is_admin: boolean;
+  is_edited?: boolean;
+  is_deleted?: boolean;
+  attachments?: ChatAttachment[];
   created_at: string;
 }
 

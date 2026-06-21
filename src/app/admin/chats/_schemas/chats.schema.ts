@@ -1,13 +1,24 @@
 import { z } from "zod";
 
+export const ChatAttachmentSchema = z.object({
+  id: z.string(),
+  original_filename: z.string(),
+  storage_path: z.string(),
+  asset_type: z.string(),
+  file_size_bytes: z.number().nullable().optional(),
+});
+
 export const ChatMessageSchema = z.object({
   id: z.string(),
   chat_id: z.string(),
   user_id: z.string().nullable(),
-  content: z.string(),
+  content: z.string().nullable(),
   is_read: z.boolean(),
   sender_name: z.string(),
   is_admin: z.boolean(),
+  is_edited: z.boolean().optional(),
+  is_deleted: z.boolean().optional(),
+  attachments: z.array(ChatAttachmentSchema).optional(),
   created_at: z.string(),
 });
 

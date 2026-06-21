@@ -31,7 +31,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { title: "Services", url: "/admin/services", icon: LayoutGrid },
       { title: "Payments", url: "/admin/payments", icon: CreditCard, badgeKey: "payments_count" },
       { title: "Blogs", url: "/admin/blogs", icon: BookOpen },
-      { title: "Chat", url: "/admin/chat", icon: MessageSquare, badgeKey: "chat_count" },
+      { title: "Chat", url: "/admin/chats", icon: MessageSquare, badgeKey: "chat_count" },
     ],
   },
 ];

@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Paperclip, Send } from "lucide-react";
 import { toast } from "sonner";
 import type { ChatWindowInputProps } from "../_props/chats.props";
 
-export function ChatWindowInput({ chat, onSendMessage }: ChatWindowInputProps) {
+export function ChatWindowInput({ chat, onSendMessage, onUploadAttachment }: ChatWindowInputProps) {
   const [content, setContent] = useState("");
   const [sending, setSending] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,20 +26,32 @@ export function ChatWindowInput({ chat, onSendMessage }: ChatWindowInputProps) {
     }
   };
 
-  const handleAttach = () => {
-    toast.info("Attachment uploading is pending backend migration support.");
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setSending(true);
+      await onUploadAttachment(file);
+      toast.success("File uploaded successfully");
+    } catch {
+      toast.error("Failed to upload file");
+    } finally {
+      setSending(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const isClosed = chat.status === "closed";
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2 pt-3 border-t border-slate-200/40">
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
       <Button
         type="button"
         variant="ghost"
         size="icon"
-        onClick={handleAttach}
-        disabled={isClosed}
+        onClick={() => fileInputRef.current?.click()}
+        disabled={isClosed || sending}
         className="h-9 w-9 text-slate-500 hover:text-slate-800"
       >
         <Paperclip className="h-4 w-4" />

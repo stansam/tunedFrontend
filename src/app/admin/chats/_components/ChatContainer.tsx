@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useChatQueries } from "../_hooks/useChatQueries";
+import { useChatActions } from "../_hooks/useChatActions";
 import { ChatSidebar } from "./ChatSidebar";
 import { ChatWindow } from "./ChatWindow";
 import { ChatSkeleton } from "./ChatSkeleton";
@@ -14,6 +15,7 @@ export function ChatContainer() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const q = useChatQueries(activeChatId);
+  const actions = useChatActions(activeChatId);
   const { markAsRead } = q;
 
   useEffect(() => {
@@ -57,6 +59,9 @@ export function ChatContainer() {
           onSendMessage={q.sendMessage}
           onAssignAgent={q.assignAgent}
           onChangeStatus={q.changeStatus}
+          onEditMessage={actions.editMessage}
+          onDeleteMessage={actions.deleteMessage}
+          onUploadAttachment={actions.uploadAttachment}
         />
       </div>
     </div>

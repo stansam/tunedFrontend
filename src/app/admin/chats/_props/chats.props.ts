@@ -34,6 +34,9 @@ export interface ChatWindowProps {
   readonly onSendMessage: (content: string) => Promise<unknown>;
   readonly onAssignAgent: (adminId: string) => Promise<unknown>;
   readonly onChangeStatus: (status: "active" | "closed") => Promise<unknown>;
+  readonly onEditMessage: (messageId: string, content: string) => Promise<unknown>;
+  readonly onDeleteMessage: (messageId: string) => Promise<unknown>;
+  readonly onUploadAttachment: (file: File) => Promise<unknown>;
 }
 
 export interface ChatWindowHeaderProps {
@@ -46,9 +49,12 @@ export interface ChatWindowHeaderProps {
 
 export interface ChatWindowMessagesProps {
   readonly chat: ChatRoom;
+  readonly onEditMessage: (messageId: string, content: string) => Promise<unknown>;
+  readonly onDeleteMessage: (messageId: string) => Promise<unknown>;
 }
 
 export interface ChatWindowInputProps {
   readonly chat: ChatRoom;
   readonly onSendMessage: (content: string) => Promise<unknown>;
+  readonly onUploadAttachment: (file: File) => Promise<unknown>;
 }

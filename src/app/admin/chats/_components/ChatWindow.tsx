@@ -11,6 +11,9 @@ export function ChatWindow({
   onSendMessage,
   onAssignAgent,
   onChangeStatus,
+  onEditMessage,
+  onDeleteMessage,
+  onUploadAttachment,
 }: ChatWindowProps) {
   if (!chat) {
     return (
@@ -29,8 +32,16 @@ export function ChatWindow({
         onAssignAgent={onAssignAgent}
         onChangeStatus={onChangeStatus}
       />
-      <ChatWindowMessages chat={chat} />
-      <ChatWindowInput chat={chat} onSendMessage={onSendMessage} />
+      <ChatWindowMessages
+        chat={chat}
+        onEditMessage={onEditMessage}
+        onDeleteMessage={onDeleteMessage}
+      />
+      <ChatWindowInput
+        chat={chat}
+        onSendMessage={onSendMessage}
+        onUploadAttachment={onUploadAttachment}
+      />
     </div>
   );
 }
