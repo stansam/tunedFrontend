@@ -44,6 +44,12 @@ export const SOCKET_ON = {
   ADMIN_PAYMENT_VERIFICATION_REQUIRED: "admin:payment_verification_required",
   ADMIN_REVISION_REQUESTED:      "admin:revision:requested",
   ADMIN_USER_REGISTERED:         "admin:user:registered",
+  ADMIN_CATEGORY_CREATED:        "admin:category:created",
+  ADMIN_CATEGORY_UPDATED:        "admin:category:updated",
+  ADMIN_CATEGORY_DELETED:        "admin:category:deleted",
+  ADMIN_SERVICE_CREATED:         "admin:service:created",
+  ADMIN_SERVICE_UPDATED:         "admin:service:updated",
+  ADMIN_SERVICE_DELETED:         "admin:service:deleted",
   // System
   SOCKET_ERROR:          "error",
 } as const;

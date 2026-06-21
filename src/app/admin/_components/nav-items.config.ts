@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, ShoppingBag, Users, Star, CreditCard, MessageSquare
+  LayoutDashboard, ShoppingBag, Users, Star, CreditCard, MessageSquare, LayoutGrid
 } from "lucide-react";
 import type { ComponentType } from "react";
 
@@ -28,6 +28,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     label: "Management",
     items: [
       { title: "Testimonials", url: "/admin/testimonials", icon: Star, badgeKey: "testimonials_count" },
+      { title: "Services", url: "/admin/services", icon: LayoutGrid },
       { title: "Payments", url: "/admin/payments", icon: CreditCard, badgeKey: "payments_count" },
       { title: "Chat", url: "/admin/chat", icon: MessageSquare, badgeKey: "chat_count" },
     ],
