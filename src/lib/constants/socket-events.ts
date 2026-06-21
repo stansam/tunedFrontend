@@ -58,6 +58,12 @@ export const SOCKET_ON = {
   ADMIN_BLOG_CATEGORY_UPDATED:   "admin:blog:category:updated",
   ADMIN_BLOG_CATEGORY_DELETED:   "admin:blog:category:deleted",
   ADMIN_BLOG_COMMENT_UPDATED:    "admin:blog:comment:updated",
+  // Chat
+  CHAT_MESSAGE:                  "chat:message",
+  CHAT_READ:                     "chat:read",
+  ADMIN_CHAT_CREATED:            "admin:chat:created",
+  CHAT_STATUS_CHANGED:           "chat:status_changed",
+  CHAT_ASSIGNED:                 "chat:assigned",
   // System
   SOCKET_ERROR:          "error",
 } as const;
