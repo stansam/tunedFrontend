@@ -50,6 +50,14 @@ export const SOCKET_ON = {
   ADMIN_SERVICE_CREATED:         "admin:service:created",
   ADMIN_SERVICE_UPDATED:         "admin:service:updated",
   ADMIN_SERVICE_DELETED:         "admin:service:deleted",
+  ADMIN_BLOG_POST_CREATED:       "admin:blog:post:created",
+  ADMIN_BLOG_POST_UPDATED:       "admin:blog:post:updated",
+  ADMIN_BLOG_POST_DELETED:       "admin:blog:post:deleted",
+  ADMIN_BLOG_POST_PUBLISHED:     "admin:blog:post:published",
+  ADMIN_BLOG_CATEGORY_CREATED:   "admin:blog:category:created",
+  ADMIN_BLOG_CATEGORY_UPDATED:   "admin:blog:category:updated",
+  ADMIN_BLOG_CATEGORY_DELETED:   "admin:blog:category:deleted",
+  ADMIN_BLOG_COMMENT_UPDATED:    "admin:blog:comment:updated",
   // System
   SOCKET_ERROR:          "error",
 } as const;
