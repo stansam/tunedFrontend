@@ -7,7 +7,7 @@ export async function fetchAdminDeliveries(
   orderId: string,
 ): Promise<ApiResult<AdminDeliveryDTO[]>> {
   const result = await apiGet<AdminDeliveryDTO[]>(
-    `/deliveries/list/${encodeURIComponent(orderId)}`,
+    `/orders/delivery/list/${encodeURIComponent(orderId)}`,
   );
   if (!result.ok) return result;
 
@@ -23,7 +23,7 @@ export async function submitAdminDelivery(
   formData: FormData,
 ): Promise<ApiResult<AdminDeliveryDTO>> {
   return apiPost<AdminDeliveryDTO>(
-    `/deliveries/create/${encodeURIComponent(orderId)}`,
+    `/orders/delivery/create/${encodeURIComponent(orderId)}`,
     formData,
   );
 }
@@ -33,7 +33,7 @@ export async function updateAdminDeliveryStatus(
   status: string,
 ): Promise<ApiResult<AdminDeliveryDTO>> {
   return apiPatch<AdminDeliveryDTO>(
-    `/deliveries/${encodeURIComponent(deliveryId)}/status`,
+    `/orders/delivery/${encodeURIComponent(deliveryId)}/status`,
     { status },
   );
 }
@@ -42,7 +42,7 @@ export async function markAdminClientNotified(
   deliveryId: string,
 ): Promise<ApiResult<AdminDeliveryDTO>> {
   return apiPatch<AdminDeliveryDTO>(
-    `/deliveries/${encodeURIComponent(deliveryId)}/notified`,
+    `/orders/delivery/${encodeURIComponent(deliveryId)}/notified`,
     {},
   );
 }
@@ -51,6 +51,6 @@ export async function deleteAdminDelivery(
   deliveryId: string,
 ): Promise<ApiResult<void>> {
   return apiDelete<void>(
-    `/deliveries/${encodeURIComponent(deliveryId)}`,
+    `/orders/delivery/${encodeURIComponent(deliveryId)}`,
   );
 }
