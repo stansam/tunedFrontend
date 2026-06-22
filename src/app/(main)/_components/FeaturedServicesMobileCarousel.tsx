@@ -5,7 +5,7 @@ import type { FeaturedServicesMobileCarouselProps } from "../_props/featured.pro
 export function FeaturedServicesMobileCarousel({
   scrollContainerRef,
   onScroll,
-  filteredServices,
+  services,
   iconRecord,
 }: FeaturedServicesMobileCarouselProps) {
   return (
@@ -14,7 +14,7 @@ export function FeaturedServicesMobileCarousel({
       onScroll={onScroll}
       className="flex gap-4 overflow-x-auto pb-6 pt-1 px-1 scroll-smooth snap-x snap-mandatory [-ms-overflow-style:none] scrollbar-none [&::-webkit-scrollbar]:hidden"
     >
-      {filteredServices.map((service) => (
+      {services.map((service) => (
         <div
           key={service.id}
           className="snap-center snap-always shrink-0 w-[280px]"
