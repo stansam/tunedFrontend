@@ -69,9 +69,9 @@ export function SamplesPageClient() {
         onEdit={s.openEdit} onDelete={s.openDelete} onFeatureToggle={handleFeatureToggle} page={s.page} total={listData?.total ?? 0} onPageChange={s.setPage}
       />
 
-      <CreateSampleModal key={s.isCreateOpen ? "open" : "closed"} isOpen={s.isCreateOpen} onClose={() => s.setIsCreateOpen(false)} onSave={handleCreate} isSaving={createMut.isPending} services={services} />
-      <EditSampleModal key={s.isEditOpen ? (s.selectedSample?.id || "new") : "closed"} isOpen={s.isEditOpen} sample={s.selectedSample} onClose={() => s.setIsEditOpen(false)} onSave={handleEdit} isSaving={updateMut.isPending} services={services} />
-      <DeleteSampleDialog key={s.isDeleteOpen ? (s.selectedSample?.id || "new") : "closed"} isOpen={s.isDeleteOpen} sample={s.selectedSample} onClose={() => s.setIsDeleteOpen(false)} onDelete={handleDelete} isDeleting={deleteMut.isPending} />
+      <CreateSampleModal key={s.isCreateOpen ? "create-open" : "create-closed"} isOpen={s.isCreateOpen} onClose={() => s.setIsCreateOpen(false)} onSave={handleCreate} isSaving={createMut.isPending} services={services} />
+      <EditSampleModal key={s.isEditOpen ? `edit-open-${s.selectedSample?.id || "new"}` : "edit-closed"} isOpen={s.isEditOpen} sample={s.selectedSample} onClose={() => s.setIsEditOpen(false)} onSave={handleEdit} isSaving={updateMut.isPending} services={services} />
+      <DeleteSampleDialog key={s.isDeleteOpen ? `delete-open-${s.selectedSample?.id || "new"}` : "delete-closed"} isOpen={s.isDeleteOpen} sample={s.selectedSample} onClose={() => s.setIsDeleteOpen(false)} onDelete={handleDelete} isDeleting={deleteMut.isPending} />
     </div>
   );
 }
