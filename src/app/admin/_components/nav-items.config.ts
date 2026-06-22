@@ -25,14 +25,24 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     ],
   },
   {
-    label: "Management",
+    label: "Finance",
     items: [
-      { title: "Testimonials", url: "/admin/testimonials", icon: Star, badgeKey: "testimonials_count" },
-      { title: "Services", url: "/admin/services", icon: LayoutGrid },
-      { title: "Samples", url: "/admin/samples", icon: FileText },
       { title: "Payments", url: "/admin/payments", icon: CreditCard, badgeKey: "payments_count" },
+    ]
+  },
+  {
+    label: "Content",
+    items: [
       { title: "Blogs", url: "/admin/blogs", icon: BookOpen },
-      { title: "Chat", url: "/admin/chats", icon: MessageSquare, badgeKey: "chat_count" },
+      { title: "Services", url: "/admin/services", icon: LayoutGrid },
+      { title: "Testimonials", url: "/admin/testimonials", icon: Star, badgeKey: "testimonials_count" },
+      { title: "Samples", url: "/admin/samples", icon: FileText },
+    ]
+  },
+  {
+    label: "Operations",
+    items: [
+      { title: "Live Chat", url: "/admin/chats", icon: MessageSquare, badgeKey: "chat_count" },
     ],
   },
 ];

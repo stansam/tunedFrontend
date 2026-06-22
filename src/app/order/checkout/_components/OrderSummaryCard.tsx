@@ -7,6 +7,7 @@ import { buildOrderItemLabel, formatCurrency } from "../_utils/format.utils";
 import { OrderSummaryLineItems } from "./OrderSummaryLineItems";
 import { OrderSummarySkeleton } from "./skeletons/OrderSummarySkeleton";
 import type { OrderSummaryCardProps } from "../_props/payment.props";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 export function OrderSummaryCard({
   order,
@@ -16,6 +17,7 @@ export function OrderSummaryCard({
   activeTab,
   hideCTA = false,
 }: OrderSummaryCardProps): ReactNode {
+  const { openModal } = useLegalModal();
   if (isLoading && !order) return <OrderSummarySkeleton />;
 
   const total = order?.total_price ?? 0;
@@ -64,9 +66,13 @@ export function OrderSummaryCard({
 
           <p className="text-center text-xs text-muted-foreground hidden sm:block leading-relaxed">
             By completing this payment, you agree to our{" "}
-            <a href="/terms" className="underline hover:text-foreground transition-colors">
+            <button
+              type="button"
+              onClick={() => openModal("terms")}
+              className="underline hover:text-foreground transition-colors bg-transparent border-none p-0 cursor-pointer text-xs"
+            >
               Terms of Service
-            </a>
+            </button>
             .
           </p>
         </>

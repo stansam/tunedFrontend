@@ -1,6 +1,7 @@
 "use client";
 
 import type { ActiveTab } from "../_types/checkout.types";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 interface MobileSubmitButtonProps {
   onSubmit: () => void;
@@ -15,6 +16,7 @@ export function MobileSubmitButton({
   isDisabled,
   activeTab,
 }: MobileSubmitButtonProps) {
+  const { openModal } = useLegalModal();
   const label = isSubmitting
     ? "Processing…"
     : activeTab === "direct"
@@ -33,9 +35,13 @@ export function MobileSubmitButton({
       </button>
       <p className="text-center text-xs text-muted-foreground">
         By continuing, you agree to our{" "}
-        <a href="/terms" className="underline hover:text-foreground transition-colors">
+        <button
+          type="button"
+          onClick={() => openModal("terms")}
+          className="underline hover:text-foreground transition-colors bg-transparent border-none p-0 cursor-pointer text-xs"
+        >
           Terms of Service
-        </a>
+        </button>
         .
       </p>
     </div>

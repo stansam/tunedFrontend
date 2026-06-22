@@ -1,6 +1,7 @@
 "use client";
 
 import { ShieldCheck, Headphones, Award } from "lucide-react";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 const TRUST_BADGES = [
   { icon: ShieldCheck, title: "256-bit AES", desc: "Encrypted Transactions" },
@@ -9,6 +10,8 @@ const TRUST_BADGES = [
 ];
 
 export function OrderFooter() {
+  const { openModal } = useLegalModal();
+
   return (
     <footer className="mt-auto border-t border-black/5 bg-white/50 py-8">
       <div className="container mx-auto px-4 lg:px-8">
@@ -31,8 +34,18 @@ export function OrderFooter() {
             © 2026 TunedEssays writing services. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm font-medium text-slate-600">
-            <a href="#" className="hover:text-emerald-600 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-emerald-600 transition-colors">Terms of Service</a>
+            <button
+              onClick={() => openModal("privacy")}
+              className="hover:text-emerald-600 transition-colors bg-transparent border-none p-0 cursor-pointer text-sm font-medium text-slate-600"
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={() => openModal("terms")}
+              className="hover:text-emerald-600 transition-colors bg-transparent border-none p-0 cursor-pointer text-sm font-medium text-slate-600"
+            >
+              Terms of Service
+            </button>
             <a href="#" className="hover:text-emerald-600 transition-colors">Support</a>
           </div>
         </div>

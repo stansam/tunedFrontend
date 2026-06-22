@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth/Context";
 import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { QueryProvider } from "@/lib/providers/QueryProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { LegalModalProvider } from "@/lib/contexts/LegalModalContext";
 import { Toaster } from "sonner";
 // import { redirect } from "next/navigation";
 import type { AuthUser } from "@/lib/types/auth.type";
@@ -32,9 +33,11 @@ export default async function OrderLayout({ children }: { children: React.ReactN
         <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null }>
       <QueryProvider>
         <TooltipProvider delayDuration={300}>
-          <div className="flex min-h-screen flex-col">
-            {children}
-          </div>
+          <LegalModalProvider>
+            <div className="flex min-h-screen flex-col">
+              {children}
+            </div>
+          </LegalModalProvider>
         </TooltipProvider>
         <Toaster position="top-center" richColors theme="light" />
       </QueryProvider>

@@ -16,6 +16,7 @@ export interface SocialLink {
 export interface FooterLink {
   readonly label: string;
   readonly href:  string;
+  readonly type?: "terms" | "privacy" | "refund" | "security";
 }
 
 export interface FooterData {
