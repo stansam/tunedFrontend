@@ -18,17 +18,11 @@ export interface UseFeaturedServicesReturn {
 export function useFeaturedServices({
   featuredServices,
 }: UseFeaturedServicesParams): UseFeaturedServicesReturn {
-  // const [activeTab, setActiveTab] = useState<TabId>("all");
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const iconMap = resolveServiceIcons(featuredServices);
   const iconRecord: ServiceIconRecord = Object.fromEntries(iconMap);
-
-  // const filteredServices = featuredServices.filter((service) => {
-  //   if (activeTab === "all") return true;
-  //   return getServiceCategoryGroup(service.id) === activeTab;
-  // });
 
   const handleScroll = () => {
     const container = scrollContainerRef.current;
@@ -61,15 +55,6 @@ export function useFeaturedServices({
     });
     setActiveIndex(index);
   };
-
-  // const handleTabChange = (tabId: TabId) => {
-  //   setActiveTab(tabId);
-  //   setActiveIndex(0);
-  //   const container = scrollContainerRef.current;
-  //   if (container) {
-  //     container.scrollLeft = 0;
-  //   }
-  // };
 
   return {
     activeIndex,

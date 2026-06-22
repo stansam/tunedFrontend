@@ -4,6 +4,7 @@ import { useState, useCallback, useId } from "react";
 import { Loader2, CheckCircle2, AlertCircle, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NewsletterRequestSchema } from "@/lib/schemas/newsletter.schema";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 import { subscribeToNewsletter } from "../../_actions/newsletter.action";
 import type { NewsletterFormProps } from "../../_props/footer.props";
 import type { NewsletterFormStatus } from "../../_types/footer.types";
@@ -19,8 +20,10 @@ export function NewsletterForm({
 }: NewsletterFormProps) {
   const inputId  = useId();
   const statusId = useId();
+  const { openModal } = useLegalModal();
 
   const [email,  setEmail]  = useState("");
+  const [consent, setConsent] = useState(false);
   const [formStatus, setFormStatus] = useState<NewsletterFormStatus>({ status: "idle" });
 
   const resetToIdle = useCallback(() => {
@@ -30,6 +33,14 @@ export function NewsletterForm({
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+
+      if (!consent) {
+        setFormStatus({
+          status:  "error",
+          message: "You must agree to the privacy policy.",
+        });
+        return;
+      }
 
       const validation = NewsletterRequestSchema.safeParse({ email: email.trim() });
       if (!validation.success) {
@@ -50,6 +61,7 @@ export function NewsletterForm({
           message: result.data.message || "You're subscribed! Check your inbox.",
         });
         setEmail("");
+        setConsent(false);
       } else {
         setFormStatus({
           status:  "error",
@@ -57,7 +69,7 @@ export function NewsletterForm({
         });
       }
     },
-    [email]
+    [email, consent]
   );
 
   const isLoading = formStatus.status === "loading";
@@ -147,6 +159,31 @@ export function NewsletterForm({
               )}
               <span>{isLoading ? "Sending…" : "Subscribe"}</span>
             </button>
+          </div>
+
+          <div className="mt-3 flex items-start gap-2 text-left">
+            <input
+              id="newsletter-consent"
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => {
+                setConsent(e.target.checked);
+                if (formStatus.status === "error") resetToIdle();
+              }}
+              disabled={isLoading}
+              className="mt-0.5 h-3.5 w-3.5 rounded border-slate-700 bg-slate-800 text-emerald-500 focus:ring-emerald-500/20 focus:ring-offset-[#0f1117] cursor-pointer"
+            />
+            <label htmlFor="newsletter-consent" className="text-[11px] leading-tight text-slate-500 select-none cursor-pointer">
+              I agree to receive newsletters and accept the{" "}
+              <button
+                type="button"
+                onClick={() => openModal("privacy")}
+                className="text-emerald-400 hover:underline bg-transparent border-none p-0 inline font-medium align-baseline cursor-pointer"
+              >
+                privacy policy
+              </button>
+              .
+            </label>
           </div>
 
           {/* ── Status message (error) ────────────────────────────────── */}

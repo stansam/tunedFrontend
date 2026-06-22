@@ -6,6 +6,8 @@ import { ContactRow } from "./ContactRow";
 import { SocialLinks } from "./SocialLinks";
 import { NewsletterForm } from "./NewsletterForm";
 import { FooterLinks } from "./FooterLinks";
+import { Suspense } from "react";
+import { UnsubscribeTrigger } from "./UnsubscribeTrigger";
 
 export function Footer({ className }: FooterProps) {
   const year = new Date().getFullYear();
@@ -52,6 +54,10 @@ export function Footer({ className }: FooterProps) {
         className="h-px w-full bg-linear-to-r from-transparent via-slate-800 to-transparent"
         aria-hidden="true"
       />
+
+      <Suspense fallback={null}>
+        <UnsubscribeTrigger />
+      </Suspense>
     </footer>
   );
 }

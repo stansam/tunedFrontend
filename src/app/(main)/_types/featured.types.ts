@@ -21,11 +21,3 @@ export interface UseFeaturedContentReturn {
   readonly hasBlogs:        boolean;
   readonly hasSamples:      boolean;
 }
-
-// export const TABS = [
-//   { id: "all", label: "All Services" },
-//   { id: "writing", label: "Writing" },
-//   { id: "editing", label: "Editing" },
-//   { id: "technical", label: "Technical & Coding" },
-// ] as const;
-// export type TabId = (typeof TABS)[number]["id"];

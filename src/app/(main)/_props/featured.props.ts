@@ -44,11 +44,6 @@ export interface FeaturedServicesMobileCarouselProps {
   readonly iconRecord: ServiceIconRecord;
 }
 
-// export interface FeaturedServicesTabsProps {
-//   readonly activeTab: TabId;
-//   readonly onTabChange: (tabId: TabId) => void;
-// }
-
 export interface FeaturedBlogsProps {
   readonly blogs:             readonly BlogPostResponse[];
   readonly title?:            string;
