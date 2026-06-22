@@ -75,7 +75,7 @@ export function NavbarAuthSection(): React.ReactElement {
             >
               <Avatar className="h-9 w-9">
                 {user.avatar_url && (
-                  <AvatarImage src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${user.avatar_url}`} alt={user.name} />
+                  <AvatarImage src={user.avatar_url} alt={user.name} />
                 )}
                 <AvatarFallback
                   className="bg-emerald-100 text-emerald-700 text-sm font-bold"

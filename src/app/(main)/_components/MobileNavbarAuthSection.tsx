@@ -54,7 +54,7 @@ export function MobileNavbarAuthSection(): React.ReactElement {
         >
           <Avatar className="h-10 w-10 shrink-0">
             {user.avatar_url && (
-              <AvatarImage src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${user.avatar_url}`} alt={user.name} />
+              <AvatarImage src={user.avatar_url} alt={user.name} />
             )}
             <AvatarFallback className="bg-emerald-100 text-emerald-700 text-sm font-bold">
               {initials}
