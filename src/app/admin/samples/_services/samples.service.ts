@@ -39,7 +39,7 @@ export const fetchSamples = async (p: {
 };
 
 export const fetchSampleServices = async (): Promise<ApiResult<readonly T.AdminSampleService[]>> =>
-  validate(await apiGet("/content/samples/services"), S.AdminSampleServiceSchema.array());
+  validate(await apiGet("/samples/services"), S.AdminSampleServiceSchema.array());
 
 export const createSample = async (
   d: T.AdminSampleMutation
