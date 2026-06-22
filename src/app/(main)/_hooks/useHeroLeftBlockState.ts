@@ -52,22 +52,63 @@ export function useHeroLeftBlockState({ onSearch }: { onSearch?: (term: string) 
       return;
     }
     const count = flatItems.length;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((prev) => (count > 0 ? (prev + 1) % count : -1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((prev) => (count > 0 ? (prev - 1 + count) % count : -1));
-    } else if (e.key === "Escape") {
-      setIsDropdownOpen(false);
-      setActiveIndex(-1);
-    } else if (e.key === "Enter" && flatItems[activeIndex]) {
-      const item = flatItems[activeIndex];
-      e.preventDefault();
-      if (["service", "sample", "blog", "faq", "tag"].includes(item.type)) {
-        trackClick(item.type as "service" | "sample" | "blog" | "faq" | "tag", item.id.split("-")[1] || "", activeIndex);
+    // if (e.key === "ArrowDown") {
+    //   e.preventDefault();
+    //   setActiveIndex((prev) => (count > 0 ? (prev + 1) % count : -1));
+    // } else if (e.key === "ArrowUp") {
+    //   e.preventDefault();
+    //   setActiveIndex((prev) => (count > 0 ? (prev - 1 + count) % count : -1));
+    // } else if (e.key === "Escape") {
+    //   setIsDropdownOpen(false);
+    //   setActiveIndex(-1);
+    // } else if (e.key === "Enter" && flatItems[activeIndex]) {
+    //   const item = flatItems[activeIndex];
+    //   e.preventDefault();
+    //   if (["service", "sample", "blog", "faq", "tag"].includes(item.type)) {
+    //     trackClick(item.type as "service" | "sample" | "blog" | "faq" | "tag", item.id.split("-")[1] || "", activeIndex);
+    //   }
+    //   handleDropdownSelect(item.value, item.path);
+    // }
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setActiveIndex((prev) => (count > 0 ? (prev + 1) % count : -1));
+        break;
+
+      case "ArrowUp":
+        e.preventDefault();
+        setActiveIndex((prev) => (count > 0 ? (prev - 1 + count) % count : -1));
+        break;
+
+      case "Escape":
+        setIsDropdownOpen(false);
+        setActiveIndex(-1);
+        break;
+
+      case "Enter": {
+        const item = flatItems[activeIndex];
+
+        if (!item) return;
+
+        e.preventDefault();
+
+        if (
+          item.type === "service" ||
+          item.type === "sample" ||
+          item.type === "blog" ||
+          item.type === "faq" ||
+          item.type === "tag"
+        ) {
+          trackClick(
+            item.type,
+            item.id.split("-")[1] ?? "",
+            activeIndex
+          );
+        }
+
+        handleDropdownSelect(item.value, item.path);
+        break;
       }
-      handleDropdownSelect(item.value, item.path);
     }
   };
 

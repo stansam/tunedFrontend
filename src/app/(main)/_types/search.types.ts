@@ -31,7 +31,7 @@ export interface PopularSearchItem {
 export interface FlatItem {
   id: string;
   label: string;
-  type: 'recent' | 'popular' | 'trending' | 'service' | 'sample' | 'blog' | 'tag';
+  type: 'recent' | 'popular' | 'trending' | 'service' | 'sample' | 'blog' | 'tag' | 'faq';
   path?: string;
   value: string;
 }
