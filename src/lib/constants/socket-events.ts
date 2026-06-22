@@ -61,6 +61,9 @@ export const SOCKET_ON = {
   ADMIN_BLOG_CATEGORY_UPDATED:   "admin:blog:category:updated",
   ADMIN_BLOG_CATEGORY_DELETED:   "admin:blog:category:deleted",
   ADMIN_BLOG_COMMENT_UPDATED:    "admin:blog:comment:updated",
+  ADMIN_TESTIMONIAL_CREATED:     "admin:testimonial:created",
+  ADMIN_TESTIMONIAL_UPDATED:     "admin:testimonial:updated",
+  ADMIN_TESTIMONIAL_DELETED:     "admin:testimonial:deleted",
   // Chat
   CHAT_MESSAGE:                  "chat:message",
   CHAT_MESSAGE_UPDATED:          "chat:message:updated",
