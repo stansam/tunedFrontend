@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils/index";
 import type { FooterLinksProps } from "../../_props/footer.props";
