@@ -18,6 +18,7 @@ export const AdminTestimonialResponseSchema = z.object({
   user_id: z.string().nullable().optional(),
   service_id: z.string().nullable().optional(),
   order_id: z.string().nullable().optional(),
+  order_number: z.string().nullable().optional(),
   content: z.string(),
   rating: z.number().int().min(1).max(5),
   is_approved: z.boolean(),

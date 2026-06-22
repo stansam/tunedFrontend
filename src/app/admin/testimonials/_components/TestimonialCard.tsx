@@ -19,14 +19,7 @@ export function TestimonialCard({
         <div className="flex items-center gap-3 min-w-0">
           <div className="flex size-10 items-center justify-center rounded-xl bg-white/60 border border-white/85 shrink-0 overflow-hidden">
             {testimonial.user?.avatar_url ? (
-              <Image
-                src={testimonial.user.avatar_url}
-                alt={authorName}
-                width={40}
-                height={40}
-                unoptimized
-                className="size-full rounded-xl object-cover"
-              />
+              <Image src={testimonial.user.avatar_url} alt={authorName} width={40} height={40} unoptimized className="size-full rounded-xl object-cover" />
             ) : <User className="h-5 w-5 text-slate-400" />}
           </div>
           <div className="min-w-0 space-y-0.5">
@@ -50,9 +43,7 @@ export function TestimonialCard({
           </div>
           <div className="flex items-center gap-2">
             {!isApproved && (
-              <button disabled={isApproving} onClick={onApprove} className="px-2.5 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer">
-                <Check className="h-3.5 w-3.5" /> Approve
-              </button>
+              <button disabled={isApproving} onClick={onApprove} className="px-2.5 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer"><Check className="h-3.5 w-3.5" /> Approve</button>
             )}
             <button onClick={onToggleExpand} className="px-2.5 py-1.5 text-xs font-bold text-slate-700 bg-white/60 hover:bg-white border border-slate-200 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer">
               {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
@@ -67,18 +58,14 @@ export function TestimonialCard({
             &quot;{testimonial.content}&quot;
           </p>
           <div className="flex items-center justify-between gap-3 text-xs">
-            {testimonial.order_id ? (
-              <Link href={`/admin/orders/detail/${testimonial.order_id}` as Route} className="text-emerald-600 hover:text-emerald-500 font-semibold inline-flex items-center gap-1">
+            {testimonial.order_number ? (
+              <Link href={`/admin/orders/${testimonial.order_number}` as Route} className="text-emerald-600 hover:text-emerald-500 font-semibold inline-flex items-center gap-1">
                 <LinkIcon className="h-3.5 w-3.5" /> View Linked Order
               </Link>
             ) : <span className="text-slate-400 italic">No order linked</span>}
             <div className="flex gap-2">
-              <button onClick={onEdit} className="px-3 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer">
-                <Edit className="h-3.5 w-3.5" /> Edit
-              </button>
-              <button onClick={onDelete} className="px-3 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer">
-                <Trash2 className="h-3.5 w-3.5" /> Delete
-              </button>
+              <button onClick={onEdit} className="px-3 py-1.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer"><Edit className="h-3.5 w-3.5" /> Edit</button>
+              <button onClick={onDelete} className="px-3 py-1.5 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-xl transition-all shadow-2xs flex items-center gap-1 cursor-pointer"><Trash2 className="h-3.5 w-3.5" /> Delete</button>
             </div>
           </div>
         </div>
