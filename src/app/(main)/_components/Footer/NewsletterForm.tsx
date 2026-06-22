@@ -161,7 +161,7 @@ export function NewsletterForm({
             </button>
           </div>
 
-          <div className="mt-3 flex items-start gap-2 text-left">
+          <div className="mt-3 flex items-start justify-center gap-2 text-left">
             <input
               id="newsletter-consent"
               type="checkbox"
@@ -186,7 +186,6 @@ export function NewsletterForm({
             </label>
           </div>
 
-          {/* ── Status message (error) ────────────────────────────────── */}
           <div
             id={statusId}
             role="status"
