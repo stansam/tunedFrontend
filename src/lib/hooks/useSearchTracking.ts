@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   trackSearchEvent,
   trackSearchClick,
@@ -66,23 +66,25 @@ export function useSearchTracking() {
     },
   });
 
-  const trackEvent = (query: string, resultsCount: number = 0, type: string = "all", source: string = "hero") => {
-    eventMutation.mutate({
+  const { mutate: mutateEvent } = eventMutation;
+  const trackEvent = useCallback((query: string, resultsCount: number = 0, type: string = "all", source: string = "hero") => {
+    mutateEvent({
       query,
       result_count: resultsCount,
       search_type: type,
       source,
     });
-  };
+  }, [mutateEvent]);
 
-  const trackClick = (clickedType: 'service' | 'sample' | 'blog' | 'faq' | 'tag', clickedId: string, position: number, eventId?: string) => {
-    clickMutation.mutate({
+  const { mutate: mutateClick } = clickMutation;
+  const trackClick = useCallback((clickedType: 'service' | 'sample' | 'blog' | 'faq' | 'tag', clickedId: string, position: number, eventId?: string) => {
+    mutateClick({
       event_id: eventId,
       clicked_type: clickedType,
       clicked_id: clickedId,
       position,
     });
-  };
+  }, [mutateClick]);
 
   return {
     trackEvent,

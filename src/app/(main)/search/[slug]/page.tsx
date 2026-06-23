@@ -53,7 +53,7 @@ export default async function SearchResultsPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <Navbar activeRoute="" />
       <main className="min-h-screen bg-[#e8e6e1]" id="main-content">

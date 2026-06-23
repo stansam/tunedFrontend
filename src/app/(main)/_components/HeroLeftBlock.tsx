@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Search } from "lucide-react";
 import type { HeroLeftBlockProps } from "@/lib/props/index.props";
 import { SearchDropdown } from "./SearchDropdown";

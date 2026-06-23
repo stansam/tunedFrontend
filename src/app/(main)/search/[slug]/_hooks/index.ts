@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { getSearchResults } from "../_services";
 import { SearchParamsSchema } from "../_schemas";
 import { ResultType } from "../_types";
@@ -56,6 +56,7 @@ export function useSearchQueryState(slug: string) {
 
 export function useSearchResults(query: string, type: ResultType, page: number, perPage: number) {
   const { trackEvent } = useSearchTracking();
+  const lastTrackedRef = useRef<string>("");
 
   const queryResult = useQuery({
     queryKey: ["globalSearch", query, type, page, perPage],
@@ -71,10 +72,14 @@ export function useSearchResults(query: string, type: ResultType, page: number, 
 
   useEffect(() => {
     if (queryResult.data) {
-      const total = queryResult.data.counts.total;
-      trackEvent(query, total, type, "search_page");
+      const currentTrackKey = `${query}-${type}-${page}-${perPage}`;
+      if (lastTrackedRef.current !== currentTrackKey) {
+        lastTrackedRef.current = currentTrackKey;
+        const total = queryResult.data.counts.total;
+        trackEvent(query, total, type, "search_page");
+      }
     }
-  }, [queryResult.data, trackEvent, query, type]);
+  }, [queryResult.data, trackEvent, query, type, page, perPage]);
 
   return queryResult;
 }
