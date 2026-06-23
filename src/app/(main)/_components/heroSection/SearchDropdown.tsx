@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useSearchSuggestions } from "@/lib/hooks/useSearchSuggestions";
-import { useSearchDropdownItems } from "../_hooks/useSearchDropdownItems";
+import { useSearchDropdownItems } from "../../_hooks/useSearchDropdownItems";
 import { DefaultSuggestionsList } from "./DefaultSuggestionsList";
 import { SearchSuggestionsList } from "./SearchSuggestionsList";
 import { SuggestionsSkeleton, NoSuggestionsFound } from "./DropdownStates";
-import type { SearchDropdownProps } from "../_props/search.props";
+import type { SearchDropdownProps } from "../../_props/search.props";
 
 export function SearchDropdown({
   query,

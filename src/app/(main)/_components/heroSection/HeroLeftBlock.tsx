@@ -6,7 +6,7 @@ import { SearchDropdown } from "./SearchDropdown";
 import { BookIllustration } from "./BookIllustration";
 import { HeroLeftBlockHeader } from "./HeroLeftBlockHeader";
 import { DecorativeDots } from "./DecorativeDots";
-import { useHeroLeftBlockState } from "../_hooks/useHeroLeftBlockState";
+import { useHeroLeftBlockState } from "../../_hooks/useHeroLeftBlockState";
 
 export function HeroLeftBlock({
   searchPlaceholder = "What are you looking for?",

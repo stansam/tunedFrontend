@@ -6,6 +6,7 @@ import { AuthProvider } from "@/lib/auth/Context";
 import type { AuthUser } from "@/lib/types/auth.type";
 import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { NotificationProvider } from "@/lib/contexts/NotificationContext";
+import { QueryProvider } from "@/lib/providers/QueryProvider";
 import { LegalModalProvider } from "@/lib/contexts/LegalModalContext";
 import { Toaster } from "sonner";
 
@@ -44,12 +45,14 @@ export default async function AuthRootLayout({
     <html lang="en" className={dmSans.variable} data-scroll-behavior="smooth">
       <body className={`${dmSans.className} antialiased`}>
          <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
-          <NotificationProvider>
-            <LegalModalProvider>
-              {children}
-            </LegalModalProvider>
-            <Toaster position="top-center" richColors theme="light" />
-          </NotificationProvider>
+          <QueryProvider>
+            <NotificationProvider>
+              <LegalModalProvider>
+                {children}
+              </LegalModalProvider>
+              <Toaster position="top-center" richColors theme="light" />
+            </NotificationProvider>
+          </QueryProvider>
          </AuthProvider>
       </body>
     </html>

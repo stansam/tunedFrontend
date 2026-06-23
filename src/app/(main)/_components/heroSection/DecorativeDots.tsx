@@ -1,5 +1,3 @@
-"use client";
-
 export function DecorativeDots() {
   const dots = [1, 2, 3];
   return (

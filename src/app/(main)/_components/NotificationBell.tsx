@@ -133,7 +133,7 @@ export function NotificationBell() {
             {notifications.length > 0 && (
               <div className="p-2 border-t border-slate-100 bg-slate-50/50">
                 <Button variant="ghost" className="w-full text-xs text-slate-500 hover:text-slate-900 h-8 rounded-xl" asChild>
-                   <Link href={{pathname:"/client/profile"}}>View Notification Settings</Link>
+                   <Link href={{pathname:"/client/settings"}}>View Notification Settings</Link>
                 </Button>
               </div>
             )}

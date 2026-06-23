@@ -2,8 +2,8 @@
 
 import React from "react";
 import { Tag, Award, BookOpen, FileText } from "lucide-react";
-import type { FlatItem } from "../_types/search.types";
-import { SuggestionButton } from "./SuggestionButton";
+import type { FlatItem } from "../../_types/search.types";
+import { SuggestionButton } from "../SuggestionButton";
 
 interface SearchSuggestionsListProps {
   flatItems: FlatItem[];

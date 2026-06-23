@@ -1,5 +1,5 @@
-import { HeroLeftBlock } from "./HeroLeftBlock";
-import { HeroPhoneBlock } from "./HeroPhoneBlock";
+import { HeroLeftBlock } from "./heroSection/HeroLeftBlock";
+import { HeroPhoneBlock } from "./heroSection/HeroPhoneBlock";
 import type { HeroSectionProps } from "@/lib/props/index.props";
 
 export function HeroSection({

@@ -2,8 +2,8 @@
 
 import React from "react";
 import { History, Flame } from "lucide-react";
-import type { FlatItem } from "../_types/search.types";
-import { SuggestionButton } from "./SuggestionButton";
+import type { FlatItem } from "../../_types/search.types";
+import { SuggestionButton } from "../SuggestionButton";
 
 interface DefaultSuggestionsListProps {
   flatItems: FlatItem[];
