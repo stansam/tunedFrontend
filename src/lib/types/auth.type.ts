@@ -5,6 +5,7 @@ export interface AuthUser {
   readonly avatar_url: string | null;
   readonly session_created_at: string | null;
   readonly reward_points: number;
+  readonly is_admin?: boolean;
 }
 
 export type AuthStatus =

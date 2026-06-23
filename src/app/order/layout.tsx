@@ -9,6 +9,8 @@ import { Toaster } from "sonner";
 // import { redirect } from "next/navigation";
 import type { AuthUser } from "@/lib/types/auth.type";
 
+import { NotificationProvider } from "@/lib/contexts/NotificationContext";
+
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -32,6 +34,7 @@ export default async function OrderLayout({ children }: { children: React.ReactN
       <body className={`${dmSans.className} antialiased bg-[#e8e6e1]`}>
         <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null }>
       <QueryProvider>
+        <NotificationProvider>
         <TooltipProvider delayDuration={300}>
           <LegalModalProvider>
             <div className="flex min-h-screen flex-col">
@@ -40,6 +43,7 @@ export default async function OrderLayout({ children }: { children: React.ReactN
           </LegalModalProvider>
         </TooltipProvider>
         <Toaster position="top-center" richColors theme="light" />
+        </NotificationProvider>
       </QueryProvider>
     </AuthProvider>
       </body>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Check, ExternalLink, Info, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { Bell, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,27 +9,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useNotifications } from "@/lib/contexts/NotificationContext";
+import { useAuth } from "@/lib/hooks/useAuth";
 import { NotificationSkeleton } from "./NotificationSkeleton";
+import { NotificationItemComponent } from "./NotificationItem";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { Route } from "next";
 
 export function NotificationBell() {
   const { unreadCount, notifications, isLoading, markAsRead, markAllAsRead } = useNotifications();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  const renderIcon = (type: string) => {
-    switch (type) {
-      case "success":
-        return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-      case "warning":
-        return <AlertTriangle className="w-5 h-5 text-amber-500" />;
-      case "error":
-        return <XCircle className="w-5 h-5 text-red-500" />;
-      default:
-        return <Info className="w-5 h-5 text-blue-500" />;
-    }
-  };
+  const viewAllPath = user?.is_admin ? "/admin/notifications" : "/client/notifications";
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -40,7 +32,7 @@ export function NotificationBell() {
             "hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-emerald-300",
             isOpen ? "bg-slate-100 text-emerald-700" : "text-slate-600"
           )}
-          aria-label="Notifications"
+          aria-label={`Notifications, ${unreadCount} unread`}
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
@@ -62,7 +54,7 @@ export function NotificationBell() {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
-                    markAllAsRead();
+                    void markAllAsRead();
                   }}
                   className="text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1"
                 >
@@ -83,60 +75,24 @@ export function NotificationBell() {
               ) : (
                 <ul className="divide-y divide-slate-100">
                   {notifications.map((notif) => (
-                    <li
+                    <NotificationItemComponent
                       key={notif.id}
-                      className={cn(
-                        "p-4 hover:bg-slate-50 transition-colors duration-150 cursor-pointer flex gap-3 group relative",
-                        !notif.is_read ? "bg-emerald-50/30" : ""
-                      )}
-                      onClick={() => {
-                        if (!notif.is_read) markAsRead(notif.id);
-                      }}
-                    >
-                      {!notif.is_read && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-emerald-500 rounded-r-full" />
-                      )}
-                      
-                      <div className="shrink-0 mt-0.5">
-                        {renderIcon(notif.type)}
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <p className={cn("text-sm font-semibold truncate", notif.is_read ? "text-slate-700" : "text-slate-900")}>
-                            {notif.title}
-                          </p>
-                          <span className="text-[10px] text-slate-400 whitespace-nowrap mt-0.5">
-                            {formatDistanceToNow(new Date(notif.created_at), { addSuffix: true })}
-                          </span>
-                        </div>
-                        <p className={cn("text-xs mt-1 line-clamp-2", notif.is_read ? "text-slate-500" : "text-slate-600")}>
-                          {notif.message}
-                        </p>
-                        
-                        {notif.link && (notif.link !== "#") && (
-                          <div className="mt-2" onClick={(e) => e.stopPropagation()}>
-                            <Button variant="outline" size="sm" className="h-7 text-xs rounded-full shadow-sm hover:border-emerald-200 hover:text-emerald-700 hover:bg-emerald-50" asChild>
-                              <Link href={{pathname: notif.link, query: {id: notif.id}}} onClick={() => { if(!notif.is_read) markAsRead(notif.id); setIsOpen(false); }}>
-                                View Details <ExternalLink className="w-3 h-3 ml-1" />
-                              </Link>
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </li>
+                      notif={notif}
+                      markAsRead={markAsRead}
+                      closeMenu={() => setIsOpen(false)}
+                    />
                   ))}
                 </ul>
               )}
             </div>
 
-            {notifications.length > 0 && (
-              <div className="p-2 border-t border-slate-100 bg-slate-50/50">
-                <Button variant="ghost" className="w-full text-xs text-slate-500 hover:text-slate-900 h-8 rounded-xl" asChild>
-                   <Link href={{pathname:"/client/settings"}}>View Notification Settings</Link>
-                </Button>
-              </div>
-            )}
+            <div className="p-2 border-t border-slate-100 bg-slate-50/50">
+              <Button variant="ghost" className="w-full text-xs text-slate-500 hover:text-slate-900 h-8 rounded-xl" asChild>
+                <Link href={viewAllPath as Route } onClick={() => setIsOpen(false)}>
+                  View All Notifications
+                </Link>
+              </Button>
+            </div>
           </div>
         )}
       </DropdownMenuContent>
