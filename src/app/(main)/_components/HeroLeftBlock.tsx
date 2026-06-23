@@ -36,7 +36,7 @@ export function HeroLeftBlock({
       <div ref={dropdownRef} className="relative w-full max-w-[320px]">
         <form
           onSubmit={handleSubmit}
-          className="flex w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-100/55 transition-all"
+          className="flex w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 shadow-sm focus-within:border-emerald-500/35 focus-within:ring-4 focus-within:ring-emerald-500/10 focus-within:shadow-[0_4px_20px_-2px_rgba(16,185,129,0.08)] transition-all duration-300"
           role="search"
           aria-label="Search services"
         >
