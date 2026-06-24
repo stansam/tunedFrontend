@@ -31,7 +31,7 @@ export function CallbackClientPage({
   useEffect(() => {
     if (order?.paid && !paymentUuid && !fetchingRef.current) {
       fetchingRef.current = true;
-      apiGet<PaymentItem>(`/payments/order/${orderId}`)
+      apiGet<PaymentItem>(`/payments/order/${order.id}`)
         .then((res: ApiResult<PaymentItem>) => {
           if (res.ok && res.data?.id) {
             setPaymentUuid(res.data.id);
@@ -44,7 +44,7 @@ export function CallbackClientPage({
           fetchingRef.current = false;
         });
     }
-  }, [order, orderId, paymentUuid]);
+  }, [order, paymentUuid]);
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 

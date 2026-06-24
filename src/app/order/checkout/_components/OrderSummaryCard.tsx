@@ -9,29 +9,16 @@ import { OrderSummarySkeleton } from "./skeletons/OrderSummarySkeleton";
 import type { OrderSummaryCardProps } from "../_props/payment.props";
 import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
-export function OrderSummaryCard({
-  order,
-  isLoading,
-  onCompletePayment,
-  isSubmitting,
-  activeTab,
-  hideCTA = false,
-}: OrderSummaryCardProps): ReactNode {
+export function OrderSummaryCard({ order, isLoading, onCompletePayment, isSubmitting, activeTab, hideCTA = false }: OrderSummaryCardProps): ReactNode {
   const { openModal } = useLegalModal();
   if (isLoading && !order) return <OrderSummarySkeleton />;
 
   const total = order?.total_price ?? 0;
   const itemLabel = buildOrderItemLabel(order?.service_type, order?.pages, order?.academic_level);
-  const btnLabel =
-    activeTab === "direct"
-      ? "Submit Proof of Payment"
-      : `Complete Payment${total ? ` — ${formatCurrency(total)}` : ""}`;
+  const btnLabel = activeTab === "direct" ? "Submit Proof of Payment" : `Complete Payment${total ? ` — ${formatCurrency(total)}` : ""}`;
 
   return (
-    <aside
-      aria-label="Order summary"
-      className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm space-y-5"
-    >
+    <aside aria-label="Order summary" className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm space-y-5">
       <h2 className="text-base font-bold text-foreground">Order Summary</h2>
 
       <div className="space-y-0.5">
@@ -53,24 +40,14 @@ export function OrderSummaryCard({
 
       {!hideCTA && (
         <>
-          <Button
-            type="button"
-            onClick={onCompletePayment}
-            disabled={isSubmitting || !order || order.paid}
-            className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold text-sm hidden sm:flex items-center justify-center gap-2"
-            aria-label={btnLabel}
-          >
+          <Button type="button" onClick={onCompletePayment} disabled={isSubmitting || !order || order.paid} className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold text-sm hidden sm:flex items-center justify-center gap-2" aria-label={btnLabel}>
             <Lock className="h-4 w-4" aria-hidden="true" />
             <span>{isSubmitting ? "Processing…" : btnLabel}</span>
           </Button>
 
           <p className="text-center text-xs text-muted-foreground hidden sm:block leading-relaxed">
             By completing this payment, you agree to our{" "}
-            <button
-              type="button"
-              onClick={() => openModal("terms")}
-              className="underline hover:text-foreground transition-colors bg-transparent border-none p-0 cursor-pointer text-xs"
-            >
+            <button type="button" onClick={() => openModal("terms")} className="underline hover:text-foreground transition-colors bg-transparent border-none p-0 cursor-pointer text-xs">
               Terms of Service
             </button>
             .
@@ -78,11 +55,7 @@ export function OrderSummaryCard({
         </>
       )}
 
-      {order?.paid && (
-        <p className="text-xs text-center text-emerald-600 font-medium">
-          This order has already been paid.
-        </p>
-      )}
+      {order?.paid && <p className="text-xs text-center text-emerald-600 font-medium">This order has already been paid.</p>}
     </aside>
   );
 }

@@ -37,7 +37,7 @@ export function useNotificationSocket(
       audio.play().catch((e) => console.warn("Audio play blocked:", e));
     };
 
-    const handleRead = (_data: { notification_id: string }) => {
+    const handleRead = () => {
       void queryClient.invalidateQueries({ queryKey: ["notifications"] });
       setUnreadCount((prev) => Math.max(0, prev - 1));
     };

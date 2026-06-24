@@ -12,7 +12,6 @@ import type { CheckoutPageClientProps } from "../_props/checkout.props";
 function CheckoutContent({ orderNumber }: CheckoutPageClientProps): ReactNode {
   const {
     order,
-    orderLoading,
     activeTab,
     setActiveTab,
     instantMethod,
@@ -25,10 +24,6 @@ function CheckoutContent({ orderNumber }: CheckoutPageClientProps): ReactNode {
     handleDirectSubmit,
     pesapalIframe,
   } = useCheckoutPage(orderNumber);
-
-  if (orderLoading || !order) {
-    return <CheckoutSkeleton />;
-  }
 
   const hideSummaryCTA = pesapalIframe.checkoutState !== "idle";
 
@@ -57,7 +52,7 @@ function CheckoutContent({ orderNumber }: CheckoutPageClientProps): ReactNode {
           <div className="lg:sticky lg:top-6">
             <OrderSummaryCard
               order={order}
-              isLoading={orderLoading}
+              isLoading={false}
               onCompletePayment={handleCompletePayment}
               isSubmitting={isSubmitting}
               activeTab={activeTab}
