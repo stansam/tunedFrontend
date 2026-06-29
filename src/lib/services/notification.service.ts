@@ -1,6 +1,6 @@
 import { apiGet, apiPut, apiDelete } from "@/api-client";
 import type { ApiResult } from "@/lib/types";
-import type { NotificationItem } from "@/lib/types/notification.type";
+import type { NotificationItem, PaginatedNotifications } from "@/lib/types/notification.type";
 
 export interface ReadAllResponse {
   updated_count: number;
@@ -17,8 +17,8 @@ export interface DeleteResponse {
 export async function fetchNotifications(
   limit: number = 20,
   offset: number = 0
-): Promise<ApiResult<NotificationItem[]>> {
-  return apiGet<NotificationItem[]>(
+): Promise<ApiResult<PaginatedNotifications>> {
+  return apiGet<PaginatedNotifications>(
     `/notifications?limit=${limit}&offset=${offset}`,
     { cache: "no-store" }
   );

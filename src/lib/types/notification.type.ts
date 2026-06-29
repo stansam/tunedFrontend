@@ -11,6 +11,14 @@ export interface NotificationItem {
   created_at: string;
 }
 
+export interface PaginatedNotifications {
+  notifications: NotificationItem[];
+  total: number;
+  limit: number;
+  offset: number;
+  has_more: boolean;
+}
+
 export interface NotificationState {
   unreadCount: number;
   notifications: NotificationItem[];
@@ -23,3 +31,4 @@ export interface NotificationContextValue extends NotificationState {
   markAllAsRead: () => Promise<void>;
   fetchNotifications: () => Promise<void>;
 }
+

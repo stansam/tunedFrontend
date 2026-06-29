@@ -16,6 +16,10 @@ export default function ClientNotificationsPage() {
     markAsRead,
     markAllAsRead,
     handleDelete,
+    loadMore,
+    hasNextPage,
+    isFetchingNextPage,
+    pendingActionIds,
   } = useClientNotifications();
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
@@ -49,11 +53,26 @@ export default function ClientNotificationsPage() {
       {isLoading ? (
         <div className="h-64 bg-white rounded-xl border border-slate-100 animate-pulse" />
       ) : (
-        <NotificationList
-          items={notifications}
-          onMarkRead={markAsRead}
-          onDelete={handleDelete}
-        />
+        <div className="space-y-6">
+          <NotificationList
+            items={notifications}
+            onMarkRead={markAsRead}
+            onDelete={handleDelete}
+            pendingActionIds={pendingActionIds}
+          />
+          {hasNextPage && (
+            <div className="flex justify-center mt-4">
+              <Button
+                onClick={loadMore}
+                disabled={isFetchingNextPage}
+                variant="outline"
+                className="rounded-full px-6 py-2 text-sm font-semibold"
+              >
+                {isFetchingNextPage ? "Loading more..." : "Load More"}
+              </Button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

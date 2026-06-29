@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { useAuthContext } from "@/lib/auth/Context";
 import {
   useNotificationsQuery,
@@ -15,17 +15,22 @@ NotificationContext.displayName = "NotificationContext";
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthContext();
-  const [unreadCount, setUnreadCount] = useState<number>(0);
 
-  const query = useNotificationsQuery(50);
+  const query = useNotificationsQuery(100, 0, isAuthenticated);
   const markReadMut = useMarkReadMutation();
   const markAllReadMut = useMarkAllReadMutation();
 
-  useNotificationSocket(isAuthenticated, setUnreadCount);
+  useNotificationSocket(isAuthenticated);
+
+  const notifications = useMemo(() => query.data?.notifications || [], [query.data]);
+
+  const unreadCount = useMemo(() => {
+    return notifications.filter((notif) => !notif.is_read).length;
+  }, [notifications]);
 
   const value = useMemo<NotificationContextValue>(() => ({
     unreadCount,
-    notifications: query.data || [],
+    notifications,
     isLoading: query.isLoading,
     error: query.error ? (query.error as Error).message : null,
     markAsRead: async (id: string) => {
@@ -37,7 +42,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     fetchNotifications: async () => {
       await query.refetch();
     },
-  }), [unreadCount, query, markReadMut, markAllReadMut]);
+  }), [unreadCount, notifications, query, markReadMut, markAllReadMut]);
 
   return (
     <NotificationContext.Provider value={value}>
@@ -53,3 +58,4 @@ export function useNotifications() {
   }
   return ctx;
 }
+

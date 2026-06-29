@@ -8,11 +8,21 @@ class WebSocketService {
   private rejoinCallbacks: Set<RoomRejoinCallback> = new Set();
 
   constructor() {
-    this.backendUrl =
-      process.env.NEXT_PUBLIC_SOCKET_URL;
+    const url = process.env.NEXT_PUBLIC_SOCKET_URL;
+    if (!url && process.env.NODE_ENV !== "production") {
+      console.warn("[WebSocket] NEXT_PUBLIC_SOCKET_URL is not set. Socket connection may fail.");
+    }
+    this.backendUrl = url ?? "";
   }
 
   public connect(): Socket {
+    if (!this.backendUrl) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn("[WebSocket] Connection aborted: backend url is not configured.");
+      }
+      return this.socket ?? ({} as Socket);
+    }
+
     if (this.socket?.connected) {
       return this.socket;
     }

@@ -6,7 +6,7 @@ import {
   deleteNotification,
 } from "@/lib/services/notification.service";
 
-export function useNotificationsQuery(limit = 50, offset = 0) {
+export function useNotificationsQuery(limit = 50, offset = 0, enabled = true) {
   return useQuery({
     queryKey: ["notifications", limit, offset],
     queryFn: async () => {
@@ -15,6 +15,7 @@ export function useNotificationsQuery(limit = 50, offset = 0) {
       return res.data;
     },
     staleTime: 15_000,
+    enabled,
   });
 }
 
