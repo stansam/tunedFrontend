@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiGet } from "@/api-client";
 
 async function downloadFile(orderId: string, fileId: string, filename: string): Promise<void> {
-  const path = `/download/order/${encodeURIComponent(orderId)}/${encodeURIComponent(fileId)}`;
+  const path = `/media/download/order/${encodeURIComponent(orderId)}/${encodeURIComponent(fileId)}`;
   const res = await apiGet<Blob>(path, { responseType: "blob" });
   if (!res.ok) throw new Error(res.error.message || "Download failed");
   const blobUrl = window.URL.createObjectURL(res.data);
@@ -18,7 +18,7 @@ async function downloadFile(orderId: string, fileId: string, filename: string): 
 }
 
 async function downloadAllFiles(orderId: string, filename: string): Promise<void> {
-  const path = `/download/order/${encodeURIComponent(orderId)}`;
+  const path = `/media/download/order/${encodeURIComponent(orderId)}`;
   const res = await apiGet<Blob>(path, { responseType: "blob" });
   if (!res.ok) throw new Error(res.error.message || "Download failed");
   const blobUrl = window.URL.createObjectURL(res.data);

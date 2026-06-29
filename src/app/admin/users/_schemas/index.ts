@@ -38,5 +38,10 @@ export const GeographicDistributionSchema = z.object({
   percentage: z.number().min(0).max(100),
 });
 export const GeographicDistributionListSchema = z.array(GeographicDistributionSchema);
+export const AdminUserRegisteredSchema = z.object({
+  user_id: z.string(),
+  created_at: z.string(),
+});
+
 export type ValidatedAdminUserList = z.infer<typeof AdminUserListResponseSchema>;
 export type ValidatedAdminUserStats = z.infer<typeof AdminUserStatsResponseSchema>;

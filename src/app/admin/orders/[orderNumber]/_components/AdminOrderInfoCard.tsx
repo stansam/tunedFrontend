@@ -14,28 +14,28 @@ export function AdminOrderInfoCard({ order }: AdminOrderInfoCardProps) {
   };
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-xl p-5 shadow-lg space-y-4">
-      <h3 className="text-sm font-semibold text-white">Order Details</h3>
+    <div className="bg-white/40 border border-white/50 rounded-xl p-5 shadow-xs space-y-4">
+      <h3 className="text-sm font-semibold text-slate-800">Order Details</h3>
       <div className="space-y-3 text-xs">
         <div>
-          <span className="text-slate-400 block mb-0.5">Client Name</span>
-          <span className="text-white font-medium">{order.client_username}</span>
+          <span className="text-slate-500 block mb-0.5 font-medium">Client Name</span>
+          <span className="text-slate-800 font-semibold">{order.client_username}</span>
         </div>
         <div>
-          <span className="text-slate-400 block mb-0.5">Service Type</span>
-          <span className="text-white font-medium">{order.service_name || "Custom Service"}</span>
+          <span className="text-slate-500 block mb-0.5 font-medium">Service Type</span>
+          <span className="text-slate-800 font-semibold">{order.service_name || "Custom Service"}</span>
         </div>
         <div>
-          <span className="text-slate-400 block mb-0.5">Academic Level</span>
-          <span className="text-white font-medium">{order.academic_level_name || "N/A"}</span>
+          <span className="text-slate-500 block mb-0.5 font-medium">Academic Level</span>
+          <span className="text-slate-800 font-semibold">{order.academic_level_name || "N/A"}</span>
         </div>
         <div>
-          <span className="text-slate-400 block mb-0.5">Order Price</span>
-          <span className="text-emerald-400 font-bold text-sm">${order.total_price || "0.00"}</span>
+          <span className="text-slate-500 block mb-0.5 font-medium">Order Price</span>
+          <span className="text-emerald-700 font-bold text-sm">${order.total_price || "0.00"}</span>
         </div>
         <div>
-          <span className="text-slate-400 block mb-0.5">Created At</span>
-          <span className="text-white">{formatDate(order.created_at)}</span>
+          <span className="text-slate-500 block mb-0.5 font-medium">Created At</span>
+          <span className="text-slate-800 font-semibold">{formatDate(order.created_at)}</span>
         </div>
       </div>
     </div>

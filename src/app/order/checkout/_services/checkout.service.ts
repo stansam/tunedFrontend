@@ -2,78 +2,37 @@ import { apiGet, apiPost } from "@/api-client";
 import type { ApiResult } from "@/lib/types";
 import { OrderDetailsSchema } from "../_schemas/payment-method.schema";
 import type { CheckoutRequestPayload, CheckoutResult } from "../_types/payment.types";
-import type { OrderDetails } from "../_types/checkout.types";
+import type { OrderDetails, ResolvedPayment } from "../_types/checkout.types";
 
 const LOG_PREFIX = "[CheckoutService]";
 
-export async function fetchOrderDetails(orderNumber: string): Promise<ApiResult<OrderDetails>> {
-  const result = await apiGet<unknown>(`/orders/detail/${orderNumber}`);
-
-  if (!result.ok) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error(`${LOG_PREFIX} Failed to fetch order ${orderNumber}:`, result.error);
-    }
-    return result as ApiResult<never>;
-  }
-
+function parseAndValidateOrder(
+  result: Extract<ApiResult<unknown>, { ok: true }>,
+  context: string
+): ApiResult<OrderDetails> {
   const parsed = OrderDetailsSchema.safeParse(result.data);
-
   if (!parsed.success) {
     if (process.env.NODE_ENV !== "production") {
-      console.error(`${LOG_PREFIX} Order schema violation:`, parsed.error.format());
-      console.error(`${LOG_PREFIX} Raw data:`, result.data);
+      console.error(`${LOG_PREFIX} Order schema violation for ${context}:`, parsed.error.format(), result.data);
     }
     return {
       ok: false,
-      error: {
-        message: "Invalid order response",
-        errors: { "": ["Schema validation failed"] },
-        status: "PARSE_ERROR",
-      },
+      error: { message: "Invalid order response", errors: { "": ["Schema validation failed"] }, status: "PARSE_ERROR" }
     };
   }
+  return { ok: true, data: parsed.data, message: result.message, status: result.status };
+}
 
-  return {
-    ok: true,
-    data: parsed.data,
-    message: result.message,
-    status: result.status,
-  };
+export async function fetchOrderDetails(orderNumber: string): Promise<ApiResult<OrderDetails>> {
+  const result = await apiGet<unknown>(`/orders/detail/${orderNumber}`);
+  if (!result.ok) return result as ApiResult<never>;
+  return parseAndValidateOrder(result, orderNumber);
 }
 
 export async function fetchOrderDetailsById(orderId: string): Promise<ApiResult<OrderDetails>> {
   const result = await apiGet<unknown>(`/orders/${orderId}`);
-
-  if (!result.ok) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error(`${LOG_PREFIX} Failed to fetch order by ID ${orderId}:`, result.error);
-    }
-    return result as ApiResult<never>;
-  }
-
-  const parsed = OrderDetailsSchema.safeParse(result.data);
-
-  if (!parsed.success) {
-    if (process.env.NODE_ENV !== "production") {
-      console.error(`${LOG_PREFIX} Order schema violation for ID ${orderId}:`, parsed.error.format());
-      console.error(`${LOG_PREFIX} Raw data:`, result.data);
-    }
-    return {
-      ok: false,
-      error: {
-        message: "Invalid order response",
-        errors: { "": ["Schema validation failed"] },
-        status: "PARSE_ERROR",
-      },
-    };
-  }
-
-  return {
-    ok: true,
-    data: parsed.data,
-    message: result.message,
-    status: result.status,
-  };
+  if (!result.ok) return result as ApiResult<never>;
+  return parseAndValidateOrder(result, orderId);
 }
 
 export async function submitCheckout(
@@ -91,3 +50,8 @@ export async function submitCheckout(
 
   return result;
 }
+
+export async function resolvePaymentReference(paymentRef: string): Promise<ApiResult<ResolvedPayment>> {
+  return apiGet<ResolvedPayment>(`/payments/resolve/${paymentRef}`);
+}
+

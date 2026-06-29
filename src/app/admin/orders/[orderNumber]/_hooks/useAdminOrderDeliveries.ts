@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { fetchAdminDeliveries } from "../_services/admin-delivery.service";
 import { ADMIN_DELIVERIES_STALE_MS, ADMIN_ORDER_DETAIL_GC_MS } from "../_fallbacks";
 import { webSocketService } from "@/lib/services/websocket.service";
+import { SOCKET_EMIT, SOCKET_ON } from "@/lib/constants/socket-events";
+import { AdminDeliverySchema } from "../_schemas";
 import type { AdminDeliveryDTO } from "../_types";
 
 export function adminDeliveriesQueryKey(orderId: string) {
@@ -31,39 +33,62 @@ export function useAdminOrderDeliveries(orderId: string) {
     if (!orderId) return;
     const socket = webSocketService.connect();
 
-    const handleCreated = (delivery: AdminDeliveryDTO) => {
-      queryClient.setQueryData<AdminDeliveryDTO[]>(
-        adminDeliveriesQueryKey(orderId),
-        (prev) => {
-          if (!prev) return [delivery];
-          if (prev.some((d) => d.id === delivery.id)) return prev;
-          return [...prev, delivery];
-        },
-      );
+    socket.emit(SOCKET_EMIT.JOIN_ORDER, { orderId });
+
+    const cleanupReconnect = webSocketService.onReconnect(() => {
+      socket.emit(SOCKET_EMIT.JOIN_ORDER, { orderId });
+    });
+
+    const handleCreated = (raw: unknown) => {
+      const parsed = AdminDeliverySchema.safeParse(raw);
+      if (parsed.success) {
+        const delivery = parsed.data as unknown as AdminDeliveryDTO;
+        queryClient.setQueryData<AdminDeliveryDTO[]>(
+          adminDeliveriesQueryKey(orderId),
+          (prev) => {
+            if (!prev) return [delivery];
+            if (prev.some((d) => d.id === delivery.id)) return prev;
+            return [...prev, delivery];
+          },
+        );
+      } else if (process.env.NODE_ENV !== "production") {
+        console.warn("[AdminOrderDeliveries] Invalid order:delivery:created payload:", parsed.error.issues);
+      }
     };
 
-    const handleUpdated = (updated: AdminDeliveryDTO) => {
-      queryClient.setQueryData<AdminDeliveryDTO[]>(
-        adminDeliveriesQueryKey(orderId),
-        (prev) => prev?.map((d) => (d.id === updated.id ? updated : d)) ?? [],
-      );
+    const handleUpdated = (raw: unknown) => {
+      const parsed = AdminDeliverySchema.safeParse(raw);
+      if (parsed.success) {
+        const updated = parsed.data as unknown as AdminDeliveryDTO;
+        queryClient.setQueryData<AdminDeliveryDTO[]>(
+          adminDeliveriesQueryKey(orderId),
+          (prev) => prev?.map((d) => (d.id === updated.id ? updated : d)) ?? [],
+        );
+      } else if (process.env.NODE_ENV !== "production") {
+        console.warn("[AdminOrderDeliveries] Invalid order:delivery:updated payload:", parsed.error.issues);
+      }
     };
 
-    const handleDeleted = (payload: { id: string }) => {
-      queryClient.setQueryData<AdminDeliveryDTO[]>(
-        adminDeliveriesQueryKey(orderId),
-        (prev) => prev?.filter((d) => d.id !== payload.id) ?? [],
-      );
+    const handleDeleted = (payload: { id?: string }) => {
+      const deliveryId = payload?.id;
+      if (deliveryId) {
+        queryClient.setQueryData<AdminDeliveryDTO[]>(
+          adminDeliveriesQueryKey(orderId),
+          (prev) => prev?.filter((d) => d.id !== deliveryId) ?? [],
+        );
+      }
     };
 
-    socket.on("order:delivery:created", handleCreated);
-    socket.on("order:delivery:updated", handleUpdated);
-    socket.on("order:delivery:deleted", handleDeleted);
+    socket.on(SOCKET_ON.DELIVERY_CREATED, handleCreated);
+    socket.on(SOCKET_ON.DELIVERY_UPDATED, handleUpdated);
+    socket.on(SOCKET_ON.DELIVERY_DELETED, handleDeleted);
 
     return () => {
-      socket.off("order:delivery:created", handleCreated);
-      socket.off("order:delivery:updated", handleUpdated);
-      socket.off("order:delivery:deleted", handleDeleted);
+      socket.off(SOCKET_ON.DELIVERY_CREATED, handleCreated);
+      socket.off(SOCKET_ON.DELIVERY_UPDATED, handleUpdated);
+      socket.off(SOCKET_ON.DELIVERY_DELETED, handleDeleted);
+      socket.emit(SOCKET_EMIT.LEAVE_ORDER, { orderId });
+      cleanupReconnect();
     };
   }, [orderId, queryClient]);
 

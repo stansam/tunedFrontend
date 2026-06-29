@@ -35,7 +35,7 @@ export function UserRow({ user, onAction, isMobile }: UserRowProps) {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2 min-w-0">
             <Avatar className="h-8 w-8 border border-white/50">
-              <AvatarImage src={user.avatar_url ?? undefined} alt={user.name} />
+              <AvatarImage src={user.avatar_url ?? ""} alt={user.name} />
               <AvatarFallback className="bg-slate-200 text-xs font-bold text-slate-600">
                 {initials}
               </AvatarFallback>
@@ -91,7 +91,7 @@ export function UserRow({ user, onAction, isMobile }: UserRowProps) {
       <td className="py-3.5 pl-4 pr-3">
         <div className="flex items-center gap-3">
           <Avatar className="h-9 w-9 border border-white/50">
-            <AvatarImage src={user.avatar_url ?? undefined} alt={user.name} />
+            <AvatarImage src={user.avatar_url ?? ""} alt={user.name} />
             <AvatarFallback className="bg-slate-200 text-xs font-bold text-slate-600">
               {initials}
             </AvatarFallback>

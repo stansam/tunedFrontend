@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export const InstantPaymentSchema = z.object({
-  cardholderName: z
-    .string()
-    .min(2, "Cardholder name must be at least 2 characters")
-    .max(100, "Cardholder name is too long"),
-});
+export const InstantPaymentSchema = z.object({});
 
 export type InstantPaymentFormValues = z.infer<typeof InstantPaymentSchema>;
 

@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/index";
 import type { FooterLinksProps } from "../../_props/footer.props";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 export function FooterLinks({ links, year }: FooterLinksProps) {
+  const { openModal } = useLegalModal();
+
   return (
     <div className="flex flex-col items-center gap-3">
       <nav aria-label="Legal links">
@@ -14,18 +19,34 @@ export function FooterLinks({ links, year }: FooterLinksProps) {
                   ·
                 </span>
               )}
-              <a
-                href={link.href}
-                className={cn(
-                  "text-xs text-slate-600",
-                  "transition-colors duration-150 hover:text-slate-400",
-                  "focus-visible:outline-none focus-visible:ring-2",
-                  "focus-visible:ring-emerald-500 focus-visible:ring-offset-1",
-                  "focus-visible:ring-offset-[#0f1117] rounded-sm"
-                )}
-              >
-                {link.label}
-              </a>
+              {link.type ? (
+                <button
+                  type="button"
+                  onClick={() => link.type && openModal(link.type)}
+                  className={cn(
+                    "text-xs text-slate-600 bg-transparent border-none p-0 cursor-pointer",
+                    "transition-colors duration-150 hover:text-slate-400",
+                    "focus-visible:outline-none focus-visible:ring-2",
+                    "focus-visible:ring-emerald-500 focus-visible:ring-offset-1",
+                    "focus-visible:ring-offset-[#0f1117] rounded-sm"
+                  )}
+                >
+                  {link.label}
+                </button>
+              ) : (
+                <a
+                  href={link.href}
+                  className={cn(
+                    "text-xs text-slate-600",
+                    "transition-colors duration-150 hover:text-slate-400",
+                    "focus-visible:outline-none focus-visible:ring-2",
+                    "focus-visible:ring-emerald-500 focus-visible:ring-offset-1",
+                    "focus-visible:ring-offset-[#0f1117] rounded-sm"
+                  )}
+                >
+                  {link.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>

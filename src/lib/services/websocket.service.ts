@@ -1,17 +1,24 @@
 import { io, Socket } from "socket.io-client";
 
+type RoomRejoinCallback = () => void;
+
 class WebSocketService {
   private socket: Socket | null = null;
   private backendUrl: string;
+  private rejoinCallbacks: Set<RoomRejoinCallback> = new Set();
 
   constructor() {
     this.backendUrl =
-      process.env.NEXT_PUBLIC_SOCKET_URL ??
-      (typeof window !== "undefined" ? window.location.origin : "");
+      process.env.NEXT_PUBLIC_SOCKET_URL;
   }
 
   public connect(): Socket {
     if (this.socket?.connected) {
+      return this.socket;
+    }
+
+    if (this.socket) {
+      this.socket.connect();
       return this.socket;
     }
 
@@ -20,9 +27,13 @@ class WebSocketService {
       transports: ["websocket", "polling"],
       autoConnect: true,
       withCredentials: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 30000,
     });
 
     this.socket.on("connect", () => {
+      this.rejoinCallbacks.forEach((cb) => cb());
       if (process.env.NODE_ENV !== "production") {
         console.log("[WebSocket] Connected successfully.");
       }
@@ -45,11 +56,7 @@ class WebSocketService {
 
   public disconnect(): void {
     if (this.socket) {
-      if (this.socket.connected) {
-        this.socket.disconnect();
-      } else {
-        this.socket.close();
-      }
+      this.socket.disconnect();
       this.socket = null;
     }
   }
@@ -57,7 +64,11 @@ class WebSocketService {
   public getSocket(): Socket | null {
     return this.socket;
   }
+
+  public onReconnect(cb: RoomRejoinCallback): () => void {
+    this.rejoinCallbacks.add(cb);
+    return () => this.rejoinCallbacks.delete(cb);
+  }
 }
 
 export const webSocketService = new WebSocketService();
-

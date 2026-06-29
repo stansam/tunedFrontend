@@ -1,14 +1,16 @@
-import { Route } from "next";
-import Link from "next/link";
+"use client";
+
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 const FOOTER_LINKS = [
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Service", href: "/terms" },
-  { label: "Security Guarantee", href: "/security" },
+  { label: "Privacy Policy", type: "privacy" },
+  { label: "Terms of Service", type: "terms" },
+  { label: "Security Guarantee", type: "security" },
 ] as const;
 
 export function CheckoutFooter() {
   const year = new Date().getFullYear();
+  const { openModal } = useLegalModal();
 
   return (
     <footer className="border-t border-border/60 bg-card/40 mt-auto">
@@ -24,14 +26,15 @@ export function CheckoutFooter() {
             className="flex items-center gap-4 order-1 sm:order-2"
             aria-label="Footer navigation"
           >
-            {FOOTER_LINKS.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href as Route}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            {FOOTER_LINKS.map(({ label, type }) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => openModal(type)}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer bg-transparent border-none p-0"
               >
                 {label}
-              </Link>
+              </button>
             ))}
           </nav>
         </div>

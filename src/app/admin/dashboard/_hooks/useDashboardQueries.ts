@@ -10,7 +10,7 @@ import {
   FALLBACK_ADMIN_KPI, FALLBACK_ADMIN_ANALYTICS, FALLBACK_ADMIN_TRACKING, FALLBACK_ADMIN_ALERTS
 } from "../_fallbacks/dashboard.fallback";
 import type {
-  AdminDashboardTracking, AdminDashboardAlerts, UpcomingDeadline, ActionableAlert
+  AdminDashboardTracking, UpcomingDeadline
 } from "../_types/dashboard.types";
 
 export function useDashboardQueries() {
@@ -36,13 +36,7 @@ export function useDashboardQueries() {
     );
   }, [queryClient]);
 
-  const handleAlertNew = useCallback((data: ActionableAlert) => {
-    queryClient.setQueryData(["admin", "alerts"], (old: AdminDashboardAlerts | undefined) => ({
-      alerts: old ? [data, ...old.alerts] : [data],
-    }));
-  }, [queryClient]);
-
-  useDashboardSocket(handleOrderUpdate, handleAlertNew);
+  useDashboardSocket(handleOrderUpdate);
 
   const refresh = useCallback(() =>
     queryClient.invalidateQueries({ queryKey: ["admin"] }).then(() => {}),

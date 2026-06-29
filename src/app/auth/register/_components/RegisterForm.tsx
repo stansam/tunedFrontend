@@ -10,8 +10,10 @@ import { RegisterField } from "./RegisterField";
 import { RegisterSubmitButton } from "./RegisterSubmitButton";
 import { GenderSelect } from "./GenderSelect";
 import { PhoneInput } from "./PhoneInput";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 export function RegisterForm({ callbackUrl }: RegisterFormProps) {
+  const { openModal } = useLegalModal();
   const {
     formId,
     formValues,
@@ -223,7 +225,23 @@ export function RegisterForm({ callbackUrl }: RegisterFormProps) {
         Already have an account? <Link href={{pathname:"/auth/login"}} className="font-semibold text-emerald-700 hover:text-emerald-800 hover:underline transition-colors">Sign in</Link>
       </p>
       <p className="text-left text-[11px] leading-relaxed text-slate-500 mt-1">
-        By signing in, you agree to Tunedessays&apos; <Link href={{pathname:"/terms"}} className="text-emerald-600 hover:underline transition-colors">Terms of Service</Link> and acknowledge our <Link href={{pathname:"/privacy"}} className="text-emerald-600 hover:underline transition-colors">Privacy Policy</Link>. You may occasionally receive important updates, writing tips, or exclusive offers from our team. Our commitment to protecting your personal information stems from our respect for your privacy.
+        By signing in, you agree to Tunedessays&apos;{" "}
+        <button
+          type="button"
+          onClick={() => openModal("terms")}
+          className="text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 cursor-pointer font-medium text-[11px]"
+        >
+          Terms of Service
+        </button>{" "}
+        and acknowledge our{" "}
+        <button
+          type="button"
+          onClick={() => openModal("privacy")}
+          className="text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 cursor-pointer font-medium text-[11px]"
+        >
+          Privacy Policy
+        </button>
+        . You may occasionally receive important updates, writing tips, or exclusive offers from our team. Our commitment to protecting your personal information stems from our respect for your privacy.
       </p>
     </form>
   );

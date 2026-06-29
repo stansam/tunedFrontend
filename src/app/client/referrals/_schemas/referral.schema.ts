@@ -6,3 +6,8 @@ export const ShareReferralSchema = z.object({
 });
 
 export type ShareReferralInput = z.infer<typeof ShareReferralSchema>;
+
+export const PointsUpdatedSchema = z.object({
+  points_earned: z.number(),
+  new_total: z.number(),
+});

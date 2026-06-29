@@ -52,3 +52,12 @@ export interface CheckoutFormState {
   cardholderName: string;
   saveCard: boolean;
 }
+
+export interface ResolvedPayment {
+  id: string;
+  payment_id: string;
+  order_id: string;
+  user_id: string;
+  amount: number;
+  status: string;
+}

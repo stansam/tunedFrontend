@@ -59,3 +59,31 @@ export const ActionableAlertSchema = z.object({
 export const AdminDashboardAlertsSchema = z.object({
   alerts: z.array(ActionableAlertSchema),
 });
+
+export const AdminOrderCreatedSchema = z.object({
+  order_number: z.string(),
+  client_id:    z.string(),
+});
+
+export const AdminPaymentVerificationSchema = z.object({
+  payment_id:   z.string(),
+  order_number: z.string(),
+  client_name:  z.string(),
+});
+
+export const AdminRevisionRequestedSchema = z.object({
+  order_id:     z.string(),
+  order_number: z.string(),
+  revision_id:  z.string(),
+});
+
+export const AdminOrderEscalatedSchema = z.object({
+  order_id:     z.string(),
+  order_number: z.string(),
+});
+
+export const AdminExtensionRespondedSchema = z.object({
+  order_id:     z.string(),
+  order_number: z.string(),
+  response:     z.enum(["approved", "rejected"]),
+});

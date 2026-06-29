@@ -1,5 +1,5 @@
-import { HeroLeftBlock } from "./HeroLeftBlock";
-import { HeroPhoneBlock } from "./HeroPhoneBlock";
+import { HeroLeftBlock } from "./heroSection/HeroLeftBlock";
+import { HeroPhoneBlock } from "./heroSection/HeroPhoneBlock";
 import type { HeroSectionProps } from "@/lib/props/index.props";
 
 export function HeroSection({
@@ -7,7 +7,7 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <section
-      className="relative w-full bg-[#e8e6e1] overflow-hidden"
+      className="relative z-20 w-full bg-[#e8e6e1] overflow-x-clip"
       aria-label="Hero section"
     >
       <div
@@ -32,11 +32,11 @@ export function HeroSection({
       <div className="relative z-10 mx-auto max-w-6xl lg:max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center md:items-start justify-between pt-5 pb-0 min-h-[480px] md:min-h-[580px]">
 
-          <div className="w-full md:w-[42%] pb-8 md:pb-16 z-10">
+          <div className="w-full md:w-[42%] pb-8 md:pb-16 z-20">
             <HeroLeftBlock />
           </div>
 
-          <div className="w-full md:w-[58%] z-20">
+          <div className="w-full md:w-[58%] z-10">
             <HeroPhoneBlock options={options} />
           </div>
         </div>

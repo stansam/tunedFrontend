@@ -1,4 +1,5 @@
 import type { OrderDetails, PaymentMethod, ActiveTab } from "../_types/checkout.types";
+import type { UsePesapalIframeReturn } from "../_hooks/usePesapalIframe";
 
 export interface PaymentMethodTabsProps {
   methods: PaymentMethod[];
@@ -11,8 +12,10 @@ export interface PaymentMethodTabsProps {
 export interface InstantPaymentFormProps {
   onSubmit: () => void;
   isSubmitting: boolean;
-  cardholderName: string;
-  onCardholderNameChange: (value: string) => void;
+}
+
+export interface ExtendedInstantPaymentFormProps extends InstantPaymentFormProps {
+  pesapalIframe: UsePesapalIframeReturn;
 }
 
 export interface DirectTransferPanelProps {
@@ -29,4 +32,6 @@ export interface OrderSummaryCardProps {
   onCompletePayment: () => void;
   isSubmitting: boolean;
   activeTab: ActiveTab;
+  hideCTA?: boolean;
 }
+

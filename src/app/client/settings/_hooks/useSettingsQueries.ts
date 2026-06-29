@@ -4,6 +4,7 @@ import type { SettingsUpdatePayload, UserSettings } from "../_types/settings.typ
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { webSocketService } from "@/lib/services/websocket.service";
+import { SOCKET_ON } from "@/lib/constants/socket-events";
 
 export function useSettingsQueries() {
   const queryClient = useQueryClient();
@@ -17,23 +18,28 @@ export function useSettingsQueries() {
   useEffect(() => {
     const socket = webSocketService.connect();
 
-    const handleSettingsUpdated = (data: { category: keyof UserSettings; payload: SettingsUpdatePayload[keyof SettingsUpdatePayload] }) => {
-      queryClient.setQueryData<UserSettings>(["client-settings"], (old) => {
-        if (!old) return old;
-        return {
-          ...old,
-          [data.category]: {
-            ...old[data.category],
-            ...data.payload,
-          },
-        };
-      });
+    const handleSettingsUpdated = (raw: unknown) => {
+      const data = raw as { category?: keyof UserSettings; payload?: Record<string, unknown> } | null;
+      if (data && data.category && data.payload) {
+        queryClient.setQueryData<UserSettings>(["client-settings"], (old) => {
+          if (!old) return old;
+          const cat = data.category;
+          if (!cat) return old;
+          return {
+            ...old,
+            [cat]: {
+              ...old[cat],
+              ...data.payload,
+            },
+          };
+        });
+      }
     };
 
-    socket.on("settings_updated", handleSettingsUpdated);
+    socket.on(SOCKET_ON.PREFERENCES_UPDATED, handleSettingsUpdated);
 
     return () => {
-      socket.off("settings_updated", handleSettingsUpdated);
+      socket.off(SOCKET_ON.PREFERENCES_UPDATED, handleSettingsUpdated);
     };
   }, [queryClient]);
 

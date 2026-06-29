@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { DM_Sans } from "next/font/google";
 import "@/app/globals.css";
 import { AuthProvider } from "@/lib/auth/Context";
@@ -7,12 +7,13 @@ import { getServerAuthUser } from "@/lib/services/auth.server.service";
 import { NotificationProvider } from "@/lib/contexts/NotificationContext";
 import { QueryProvider } from "@/lib/providers/QueryProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { LegalModalProvider } from "@/lib/contexts/LegalModalContext";
 import { Toaster } from "sonner";
 import { AdminSidebar } from "./_components/AdminSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AdminDashboardHeader } from "./_components/AdminDashboardHeader";
-import { cookies, headers } from "next/headers";
-import { apiGet } from "@/api-client";
+// import { cookies, headers } from "next/headers";
+// import { apiGet } from "@/api-client";
 import type { ReactNode } from "react";
 
 const dmSans = DM_Sans({
@@ -71,24 +72,26 @@ export default async function AdminRootLayout({
          <AuthProvider initialUser={initialUser} skipInitialFetch={initialUser !== null}>
           <QueryProvider>
           <NotificationProvider>
-            <TooltipProvider delayDuration={300}>
-              <SidebarProvider
-                style={
-                  {
-                    "--sidebar-width": "calc(var(--spacing) * 64)",
-                    "--header-height": "calc(var(--spacing) * 16)",
-                  } as React.CSSProperties
-                }
-              >
-                <AdminSidebar user={initialUser} />
-                <SidebarInset>
-                  <AdminDashboardHeader />
-                  <div className="flex flex-1 flex-col p-4 md:p-8">
-                    {children}
-                  </div>
-                </SidebarInset>
-              </SidebarProvider>
-            </TooltipProvider>
+            <LegalModalProvider>
+              <TooltipProvider delayDuration={300}>
+                <SidebarProvider
+                  style={
+                    {
+                      "--sidebar-width": "calc(var(--spacing) * 64)",
+                      "--header-height": "calc(var(--spacing) * 16)",
+                    } as React.CSSProperties
+                  }
+                >
+                  <AdminSidebar user={initialUser} />
+                  <SidebarInset>
+                    <AdminDashboardHeader />
+                    <div className="flex flex-1 flex-col p-4 md:p-8">
+                      {children}
+                    </div>
+                  </SidebarInset>
+                </SidebarProvider>
+              </TooltipProvider>
+            </LegalModalProvider>
             <Toaster position="top-center" richColors theme="light" />
           </NotificationProvider>
           </QueryProvider>

@@ -8,8 +8,10 @@ import type { LoginFormProps } from "../_types/login.type";
 import { useLoginForm } from "../_hooks/useLoginForm";
 import { LoginField } from "./LoginField";
 import { LoginSubmitButton } from "./LoginSubmitButton";
+import { useLegalModal } from "@/lib/contexts/LegalModalContext";
 
 export function LoginForm({ callbackUrl }: LoginFormProps) {
+  const { openModal } = useLegalModal();
   const {
     formId, identifier, handleChange, handleBlur, password, rememberMe, setRememberMe,
     showPassword, setShowPassword, formStatus, globalError, fieldErrors,
@@ -71,7 +73,23 @@ export function LoginForm({ callbackUrl }: LoginFormProps) {
       <LoginSubmitButton isSubmitting={isSubmitting} isSuccess={isSuccess} />
       <p className="text-center text-sm text-slate-500">Don&apos;t have an account? <Link href={{pathname:"/auth/register"}} className="font-semibold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">Join here</Link></p>
       <p className="text-center text-[11px] leading-relaxed text-slate-400 px-2 mt-[-6px]">
-        By signing in, you agree to Tunedessays&apos; <Link href={{pathname:"/terms"}} className="text-emerald-600 hover:underline transition-colors">Terms of Service</Link> and acknowledge our <Link href={{pathname:"/privacy"}} className="text-emerald-600 hover:underline transition-colors">Privacy Policy</Link>.
+        By signing in, you agree to Tunedessays&apos;{" "}
+        <button
+          type="button"
+          onClick={() => openModal("terms")}
+          className="text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 cursor-pointer font-medium text-[11px]"
+        >
+          Terms of Service
+        </button>{" "}
+        and acknowledge our{" "}
+        <button
+          type="button"
+          onClick={() => openModal("privacy")}
+          className="text-emerald-600 hover:underline transition-colors bg-transparent border-none p-0 cursor-pointer font-medium text-[11px]"
+        >
+          Privacy Policy
+        </button>
+        .
       </p>
     </form>
   );

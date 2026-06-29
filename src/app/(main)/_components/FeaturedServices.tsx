@@ -2,7 +2,6 @@
 
 import { useFeaturedServices } from "../_hooks/useFeaturedServices";
 import { SectionHeader } from "./SectionHeader";
-import { FeaturedServicesTabs } from "./FeaturedServicesTabs";
 import { FeaturedServicesDesktopGrid } from "./FeaturedServicesDesktopGrid";
 import { FeaturedServicesMobileCarousel } from "./FeaturedServicesMobileCarousel";
 import { FeaturedServicesIndicators } from "./FeaturedServicesIndicators";
@@ -11,14 +10,11 @@ import { cn } from "@/lib/utils";
 
 export function FeaturedServices({ featuredServices, className }: FeaturedServicesProps) {
   const {
-    activeTab,
     activeIndex,
     scrollContainerRef,
-    filteredServices,
     iconRecord,
     handleScroll,
     scrollToCard,
-    handleTabChange,
   } = useFeaturedServices({ featuredServices });
 
   if (featuredServices.length === 0) return null;
@@ -44,14 +40,8 @@ export function FeaturedServices({ featuredServices, className }: FeaturedServic
           accentWord="Services"
         />
 
-        <FeaturedServicesTabs
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-        />
-
         <FeaturedServicesDesktopGrid
-          activeTab={activeTab}
-          filteredServices={filteredServices}
+          services={featuredServices}
           iconRecord={iconRecord}
         />
 
@@ -59,12 +49,12 @@ export function FeaturedServices({ featuredServices, className }: FeaturedServic
           <FeaturedServicesMobileCarousel
             scrollContainerRef={scrollContainerRef}
             onScroll={handleScroll}
-            filteredServices={filteredServices}
+            services={featuredServices}
             iconRecord={iconRecord}
           />
 
           <FeaturedServicesIndicators
-            count={filteredServices.length}
+            count={featuredServices.length}
             activeIndex={activeIndex}
             onDotClick={scrollToCard}
           />

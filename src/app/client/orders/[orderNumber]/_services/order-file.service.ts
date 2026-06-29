@@ -5,7 +5,7 @@ export async function DownloadOrderFile(
   fileId: string,
   filename: string,
 ): Promise<void> {
-  const path = `/download/order/${encodeURIComponent(orderId)}/${encodeURIComponent(fileId)}`;
+  const path = `/media/download/order/${encodeURIComponent(orderId)}/${encodeURIComponent(fileId)}`;
   const res = await apiGet<Blob>(path, { responseType: "blob" });
   if (!res.ok) {
     throw new Error(res.error.message || "Failed to download file");
@@ -24,7 +24,7 @@ export async function DownloadOrderFiles(
   orderId: string,
   filename: string,
 ): Promise<void> {
-  const path = `/download/order/${encodeURIComponent(orderId)}`;
+  const path = `/media/download/order/${encodeURIComponent(orderId)}`;
   const res = await apiGet<Blob>(path, { responseType: "blob" });
   if (!res.ok) {
     throw new Error(res.error.message || "Failed to download package");

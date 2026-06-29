@@ -10,7 +10,7 @@ export const NewsletterRequestSchema = z.object({
 });
 
 export const NewsletterResponseSchema = z.object({
-  message:    z.string(),
+  message:    z.string().optional(),
   subscribed: z.boolean(),
 });
 

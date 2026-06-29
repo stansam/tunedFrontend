@@ -13,7 +13,7 @@ import Logo from "@/components/shared/logo";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   DashboardSquare01Icon, Folder01Icon, Wallet01Icon,
-  Calendar01Icon, UserIcon, Settings05Icon, GiftIcon,
+  Calendar01Icon, UserIcon, Settings05Icon, GiftIcon, SchoolBellIcon,
 } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import type { AuthUser } from "@/lib/types/auth.type";
@@ -45,6 +45,7 @@ export function ClientSidebar({ user, ...props }: ClientSidebarProps) {
       items: [
         { title: "Profile", url: "/client/profile", icon: UserIcon, badge: undefined, label: undefined },
         { title: "Settings", url: "/client/settings", icon: Settings05Icon, badge: undefined, label: undefined },
+        { title: "Notifications", url: "/client/notifications", icon: SchoolBellIcon, badge: undefined, label: undefined },
       ]
     }
   ];

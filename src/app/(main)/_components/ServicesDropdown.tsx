@@ -3,7 +3,7 @@
 import Link, { type LinkProps } from "next/link";
 import { ChevronRight, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DropdownSkeleton } from "./DropdownSkeleton";
+import { DropdownSkeleton } from "./heroSection/DropdownSkeleton";
 import type { ServicesDropdownProps } from "@/lib/props/service.props";
 import type { Service } from "@/lib/types/service.type";
 

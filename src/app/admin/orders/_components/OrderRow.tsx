@@ -3,6 +3,8 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import type { OrderRowProps } from "../_props/orders.props";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Route } from "next";
 
 const STATUS_LABELS: Record<string, string> = {
   draft: "Draft",
@@ -62,7 +64,9 @@ export function OrderRow({ order, onActivate, onEscalate, isActivating, isMobile
         </Button>
       )}
       <Button size="sm" variant="outline" className="h-7 text-xs rounded-lg bg-white/40 border-white/50 hover:bg-white/60">
-        View
+        <Link href={`/admin/orders/${order.order_number}` as Route}>
+          View
+        </Link>
       </Button>
     </div>
   );

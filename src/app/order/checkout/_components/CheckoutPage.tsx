@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { AuthGuard } from "@/lib/auth/Guard";
 import { useCheckoutPage } from "../_hooks/useCheckoutPage";
 import { CheckoutLeftPanel } from "./CheckoutLeftPanel";
@@ -8,23 +9,28 @@ import { CheckoutBreadcrumb } from "./CheckoutBreadcrumb";
 import { CheckoutSkeleton } from "./skeletons/CheckoutSkeleton";
 import type { CheckoutPageClientProps } from "../_props/checkout.props";
 
-function CheckoutContent({ orderNumber, pesapalTrackingId }: CheckoutPageClientProps) {
+function CheckoutContent({ orderNumber }: CheckoutPageClientProps): ReactNode {
   const {
-    order, orderLoading,
-    activeTab, setActiveTab,
-    instantMethod, directMethod,
-    cardholderName, setCardholderName,
+    order,
+    activeTab,
+    setActiveTab,
+    instantMethod,
+    directMethod,
     isSubmitting,
-    directSuccess, successPaymentId,
+    directSuccess,
+    successPaymentId,
     handleCompletePayment,
     handleInstantSubmit,
     handleDirectSubmit,
-  } = useCheckoutPage(orderNumber, pesapalTrackingId);
+    pesapalIframe,
+  } = useCheckoutPage(orderNumber);
+
+  const hideSummaryCTA = pesapalIframe.checkoutState !== "idle";
 
   return (
     <main className="flex-1 bg-[#e8e6e1]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-        <CheckoutBreadcrumb orderNumber={order?.order_number} />
+        <CheckoutBreadcrumb orderNumber={order.order_number} />
         <h1 className="text-2xl font-bold text-foreground mb-6">Secure Checkout</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6 lg:gap-8 items-start">
@@ -33,24 +39,24 @@ function CheckoutContent({ orderNumber, pesapalTrackingId }: CheckoutPageClientP
             onTabChange={setActiveTab}
             instantMethod={instantMethod}
             directMethod={directMethod}
-            cardholderName={cardholderName}
-            onCardholderNameChange={setCardholderName}
             onInstantSubmit={handleInstantSubmit}
             onDirectSubmit={handleDirectSubmit}
             onMobileSubmit={handleCompletePayment}
             isSubmitting={isSubmitting}
             isDirectSuccess={directSuccess}
             directPaymentId={successPaymentId}
-            isPaid={order?.paid ?? false}
+            isPaid={order.paid}
+            pesapalIframe={pesapalIframe}
           />
 
           <div className="lg:sticky lg:top-6">
             <OrderSummaryCard
               order={order}
-              isLoading={orderLoading}
+              isLoading={false}
               onCompletePayment={handleCompletePayment}
               isSubmitting={isSubmitting}
               activeTab={activeTab}
+              hideCTA={hideSummaryCTA}
             />
           </div>
         </div>
@@ -59,7 +65,7 @@ function CheckoutContent({ orderNumber, pesapalTrackingId }: CheckoutPageClientP
   );
 }
 
-export function CheckoutPage(props: CheckoutPageClientProps) {
+export function CheckoutPage(props: CheckoutPageClientProps): ReactNode {
   return (
     <AuthGuard loadingFallback={<CheckoutSkeleton />} unauthenticatedFallback={null}>
       <CheckoutContent {...props} />

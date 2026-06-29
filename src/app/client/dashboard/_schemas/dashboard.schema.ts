@@ -74,3 +74,51 @@ export const DashboardAlertsSchema = z.object({
   alerts: z.array(ActionableAlertSchema),
 });
 
+export const PaymentUpdatedSchema = z.object({
+  payment_id: z.string(),
+  status:     z.string(),
+});
+
+export const RefundProcessedSchema = z.object({
+  refund_id: z.string(),
+  amount:    z.string(),
+});
+
+export const RevisionStatusSchema = z.object({
+  order_id:    z.string(),
+  revision_id: z.string(),
+  new_status:  z.string(),
+});
+
+export const DraftSavedSchema = z.object({
+  draft_id: z.string(),
+});
+
+export const OrderDeliveryFileSchema = z.object({
+  id: z.string(),
+  delivery_id: z.string(),
+  filename: z.string(),
+  original_filename: z.string(),
+  file_path: z.string(),
+  file_type: z.string(),
+  file_format: z.string(),
+  description: z.string().nullable(),
+  file_size: z.number(),
+  is_plagiarism_report: z.boolean(),
+  file_icon: z.string(),
+  created_at: z.string(),
+});
+
+export const OrderDeliverySchema = z.object({
+  id: z.string(),
+  order_id: z.string(),
+  delivery_status: z.string(),
+  status_color: z.string(),
+  client_notified: z.boolean(),
+  client_notified_at: z.string().nullable(),
+  has_plagiarism_report: z.boolean(),
+  delivery_files_count: z.number(),
+  files: z.array(OrderDeliveryFileSchema),
+  created_at: z.string(),
+});
+

@@ -1,4 +1,4 @@
-import { apiPost } from "@/api-client";
+import { apiPost, apiGet } from "@/api-client";
 import {
   NewsletterRequestSchema,
   NewsletterResponseSchema,
@@ -49,7 +49,48 @@ export async function subscribeNewsletter(
   return {
     ok:      true,
     data:    parsed.data,
-    message: parsed.data.message,
+    message: parsed.data.message ?? result.message ?? "Successfully subscribed.",
     status:  200,
   };
+}
+
+export async function unsubscribeNewsletter(
+  token: string
+): Promise<ApiResult<{ unsubscribed: boolean }>> {
+  if (!token.trim()) {
+    return {
+      ok: false,
+      error: {
+        message: "Invalid or missing unsubscribe token.",
+        errors: { token: ["Token is required"] },
+        status: "PARSE_ERROR",
+      },
+    };
+  }
+
+  const result = await apiPost<{ unsubscribed: boolean }>(
+    "/newsletter/unsubscribe",
+    { token }
+  );
+
+  return result;
+}
+
+export async function validateUnsubscribeToken(
+  token: string
+): Promise<ApiResult<{ email: string }>> {
+  if (!token.trim()) {
+    return {
+      ok: false,
+      error: {
+        message: "Invalid or missing token.",
+        errors: { token: ["Token is required"] },
+        status: "PARSE_ERROR",
+      },
+    };
+  }
+
+  return apiGet<{ email: string }>(
+    `/newsletter/unsubscribe?token=${encodeURIComponent(token)}`
+  );
 }

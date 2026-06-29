@@ -44,6 +44,14 @@ export const OrderDetailResponseSchema = z.object({
   attachments: z.array(OrderAttachmentSchema).optional(),
 });
 
+export const CommentAttachmentSchema = z.object({
+  id: z.string(),
+  filename: z.string(),
+  url: z.string(),
+  size: z.number().optional(),
+  type: z.string().optional(),
+});
+
 export const OrderCommentSchema = z.object({
   id: z.string(),
   order_id: z.string(),
@@ -53,24 +61,33 @@ export const OrderCommentSchema = z.object({
   content: z.string(),
   created_at: z.string(),
   is_read: z.boolean().optional(),
+  attachments: z.array(CommentAttachmentSchema).optional(),
 });
 
-const DeliveryAttachmentSchema = z.object({
+export const OrderDeliveryFileSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  url: z.string(),
-  size: z.number().optional(),
-  mime_type: z.string().optional(),
+  delivery_id: z.string(),
+  filename: z.string(),
+  original_filename: z.string(),
+  file_path: z.string(),
+  file_type: z.string(),
+  file_format: z.string(),
+  description: z.string().nullable(),
+  file_size: z.number(),
+  is_plagiarism_report: z.boolean(),
+  file_icon: z.string(),
+  created_at: z.string(),
 });
 
 export const OrderDeliverySchema = z.object({
   id: z.string(),
   order_id: z.string(),
-  delivery_number: z.number(),
-  status: z.enum(["pending", "ready_for_review", "approved", "revision_requested"]),
-  message: z.string(),
-  sender_name: z.string(),
-  sender_avatar_url: z.string().nullable().optional(),
+  delivery_status: z.enum(["delivered", "revised", "redelivered"]),
+  status_color: z.string(),
+  client_notified: z.boolean(),
+  client_notified_at: z.string().nullable(),
+  has_plagiarism_report: z.boolean(),
+  delivery_files_count: z.number(),
+  files: z.array(OrderDeliveryFileSchema),
   created_at: z.string(),
-  attachments: z.array(DeliveryAttachmentSchema),
 });

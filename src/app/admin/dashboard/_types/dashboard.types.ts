@@ -15,3 +15,9 @@ export type AdminDashboardTracking = z.infer<typeof schemas.AdminDashboardTracki
 
 export type ActionableAlert = z.infer<typeof schemas.ActionableAlertSchema>;
 export type AdminDashboardAlerts = z.infer<typeof schemas.AdminDashboardAlertsSchema>;
+
+export type AdminOrderCreated = z.infer<typeof schemas.AdminOrderCreatedSchema>;
+export type AdminPaymentVerification = z.infer<typeof schemas.AdminPaymentVerificationSchema>;
+export type AdminRevisionRequested = z.infer<typeof schemas.AdminRevisionRequestedSchema>;
+export type AdminOrderEscalated = z.infer<typeof schemas.AdminOrderEscalatedSchema>;
+export type AdminExtensionResponded = z.infer<typeof schemas.AdminExtensionRespondedSchema>;

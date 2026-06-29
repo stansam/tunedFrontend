@@ -15,3 +15,10 @@ export type ActivityLogEntry = z.infer<typeof schemas.ActivityLogEntrySchema>;
 export type DashboardTracking = z.infer<typeof schemas.DashboardTrackingSchema>;
 export type ActionableAlert = z.infer<typeof schemas.ActionableAlertSchema>;
 export type DashboardAlerts = z.infer<typeof schemas.DashboardAlertsSchema>;
+
+export type PaymentUpdated = z.infer<typeof schemas.PaymentUpdatedSchema>;
+export type RefundProcessed = z.infer<typeof schemas.RefundProcessedSchema>;
+export type RevisionStatus = z.infer<typeof schemas.RevisionStatusSchema>;
+export type DraftSaved = z.infer<typeof schemas.DraftSavedSchema>;
+export type OrderDeliveryFile = z.infer<typeof schemas.OrderDeliveryFileSchema>;
+export type OrderDelivery = z.infer<typeof schemas.OrderDeliverySchema>;

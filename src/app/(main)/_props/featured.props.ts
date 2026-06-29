@@ -8,7 +8,6 @@ import type {
   SampleViewModel,
 } from "../_types";
 import type { ResolvedServiceIcon } from "@/lib/utils/resolveServiceIcon";
-import { TabId } from "../_types/featured.types";
 
 export type ServiceIconRecord = Readonly<Record<string, ResolvedServiceIcon>>;
 
@@ -28,8 +27,7 @@ export interface ServiceCardProps {
 }
 
 export interface FeaturedServicesDesktopGridProps {
-  readonly activeTab: string;
-  readonly filteredServices: readonly ServiceCategory[];
+  readonly services: readonly ServiceCategory[];
   readonly iconRecord: ServiceIconRecord;
 }
 
@@ -42,13 +40,8 @@ export interface FeaturedServicesIndicatorsProps {
 export interface FeaturedServicesMobileCarouselProps {
   readonly scrollContainerRef: RefObject<HTMLDivElement | null>;
   readonly onScroll: () => void;
-  readonly filteredServices: readonly ServiceCategory[];
+  readonly services: readonly ServiceCategory[];
   readonly iconRecord: ServiceIconRecord;
-}
-
-export interface FeaturedServicesTabsProps {
-  readonly activeTab: TabId;
-  readonly onTabChange: (tabId: TabId) => void;
 }
 
 export interface FeaturedBlogsProps {

@@ -1,88 +1,63 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/hooks/useAuth";
-import { useQueryClient } from "@tanstack/react-query";
 import { usePaymentMethods } from "./usePaymentMethods";
-import { useOrderDetails, ORDER_QUERY_KEY } from "./useOrderDetails";
+import { useOrderDetails } from "./useOrderDetails";
 import { useCheckout } from "./useCheckout";
+import { usePesapalIframe } from "./usePesapalIframe";
+import { usePesapalIframePolling } from "./usePesapalIframePolling";
 import { getInstantMethod, getDirectTransferMethod, getMethodIdForTab, resolveActiveTab } from "../_utils/payment.utils";
 import type { ActiveTab } from "../_types/checkout.types";
 
-export function useCheckoutPage(orderNumber: string, pesapalTrackingId?: string) {
+export function useCheckoutPage(orderNumber: string) {
   const router = useRouter();
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
-
   const [activeTabState, setActiveTab] = useState<ActiveTab>("instant");
-  const [cardholderName, setCardholderName] = useState<string>(user?.name ?? "");
   const [directSuccess, setDirectSuccess] = useState(false);
   const [successPaymentId, setSuccessPaymentId] = useState<string | null>(null);
 
   const { methods } = usePaymentMethods();
-  const { order, isLoading: orderLoading } = useOrderDetails(orderNumber);
+  const { order } = useOrderDetails(orderNumber);
   const instantMethod = getInstantMethod(methods);
   const directMethod = getDirectTransferMethod(methods);
-
   const activeTab = resolveActiveTab(activeTabState, instantMethod, directMethod);
 
-  // Invalidate order details if we are returning from a Pesapal redirect
-  useEffect(() => {
-    if (pesapalTrackingId && orderNumber) {
-      queryClient.invalidateQueries({ queryKey: ORDER_QUERY_KEY(orderNumber) });
-    }
-  }, [pesapalTrackingId, orderNumber, queryClient]);
+  const pesapalIframe = usePesapalIframe();
+  usePesapalIframePolling(orderNumber, pesapalIframe);
 
   const { submit, isSubmitting } = useCheckout({
-    onManualSuccess: (pid) => {
-      setDirectSuccess(true);
-      setSuccessPaymentId(pid);
-      router.refresh();
-    },
+    onManualSuccess: (pid) => { setDirectSuccess(true); setSuccessPaymentId(pid); router.refresh(); },
+    onPesapalRedirect: (data) => pesapalIframe.onCheckoutSuccess(data),
   });
 
   const handleCompletePayment = useCallback(() => {
     if (!order) return;
     const methodId = getMethodIdForTab(activeTab, instantMethod, directMethod);
     if (!methodId) return;
-    if (activeTab === "instant") {
-      document
-        .getElementById("instant-payment-form")
-        ?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-      return;
-    }
-    document
-      .getElementById("direct-transfer-form")
-      ?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    const formId = activeTab === "instant" ? "instant-payment-form" : "direct-transfer-form";
+    document.getElementById(formId)?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
   }, [order, activeTab, instantMethod, directMethod]);
 
   const handleInstantSubmit = useCallback(() => {
-    if (!order || !instantMethod?.id) return;
-    submit({
-      order_id: order.id,
-      payment_method_id: instantMethod.id,
-    });
+    if (order && instantMethod?.id) submit({ order_id: order.id, payment_method_id: instantMethod.id });
   }, [order, instantMethod, submit]);
 
-  const handleDirectSubmit = useCallback((proofReference: string) => {
-    if (!order || !directMethod?.id) return;
-    submit({
-      order_id: order.id,
-      payment_method_id: directMethod.id,
-      client_proof_reference: proofReference,
-    });
+  const handleDirectSubmit = useCallback((proofRef: string) => {
+    if (order && directMethod?.id) submit({ order_id: order.id, payment_method_id: directMethod.id, client_proof_reference: proofRef });
   }, [order, directMethod, submit]);
 
   return {
-    order, orderLoading,
-    activeTab, setActiveTab,
-    instantMethod, directMethod,
-    cardholderName, setCardholderName,
+    order,
+    activeTab,
+    setActiveTab,
+    instantMethod,
+    directMethod,
     isSubmitting,
-    directSuccess, successPaymentId,
+    directSuccess,
+    successPaymentId,
     handleCompletePayment,
     handleInstantSubmit,
     handleDirectSubmit,
+    pesapalIframe,
   };
 }
