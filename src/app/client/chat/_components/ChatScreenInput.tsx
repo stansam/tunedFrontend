@@ -71,16 +71,16 @@ export function ChatScreenInput({ onSendMessage, onUploadAttachment, onKeyDown }
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-1.5">
-      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-      <Button type="button" variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="h-8 w-8 text-slate-400 hover:text-slate-600 rounded-full shrink-0"><Paperclip className="h-4 w-4" /></Button>
+      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" aria-label="Choose file to attach" />
+      <Button type="button" variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} aria-label="Upload attachment" className="h-8 w-8 text-slate-400 hover:text-slate-600 rounded-full shrink-0"><Paperclip className="h-4 w-4" /></Button>
       <EmojiPickerButton onSelect={(emoji) => setContent((c) => c + emoji.native)} />
-      <Input value={content} onChange={(e) => setContent(e.target.value)} onKeyDown={() => onKeyDown?.()} placeholder={recording ? "Recording audio..." : "Type a message..."} disabled={recording} className="flex-1 text-xs h-8 bg-slate-55 border-slate-200" />
+      <Input value={content} onChange={(e) => setContent(e.target.value)} onKeyDown={() => onKeyDown?.()} placeholder={recording ? "Recording audio..." : "Type a message..."} disabled={recording} aria-label="Chat message text" className="flex-1 text-xs h-8 bg-slate-55 border-slate-200" />
       {recording ? (
-        <Button type="button" size="icon" onClick={stopRecording} className="h-8 w-8 bg-red-500 hover:bg-red-650 text-white rounded-full shrink-0 animate-pulse"><Square className="h-3.5 w-3.5" /></Button>
+        <Button type="button" size="icon" onClick={stopRecording} aria-label="Stop recording and upload" className="h-8 w-8 bg-red-500 hover:bg-red-650 text-white rounded-full shrink-0 animate-pulse"><Square className="h-3.5 w-3.5" /></Button>
       ) : (
-        <Button type="button" size="icon" variant="ghost" onClick={startRecording} className="h-8 w-8 text-slate-400 hover:text-slate-600 rounded-full shrink-0"><Mic className="h-4 w-4" /></Button>
+        <Button type="button" size="icon" variant="ghost" onClick={startRecording} aria-label="Start recording audio" className="h-8 w-8 text-slate-400 hover:text-slate-600 rounded-full shrink-0"><Mic className="h-4 w-4" /></Button>
       )}
-      <Button type="submit" size="icon" disabled={!content.trim()} className="h-8 w-8 bg-slate-900 hover:bg-slate-800 text-white rounded-full shrink-0"><Send className="h-3.5 w-3.5" /></Button>
+      <Button type="submit" size="icon" disabled={!content.trim()} aria-label="Send message" className="h-8 w-8 bg-slate-900 hover:bg-slate-800 text-white rounded-full shrink-0"><Send className="h-3.5 w-3.5" /></Button>
     </form>
   );
 }

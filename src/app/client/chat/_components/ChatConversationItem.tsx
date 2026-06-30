@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import type { ClientChatSummary } from "../_types/client-chat.type";
 import { MessageSquare } from "lucide-react";
 
@@ -8,7 +9,7 @@ interface ChatConversationItemProps {
   readonly onClick: () => void;
 }
 
-export function ChatConversationItem({ chat, onClick }: ChatConversationItemProps) {
+export const ChatConversationItem = React.memo(function ChatConversationItem({ chat, onClick }: ChatConversationItemProps) {
   const timeStr = chat.last_message_at
     ? new Date(chat.last_message_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     : new Date(chat.created_at).toLocaleDateString([], { month: "short", day: "numeric" });
@@ -40,5 +41,5 @@ export function ChatConversationItem({ chat, onClick }: ChatConversationItemProp
       )}
     </button>
   );
-}
+});
 export default ChatConversationItem;
