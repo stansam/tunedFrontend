@@ -9,6 +9,8 @@ import { ChatWidgetSkeleton } from "../_skeletons/ChatWidgetSkeleton";
 import { useChatWidget } from "../_hooks/useChatWidget";
 import { useClientChats } from "../_hooks/useClientChats";
 
+import { TawkToWidget } from "./TawkToWidget";
+
 const ChatConversationList = lazy(() => import("./ChatConversationList"));
 const ChatConversationScreen = lazy(() => import("./ChatConversationScreen"));
 
@@ -45,6 +47,7 @@ export function ChatWidget() {
         <ChatWidgetContent />
       </ChatWidgetPanel>
       <ChatWidgetFAB />
+      <TawkToWidget />
     </ChatWidgetProvider>
   );
 }

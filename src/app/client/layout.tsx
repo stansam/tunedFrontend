@@ -12,7 +12,7 @@ import { Toaster } from "sonner";
 import { ClientSidebar } from "./_components/ClientSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { DashboardHeader } from "./_components/DashboardHeader";
-import { ChatWidget, TawkToWidget } from "./chat";
+import { ChatWidget } from "./chat";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -71,7 +71,6 @@ export default async function ClientRootLayout({
               </TooltipProvider>
             </LegalModalProvider>
             <ChatWidget />
-            <TawkToWidget />
             <Toaster position="top-center" richColors theme="light" />
           </NotificationProvider>
           </QueryProvider>
