@@ -36,7 +36,7 @@ export function useNotificationSocket(isAuthenticated: boolean) {
       // Audio notification with fallback check
       const soundEnabled = typeof window !== "undefined" && localStorage.getItem("notificationSound") !== "disabled";
       if (soundEnabled) {
-        const audio = new Audio("/sounds/notification.mp3");
+        const audio = new Audio("/sounds/notification.wav");
         audio.play().catch((e) => console.warn("Audio play blocked:", e));
       }
     };
