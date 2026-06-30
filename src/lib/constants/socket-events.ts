@@ -6,6 +6,10 @@ export const SOCKET_EMIT = {
   LEAVE_ORDER:                   "leave:order",
   NOTIFICATION_MARK_READ:        "notification:mark_read",
   NOTIFICATION_GET_UNREAD_COUNT: "notification:get_unread_count",
+  JOIN_CHAT:                     "join:chat",
+  LEAVE_CHAT:                    "leave:chat",
+  CHAT_TYPING:                   "chat:typing",
+  CHAT_TYPING_STOP:              "chat:typing_stop",
 } as const;
 
 // Outbound Server Events (server → client)
@@ -72,6 +76,10 @@ export const SOCKET_ON = {
   ADMIN_CHAT_CREATED:            "admin:chat:created",
   CHAT_STATUS_CHANGED:           "chat:status_changed",
   CHAT_ASSIGNED:                 "chat:assigned",
+  CHAT_JOINED:                   "chat:joined",
+  CHAT_LEFT:                     "chat:left",
+  CHAT_TYPING:                   "chat:typing",
+  CHAT_TYPING_STOP:              "chat:typing_stop",
   // System
   SOCKET_ERROR:          "error",
 } as const;

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useChatQueries } from "../_hooks/useChatQueries";
 import { useChatActions } from "../_hooks/useChatActions";
+import { useChatSocket } from "../_hooks/useChatSocket";
 import { ChatSidebar } from "./ChatSidebar";
 import { ChatWindow } from "./ChatWindow";
 import { ChatSkeleton } from "./ChatSkeleton";
@@ -16,6 +17,7 @@ export function ChatContainer() {
 
   const q = useChatQueries(activeChatId);
   const actions = useChatActions(activeChatId);
+  useChatSocket(activeChatId);
   const { markAsRead } = q;
 
   useEffect(() => {

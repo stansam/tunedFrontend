@@ -32,10 +32,16 @@ export const ChatRoomSchema = z.object({
   order_id: z.string().nullable(),
   order_number: z.string().nullable(),
   status: z.enum(["active", "closed"]),
-  messages: z.array(ChatMessageSchema).default([]),
-  unread_count: z.number().int().nonnegative(),
+  messages: z.array(ChatMessageSchema).optional(),
+  unread_count: z.number(),
   created_at: z.string(),
   updated_at: z.string(),
+});
+
+export const ChatMessagePageSchema = z.object({
+  messages: z.array(ChatMessageSchema),
+  has_more: z.boolean(),
+  next_cursor: z.string().nullable(),
 });
 
 export const SupportAgentSchema = z.object({
@@ -44,3 +50,9 @@ export const SupportAgentSchema = z.object({
   email: z.string(),
   avatar_url: z.string().optional(),
 });
+
+export const CreateChatResponseSchema = ChatRoomSchema;
+export const SendMessageResponseSchema = ChatMessageSchema;
+export const AssignAdminResponseSchema = ChatRoomSchema;
+export const ChangeStatusResponseSchema = ChatRoomSchema;
+export const EditMessageResponseSchema = ChatMessageSchema;

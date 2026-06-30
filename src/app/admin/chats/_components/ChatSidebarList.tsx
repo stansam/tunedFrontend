@@ -19,7 +19,7 @@ export function ChatSidebarList({
     <ScrollArea className="grow pr-1">
       <div className="space-y-1.5">
         {chats.map((chat) => {
-          const lastMsg = chat.messages[chat.messages.length - 1];
+          const lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : undefined;
           const isSelected = activeChatId === chat.id;
           return (
             <button

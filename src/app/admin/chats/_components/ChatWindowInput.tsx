@@ -7,7 +7,7 @@ import { Paperclip, Send } from "lucide-react";
 import { toast } from "sonner";
 import type { ChatWindowInputProps } from "../_props/chats.props";
 
-export function ChatWindowInput({ chat, onSendMessage, onUploadAttachment }: ChatWindowInputProps) {
+export function ChatWindowInput({ chat, onSendMessage, onUploadAttachment, onKeyDown }: ChatWindowInputProps) {
   const [content, setContent] = useState("");
   const [sending, setSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -41,7 +41,7 @@ export function ChatWindowInput({ chat, onSendMessage, onUploadAttachment }: Cha
     }
   };
 
-  const isClosed = chat.status === "closed";
+  const isClosed = chat?.status === "closed";
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2 pt-3 border-t border-slate-200/40">
@@ -59,6 +59,9 @@ export function ChatWindowInput({ chat, onSendMessage, onUploadAttachment }: Cha
       <Input
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        onKeyDown={() => {
+          if (onKeyDown) onKeyDown();
+        }}
         placeholder={isClosed ? "This chat is closed." : "Type your message..."}
         disabled={isClosed || sending}
         className="grow text-xs h-9 bg-white/50 border-slate-200"

@@ -9,14 +9,31 @@ import { Paperclip, Pencil, Trash, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import type { ChatWindowMessagesProps } from "../_props/chats.props";
 
-export function ChatWindowMessages({ chat, onEditMessage, onDeleteMessage }: ChatWindowMessagesProps) {
+export function ChatWindowMessages({
+  messages,
+  activeChatId,
+  onEditMessage,
+  onDeleteMessage,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}: ChatWindowMessagesProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const lastActiveChatId = useRef<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editVal, setEditVal] = useState("");
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat.messages]);
+    if (lastActiveChatId.current !== activeChatId) {
+      scrollRef.current?.scrollIntoView({ behavior: "auto" });
+      lastActiveChatId.current = activeChatId;
+    } else {
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg?.is_admin) {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [messages, activeChatId]);
 
   const handleSave = async (id: string) => {
     if (!editVal.trim()) return;
@@ -31,10 +48,24 @@ export function ChatWindowMessages({ chat, onEditMessage, onDeleteMessage }: Cha
   return (
     <ScrollArea className="grow pr-1">
       <div className="space-y-4 py-2">
-        {chat.messages.length === 0 ? (
+        {hasNextPage && (
+          <div className="flex justify-center py-1">
+            <Button
+              size="sm"
+              variant="ghost"
+              disabled={isFetchingNextPage}
+              onClick={() => fetchNextPage()}
+              className="text-[10px] h-6 px-3 border border-slate-200/50 text-slate-500 bg-white/30 hover:bg-white/50"
+            >
+              {isFetchingNextPage ? "Loading..." : "Load older messages"}
+            </Button>
+          </div>
+        )}
+        
+        {messages.length === 0 ? (
           <div className="text-center text-xs text-slate-400 py-8">No messages in this chat yet.</div>
         ) : (
-          chat.messages.map((m) => {
+          messages.map((m) => {
             const isSelf = m.is_admin;
             const isEditing = editingId === m.id;
             return (

@@ -1,7 +1,7 @@
 import { apiGet, apiPost, apiPatch } from "@/api-client";
 import type { ApiResult } from "@/lib/types";
-import { ChatRoomSchema, ChatMessageSchema, SupportAgentSchema } from "../_schemas/chats.schema";
-import type { ChatRoom, ChatMessage, SupportAgent } from "../_types/chats.type";
+import { ChatRoomSchema, ChatMessageSchema, SupportAgentSchema, ChatMessagePageSchema } from "../_schemas/chats.schema";
+import type { ChatRoom, ChatMessage, SupportAgent, ChatMessagePage } from "../_types/chats.type";
 import { z } from "zod";
 
 function logError(path: string, err: unknown) {
@@ -28,6 +28,25 @@ export async function fetchChatDetails(id: string): Promise<ApiResult<ChatRoom>>
   if (!res.ok) return { ok: false, error: res.error };
   const p = ChatRoomSchema.safeParse(res.data);
   if (!p.success) { logError(`/chats/${id}`, p.error.format()); return PARSE_ERR; }
+  return { ok: true, data: p.data, message: res.message, status: res.status };
+}
+
+export async function fetchChatMessages(
+  id: string,
+  before?: string | null,
+  limit?: number
+): Promise<ApiResult<ChatMessagePage>> {
+  let url = `/chats/${id}/messages`;
+  const params = new URLSearchParams();
+  if (before) params.append("before", before);
+  if (limit) params.append("limit", limit.toString());
+  const queryStr = params.toString();
+  if (queryStr) url += `?${queryStr}`;
+
+  const res = await apiGet<unknown>(url);
+  if (!res.ok) return { ok: false, error: res.error };
+  const p = ChatMessagePageSchema.safeParse(res.data);
+  if (!p.success) { logError(`/chats/${id}/messages?before=${before}`, p.error.format()); return PARSE_ERR; }
   return { ok: true, data: p.data, message: res.message, status: res.status };
 }
 
