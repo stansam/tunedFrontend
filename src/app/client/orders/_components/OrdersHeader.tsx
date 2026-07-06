@@ -25,7 +25,7 @@ export function OrdersHeader({ filters }: OrdersHeaderProps) {
         <Button
           size="sm"
           className="gap-1.5 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800"
-          onClick={() => router.push("/client/orders/new" as never)}
+          onClick={() => router.push("/order" as never)}
         >
           <Plus className="h-4 w-4" />
           <span className="hidden sm:inline">New Order</span>
