@@ -23,6 +23,7 @@ export function NotificationFilter({ filters, onChange }: Props) {
       <div className="flex gap-3 w-full md:w-auto">
         <select
           value={filters.readStatus}
+          aria-label="Filter by read status"
           onChange={(e) =>
             onChange({
               ...filters,
@@ -38,6 +39,7 @@ export function NotificationFilter({ filters, onChange }: Props) {
 
         <select
           value={filters.type}
+          aria-label="Filter by notification type"
           onChange={(e) =>
             onChange({
               ...filters,

@@ -30,10 +30,16 @@ export interface ChatRoom {
   order_id: string | null;
   order_number: string | null;
   status: "active" | "closed";
-  messages: ChatMessage[];
+  messages?: ChatMessage[];
   unread_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface ChatMessagePage {
+  messages: ChatMessage[];
+  has_more: boolean;
+  next_cursor: string | null;
 }
 
 export interface SupportAgent {

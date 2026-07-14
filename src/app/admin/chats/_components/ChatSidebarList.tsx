@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { ChatSidebarListProps } from "../_props/chats.props";
+import { Bot } from "lucide-react";
 
 export function ChatSidebarList({
   chats,
@@ -19,8 +20,9 @@ export function ChatSidebarList({
     <ScrollArea className="grow pr-1">
       <div className="space-y-1.5">
         {chats.map((chat) => {
-          const lastMsg = chat.messages[chat.messages.length - 1];
+          const lastMsg = chat.messages && chat.messages.length > 0 ? chat.messages[chat.messages.length - 1] : undefined;
           const isSelected = activeChatId === chat.id;
+          const isEscalated = chat.subject === "Escalated from AI";
           return (
             <button
               key={chat.id}
@@ -38,7 +40,12 @@ export function ChatSidebarList({
               </Avatar>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1 mb-0.5">
-                  <span className="text-xs font-bold truncate">{chat.user_name}</span>
+                  <span className="text-xs font-bold truncate flex items-center gap-1">
+                    {chat.user_name}
+                    {isEscalated && (
+                      <Bot className="h-3 w-3 text-emerald-400 shrink-0" aria-label="Escalated from AI" />
+                    )}
+                  </span>
                   {chat.unread_count > 0 && (
                     <span className="h-4 min-w-4 px-1 rounded-full bg-emerald-500 text-white text-[9px] font-extrabold flex items-center justify-center shrink-0">
                       {chat.unread_count}

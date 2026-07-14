@@ -50,14 +50,14 @@ export function AdminOrderDetailPageClient({ orderNumber }: { orderNumber: strin
 
       <AdminOrderDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
-        <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-8">
+        <div className="space-y-6 min-w-0">
           {activeTab === "details" && <AdminDetailsTabContent order={order} />}
           {activeTab === "activity" && <AdminActivityTabContent orderId={order.id} />}
           {activeTab === "delivery" && <AdminDeliveryTabContent order={order} />}
           {activeTab === "actions" && <AdminOrderActionsPanel order={order} onSuccess={() => {}} />}
         </div>
-        <div>
+        <div className="self-start">
           <AdminOrderDetailSidebar order={order} />
         </div>
       </div>

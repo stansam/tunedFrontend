@@ -17,7 +17,7 @@ import Link from "next/link";
 import { Route } from "next";
 
 export function NotificationBell() {
-  const { unreadCount, notifications, isLoading, markAsRead, markAllAsRead } = useNotifications();
+  const { unreadCount, notifications, isLoading, error, markAsRead, markAllAsRead } = useNotifications();
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,15 +36,24 @@ export function NotificationBell() {
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
-            <span className="absolute top-1 right-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white">
+            <span
+              aria-live="polite"
+              aria-atomic="true"
+              className="absolute top-1 right-1.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white"
+            >
               {unreadCount > 99 ? "99+" : unreadCount}
             </span>
           )}
         </button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-[340px] md:w-[380px] p-0 overflow-hidden shadow-2xl rounded-2xl border border-slate-100">
-        {isLoading ? (
+      <DropdownMenuContent align="end" className="w-[min(340px,calc(100vw-32px))] md:w-[380px] p-0 overflow-hidden shadow-2xl rounded-2xl border border-slate-100">
+        {error ? (
+          <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+            <p className="text-sm font-medium text-red-500">Failed to load notifications</p>
+            <p className="text-xs text-slate-400 mt-1">Please try again later</p>
+          </div>
+        ) : isLoading ? (
           <NotificationSkeleton />
         ) : (
           <div className="flex flex-col max-h-[80vh]">

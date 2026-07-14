@@ -6,10 +6,12 @@ import { CheckCircle2, AlertTriangle, XCircle, Info, ExternalLink } from "lucide
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { NotificationItem as Item } from "@/lib/types/notification.type";
+import { sanitizeNotificationLink } from "@/lib/utils/sanitize";
+import type { Route } from "next";
 
 export interface NotificationItemProps {
   readonly notif: Item;
-  readonly markAsRead: (id: string) => void;
+  readonly markAsRead: (id: string) => Promise<void> | void;
   readonly closeMenu: () => void;
 }
 
@@ -27,14 +29,22 @@ const renderIcon = (type: string) => {
 };
 
 export function NotificationItemComponent({ notif, markAsRead, closeMenu }: NotificationItemProps) {
+  const sanitizedLink = sanitizeNotificationLink(notif.link);
+
   return (
     <li
       className={cn(
         "p-4 hover:bg-slate-50 transition-colors duration-150 cursor-pointer flex gap-3 group relative",
         !notif.is_read ? "bg-emerald-50/30" : ""
       )}
-      onClick={() => {
-        if (!notif.is_read) markAsRead(notif.id);
+      onClick={async () => {
+        if (!notif.is_read) {
+          try {
+            await markAsRead(notif.id);
+          } catch (e) {
+            console.error("Failed to mark notification read:", e);
+          }
+        }
       }}
     >
       {!notif.is_read && (
@@ -56,7 +66,7 @@ export function NotificationItemComponent({ notif, markAsRead, closeMenu }: Noti
           {notif.message}
         </p>
 
-        {notif.link && notif.link !== "#" && (
+        {sanitizedLink && sanitizedLink !== "#" && (
           <div className="mt-2" onClick={(e) => e.stopPropagation()}>
             <Button
               variant="outline"
@@ -65,7 +75,7 @@ export function NotificationItemComponent({ notif, markAsRead, closeMenu }: Noti
               asChild
             >
               <Link
-                href={{ pathname: notif.link, query: { id: notif.id } }}
+                href={sanitizedLink as Route}
                 onClick={() => {
                   if (!notif.is_read) markAsRead(notif.id);
                   closeMenu();

@@ -5,10 +5,7 @@ import { webSocketService } from "@/lib/services/websocket.service";
 import { SOCKET_ON } from "@/lib/constants/socket-events";
 import type { NotificationItem } from "@/lib/types/notification.type";
 
-export function useNotificationSocket(
-  isAuthenticated: boolean,
-  setUnreadCount: React.Dispatch<React.SetStateAction<number>>
-) {
+export function useNotificationSocket(isAuthenticated: boolean) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -19,13 +16,16 @@ export function useNotificationSocket(
 
     const socket = webSocketService.connect();
 
-    const handleCount = (data: { unread_count: number }) => {
-      setUnreadCount(data.unread_count);
+    const handleConnect = () => {
+      void queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    };
+
+    const handleCount = () => {
+      void queryClient.invalidateQueries({ queryKey: ["notifications"] });
     };
 
     const handleNew = (notification: NotificationItem) => {
       void queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      setUnreadCount((prev) => prev + 1);
 
       const msg = notification.message;
       if (notification.type === "success") toast.success(notification.title, { description: msg });
@@ -33,29 +33,40 @@ export function useNotificationSocket(
       else if (notification.type === "error") toast.error(notification.title, { description: msg });
       else toast.info(notification.title, { description: msg });
 
-      const audio = new Audio("/sounds/notification.mp3");
-      audio.play().catch((e) => console.warn("Audio play blocked:", e));
+      // Audio notification with fallback check
+      const soundEnabled = typeof window !== "undefined" && localStorage.getItem("notificationSound") !== "disabled";
+      if (soundEnabled) {
+        const audio = new Audio("/sounds/notification.wav");
+        audio.play().catch((e) => console.warn("Audio play blocked:", e));
+      }
     };
 
     const handleRead = () => {
       void queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      setUnreadCount((prev) => Math.max(0, prev - 1));
     };
 
     const handleError = (err: unknown) => {
       if (process.env.NODE_ENV !== "production") console.error("[WebSocket error]", err);
     };
 
+    socket.on("connect", handleConnect);
     socket.on(SOCKET_ON.NOTIFICATION_COUNT, handleCount);
     socket.on(SOCKET_ON.NOTIFICATION_NEW, handleNew);
     socket.on(SOCKET_ON.NOTIFICATION_READ, handleRead);
     socket.on(SOCKET_ON.SOCKET_ERROR, handleError);
 
+    // If socket is already connected when this mounts, trigger initial load/sync
+    if (socket.connected) {
+      handleConnect();
+    }
+
     return () => {
+      socket.off("connect", handleConnect);
       socket.off(SOCKET_ON.NOTIFICATION_COUNT, handleCount);
       socket.off(SOCKET_ON.NOTIFICATION_NEW, handleNew);
       socket.off(SOCKET_ON.NOTIFICATION_READ, handleRead);
       socket.off(SOCKET_ON.SOCKET_ERROR, handleError);
     };
-  }, [isAuthenticated, queryClient, setUnreadCount]);
+  }, [isAuthenticated, queryClient]);
 }
+
